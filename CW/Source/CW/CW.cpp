@@ -17,9 +17,9 @@ void DebugPrintScreen(const FString& text, const FLinearColor& textColor, float 
 
 //----------------------------------------------------------------------//
 //
-//! @brief CWGameInstance‚ðŽæ“¾
+//! @brief CWGameInstanceï¿½ï¿½ï¿½æ“¾
 //
-//! @retval CWGameInstance‚Ö‚Ìƒ|ƒCƒ“ƒ^
+//! @retval CWGameInstanceï¿½Ö‚Ìƒ|ï¿½Cï¿½ï¿½ï¿½^
 //
 //----------------------------------------------------------------------//
 UCWGameInstance* GetCWGameInstance(){
@@ -33,12 +33,12 @@ UCWGameInstance* GetCWGameInstance(){
 
 //----------------------------------------------------------------------//
 //
-//! @brief CWPlayerController‚ðŽæ“¾
+//! @brief CWPlayerControllerï¿½ï¿½ï¿½æ“¾
 //
-//! @retval CWPlayerController‚Ö‚Ìƒ|ƒCƒ“ƒ^
+//! @retval CWPlayerControllerï¿½Ö‚Ìƒ|ï¿½Cï¿½ï¿½ï¿½^
 //
 //----------------------------------------------------------------------//
-ACWPlayerController* GetPlayerController(){
+ACWPlayerController* GetCWPlayerController(){
 	
 	ACWPlayerController* pPlayerController = Cast<ACWPlayerController>(UGameplayStatics::GetGameInstance(GetPrimaryWorld())->GetPrimaryPlayerController());
 	

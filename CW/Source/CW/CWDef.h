@@ -3,7 +3,7 @@
 //----------------------------------------------------------------------//
 //	Copyright (c) 2024 BeeTribe Co.,Ltd. All Rights Reserved.			//
 //																		//
-//			24/01/25(–Ø)		Programming by Satoshi Nishimura		//
+//			24/01/25(ï¿½ï¿½)		Programming by Satoshi Nishimura		//
 //----------------------------------------------------------------------//
 
 #ifndef	_CWDef_h_
@@ -12,11 +12,11 @@
 //----------------------------------------------------------------------//
 //----------------------------------------------------------------------//
 #if UE_BUILD_DEBUG || UE_BUILD_DEVELOPMENT
-	// ƒfƒoƒbƒOƒrƒ‹ƒh‚Å‚Ì’è‹`
+	// ï¿½fï¿½oï¿½bï¿½Oï¿½rï¿½ï¿½ï¿½hï¿½Å‚Ì’ï¿½`
 	#define CW_DEBUG (1)
 	#define CW_DEMO (0)
 #else  // UE_BUILD_DEBUG || UE_BUILD_DEVELOPMENT
-	// ƒŠƒŠ[ƒXƒrƒ‹ƒh‚Å‚Ì’è‹`
+	// ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½Xï¿½rï¿½ï¿½ï¿½hï¿½Å‚Ì’ï¿½`
 	#define CW_DEBUG (0)
 	#define CW_DEMO (0)
 #endif // UE_BUILD_DEBUG || UE_BUILD_DEVELOPMENT
@@ -62,7 +62,7 @@ class UCWGameInstance;
 class ACWPlayerController;
 
 UCWGameInstance* GetCWGameInstance();
-ACWPlayerController* GetPlayerController();
+ACWPlayerController* GetCWPlayerController();
 
 #endif	//	_CWDef_h_
 //----------------------------------------------------------------------//
