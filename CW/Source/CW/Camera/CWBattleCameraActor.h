@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Camera/CameraActor.h"
-#include "CWCameraActorBase.generated.h"
+#include "CW/Camera/CWRearCameraActorBase.h"
+#include "CWBattleCameraActor.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class CW_API ACWCameraActorBase : public ACameraActor
+class CW_API ACWBattleCameraActor : public ACWRearCameraActorBase
 {
 	GENERATED_BODY()
 	

@@ -6,6 +6,11 @@
 #include "CW/Action/CWActionBase.h"
 #include "CWCameraOperation.generated.h"
 
+//----------------------------------------------------------------------//
+//----------------------------------------------------------------------//
+struct FInputActionValue;
+class  UCameraComponent;
+
 /**
  * 
  */
@@ -13,8 +18,17 @@ UCLASS()
 class CW_API UCWCameraOperation : public UCWActionBase
 {
 	GENERATED_BODY()
+	
 public:
+
+	UCWCameraOperation();
+	
 	//! @{@name アクションの実行
 	void ExecAction(const FInputActionValue& InputActionValue) override ;
 	//! @}
+
+private:
+	void UpdateCarFocusedCamera(UCameraComponent* CamComponent, const FInputActionValue& axis);
+
+	FRotator CameraRotation;
 };
