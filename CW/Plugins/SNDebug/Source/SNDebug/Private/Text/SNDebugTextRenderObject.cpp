@@ -1,22 +1,22 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 #include "Text/SNDebugTextRenderObject.h"
 #include "CanvasItem.h"
 #include "Engine/Canvas.h"
 
 //----------------------------------------------------------------------//
 //
-//! @brief ƒfƒtƒHƒ‹ƒgƒRƒ“ƒXƒgƒ‰ƒNƒ^
+//! @brief ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 //
 //----------------------------------------------------------------------//
 USNDebugTextRenderObject::USNDebugTextRenderObject()
 : Key(0)
 {
-	
+	DebugTextList.Empty();
 }
 
 //----------------------------------------------------------------------//
 //
-//! @brief ƒfƒXƒgƒ‰ƒNƒ^
+//! @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 //
 //----------------------------------------------------------------------//
 USNDebugTextRenderObject::~USNDebugTextRenderObject(){
@@ -25,9 +25,9 @@ USNDebugTextRenderObject::~USNDebugTextRenderObject(){
 
 //----------------------------------------------------------------------//
 //
-//! @brief XVˆ—
+//! @brief æ›´æ–°å‡¦ç†
 //
-//! @param DeltaTime Œo‰ßŠÔ
+//! @param DeltaTime çµŒéæ™‚é–“
 //
 //----------------------------------------------------------------------//
 void USNDebugTextRenderObject::Tick(float DeltaTime){
@@ -37,11 +37,11 @@ void USNDebugTextRenderObject::Tick(float DeltaTime){
 	for(auto& element : DebugTextList){
 		
 		FSNDebugTextParam& param(element.Value);
-		// ƒ‰ƒCƒuƒ^ƒCƒ€‚Ìƒ`ƒFƒbƒN
+		// ãƒ©ã‚¤ãƒ–ã‚¿ã‚¤ãƒ ã®ãƒã‚§ãƒƒã‚¯
 		if(param.lifeTime >= 0.0f){
 			param.lifeTime -= DeltaTime;
 		} else {
-			// ƒ‰ƒCƒtƒ^ƒCƒ€‚ª0‚ğ‰º‰ñ‚Á‚½‚çíœ
+			// ãƒ©ã‚¤ãƒ•ã‚¿ã‚¤ãƒ ãŒ0ã‚’ä¸‹å›ã£ãŸã‚‰å‰Šé™¤
 			if(param.lifeTime < 0.0f){
 				
 				removeList.Add(param.key);
@@ -50,27 +50,27 @@ void USNDebugTextRenderObject::Tick(float DeltaTime){
 			}
 		}
 	}
-	// ƒŠƒXƒg‚©‚çíœ
+	// ãƒªã‚¹ãƒˆã‹ã‚‰å‰Šé™¤
 	for(int32& removeVal : removeList){
 		DebugTextList.Remove(removeVal);
 	}
-	// ”z—ñ‚ğ®—
+	// é…åˆ—ã‚’æ•´ç†
 	DebugTextList.Compact();
 }
 
 //----------------------------------------------------------------------//
 //
-//! @brief •`‰æˆ—
+//! @brief æç”»å‡¦ç†
 //
-//! @param pCanvas •`‰æ‚·‚éƒLƒƒƒ“ƒoƒX‚Ö‚Ìƒ|ƒCƒ“ƒ^
+//! @param pCanvas æç”»ã™ã‚‹ã‚­ãƒ£ãƒ³ãƒã‚¹ã¸ã®ãƒã‚¤ãƒ³ã‚¿
 //
 //----------------------------------------------------------------------//
 void USNDebugTextRenderObject::Draw(UCanvas* pCanvas){
-	// •\¦‚·‚é•¶š—ñ‚ª‚È‚¢ê‡‚Íˆ—‚µ‚È‚¢
+	// è¡¨ç¤ºã™ã‚‹æ–‡å­—åˆ—ãŒãªã„å ´åˆã¯å‡¦ç†ã—ãªã„
 	if(DebugTextList.Num() <= 0){
 		return;
 	}
-	// nullƒ`ƒFƒbƒN
+	// nullãƒã‚§ãƒƒã‚¯
 	if(pCanvas == nullptr){
 		return;
 	}
@@ -87,27 +87,27 @@ void USNDebugTextRenderObject::Draw(UCanvas* pCanvas){
 		
 		TextItem.Scale.X = param.scale;
 		TextItem.Scale.Y = param.scale;
-		// •¶š—ñ‚ğ•`‰æ
+		// æ–‡å­—åˆ—ã‚’æç”»
 		pCanvas->DrawItem(TextItem);
 	}
 }
 
 //----------------------------------------------------------------------//
 //
-//! @brief •\¦‚·‚é•¶š—ñ‚ğ’Ç‰Á
+//! @brief è¡¨ç¤ºã™ã‚‹æ–‡å­—åˆ—ã‚’è¿½åŠ 
 //
-//! @param text           •\¦‚·‚é•¶š—ñ
-//! @param color          ƒJƒ‰[
-//! @param screenX        ƒXƒNƒŠ[ƒ“À•WX
-//! @param screenY        ƒXƒNƒŠ[ƒ“À•WY
-//! @param lifeTime       •\¦ŠÔ
-//! @param pFont          ƒtƒHƒ“ƒg
-//! @param scale          ƒXƒP[ƒ‹
-//! @param bScalePosition ƒXƒP[ƒ‹‚ğƒ|ƒWƒVƒ‡ƒ“‚É”½‰f‚³‚¹‚é‚©
+//! @param text           è¡¨ç¤ºã™ã‚‹æ–‡å­—åˆ—
+//! @param color          ã‚«ãƒ©ãƒ¼
+//! @param screenX        ã‚¹ã‚¯ãƒªãƒ¼ãƒ³åº§æ¨™X
+//! @param screenY        ã‚¹ã‚¯ãƒªãƒ¼ãƒ³åº§æ¨™Y
+//! @param lifeTime       è¡¨ç¤ºæ™‚é–“
+//! @param pFont          ãƒ•ã‚©ãƒ³ãƒˆ
+//! @param scale          ã‚¹ã‚±ãƒ¼ãƒ«
+//! @param bScalePosition ã‚¹ã‚±ãƒ¼ãƒ«ã‚’ãƒã‚¸ã‚·ãƒ§ãƒ³ã«åæ˜ ã•ã›ã‚‹ã‹
 //
 //----------------------------------------------------------------------//
 void USNDebugTextRenderObject::AddString(const FString& text, FLinearColor color, float screenX, float screenY, float lifeTime, UFont* pFont, float scale, bool bScalePosition){
-	// int32Å‘å’l‚É’B‚µ‚½‚çƒI[ƒ‹ƒNƒŠƒA
+	// int32æœ€å¤§å€¤ã«é”ã—ãŸã‚‰ã‚ªãƒ¼ãƒ«ã‚¯ãƒªã‚¢
 	if(Key >= INT32_MAX){
 		
 		Key = 0;

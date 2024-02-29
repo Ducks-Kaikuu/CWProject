@@ -5,6 +5,7 @@
 #include "CW/System/CWBlueprintFunctionLibrary.h"
 #include "CW/System/CWGameInstance.h"
 #include "CW/Player/CWPlayerController.h"
+#include "Utility/SNUtility.h"
 
 #include "Modules/ModuleManager.h"
 #include "Kismet/GameplayStatics.h"
@@ -26,12 +27,7 @@ void DebugPrintScreen(const FString& text, const FLinearColor& textColor, float 
 //
 //----------------------------------------------------------------------//
 UCWGameInstance* GetCWGameInstance(){
-	
-	if(UWorld* pPrimaryWorld = GetPrimaryWorld()){
-		return Cast<UCWGameInstance>(pPrimaryWorld->GetGameInstance());
-	}
-	
-	return nullptr;
+	return SNUtility::GetGameInstance<UCWGameInstance>();
 }
 
 //----------------------------------------------------------------------//
@@ -42,21 +38,16 @@ UCWGameInstance* GetCWGameInstance(){
 //
 //----------------------------------------------------------------------//
 ACWPlayerController* GetCWPlayerController(){
-	
-	ACWPlayerController* pPlayerController = Cast<ACWPlayerController>(UGameplayStatics::GetGameInstance(GetPrimaryWorld())->GetPrimaryPlayerController());
-	
-	return pPlayerController;
+	return SNUtility::GetPlayerController<ACWPlayerController>();
 }
 
+//----------------------------------------------------------------------//
+//
+//! @brief 現在のプレイヤーへのポインタを取得
+//
+//! @retval 
+//
+//----------------------------------------------------------------------//
 ACWWheeledVehiclePawn* GetCurrentPlayer(){
-	
-	ACWWheeledVehiclePawn* Player = nullptr;
-	
-	ACWPlayerController* PlayerController = GetCWPlayerController();
-	
-	if(PlayerController != nullptr){
-		Player = Cast<ACWWheeledVehiclePawn>(PlayerController->GetPawn());
-	}
-	
-	return Player;	
+	return SNUtility::GetCurrentPlayer<ACWWheeledVehiclePawn>();
 }

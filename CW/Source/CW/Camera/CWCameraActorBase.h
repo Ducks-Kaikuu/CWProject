@@ -13,5 +13,9 @@ UCLASS()
 class CW_API ACWCameraActorBase : public ACameraActor
 {
 	GENERATED_BODY()
-	
+
+public:
+	//! @{@name デフォルトコンストラクタ
+	ACWCameraActorBase(const FObjectInitializer& ObjectInitializer);
+	//! @}
 };

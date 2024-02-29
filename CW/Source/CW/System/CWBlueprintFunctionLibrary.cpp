@@ -2,7 +2,7 @@
 
 #include "CW/System/CWBlueprintFunctionLibrary.h"
 #include "CW/CWDef.h"
-#include "System/SNGameInstance.h"
+#include "Utility/SNUtility.h"
 #include "CW/UI/HUD/CWHUD.h"
 
 #include "Kismet/GameplayStatics.h"
@@ -10,7 +10,7 @@
 void UCWBlueprintFunctionLibrary::DrawDisplay(const FString& text, FLinearColor color, float screenX, float screenY, float lifeTime, float scale){
 #if CW_DEBUG
 	
-	APlayerController* pPC = UGameplayStatics::GetPlayerController(GetPrimaryWorld(), 0);
+	APlayerController* pPC = UGameplayStatics::GetPlayerController(SNUtility::GetWorld(), 0);
 	// nullチェック
 	if(pPC != nullptr){
 		// HUDを取得

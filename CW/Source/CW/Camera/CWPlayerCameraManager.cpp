@@ -31,7 +31,7 @@ void ACWPlayerCameraManager::BeginPlay(){
 				CameraInstance = Cast<ACWCameraActorBase>(World->SpawnActor(Class));
 				
 				CameraInstanseMap.Add(Object.Key, CameraInstance);
-
+				
 				if(CurrentCamera == NAME_None)
 				{
 					CurrentCamera = Object.Key;
@@ -41,4 +41,6 @@ void ACWPlayerCameraManager::BeginPlay(){
 			CW_ASSERT(CameraInstance != nullptr, TEXT("Failed to create camera instance : %s"), *Object.Key.ToString());
 		}
 	}
+	
+	SetViewTarget(CameraInstanseMap[CurrentCamera]);
 }

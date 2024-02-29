@@ -15,6 +15,35 @@ void FSNPluginModule::ShutdownModule()
 	// we call this function before unloading the module.
 }
 
+//----------------------------------------------------------------------//
+//
+//! @brief ワールドへのポインタを取得
+//
+//! @retval ワールドへのポインタ
+//
+//----------------------------------------------------------------------//
+UWorld* GetPrimaryWorld(){
+	
+	UWorld* ReturnVal = nullptr;
+	
+	if(GEngine != nullptr){
+		
+		for(auto It = GEngine->GetWorldContexts().CreateConstIterator(); It; ++It){
+			
+			const FWorldContext& Context = *It;
+			
+			if((Context.WorldType == EWorldType::Game || Context.WorldType == EWorldType::PIE) && Context.World()){
+				
+				ReturnVal = Context.World();
+				
+				break;
+			}
+		}
+	}
+	
+	return ReturnVal;
+}
+
 #undef LOCTEXT_NAMESPACE
 	
 IMPLEMENT_MODULE(FSNPluginModule, SNPlugin)

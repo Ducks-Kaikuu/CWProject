@@ -6,10 +6,6 @@
 #include "Engine/GameInstance.h"
 #include "SNGameInstance.generated.h"
 
-//! @{@name プライマリーワールドへのポインタを取得
-SNPLUGIN_API UWorld* GetPrimaryWorld();
-//! @}
-
 /**
  * 
  */

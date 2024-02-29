@@ -12,11 +12,11 @@
 //----------------------------------------------------------------------//
 //----------------------------------------------------------------------//
 #if UE_BUILD_DEBUG || UE_BUILD_DEVELOPMENT
-	// �f�o�b�O�r���h�ł̒�`
+	// デバッグ有効化
 	#define CW_DEBUG (1)
 	#define CW_DEMO (0)
 #else  // UE_BUILD_DEBUG || UE_BUILD_DEVELOPMENT
-	// �����[�X�r���h�ł̒�`
+	// デバッグ無効化
 	#define CW_DEBUG (0)
 	#define CW_DEMO (0)
 #endif // UE_BUILD_DEBUG || UE_BUILD_DEVELOPMENT
@@ -60,9 +60,11 @@ void DebugPrintScreen(const FString& text, const FLinearColor& textColor, float 
 //----------------------------------------------------------------------//
 class UCWGameInstance;
 class ACWPlayerController;
+class ACWWheeledVehiclePawn;
 
 UCWGameInstance* GetCWGameInstance();
 ACWPlayerController* GetCWPlayerController();
+ACWWheeledVehiclePawn* GetCurrentPlayer();
 
 #endif	//	_CWDef_h_
 //----------------------------------------------------------------------//

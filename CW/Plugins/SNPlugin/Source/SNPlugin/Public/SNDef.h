@@ -32,3 +32,6 @@
 	#define SNPLUGIN_LOG(__FORMAT__, ...)
 #endif// SNPLUGIN_ENABLE_DEBUGOUTPUT
 
+//! @{@name プライマリーワールドへのポインタを取得
+SNPLUGIN_API UWorld* GetPrimaryWorld();
+//! @}

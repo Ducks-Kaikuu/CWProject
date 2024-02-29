@@ -2,6 +2,11 @@
 
 
 #include "Utility/SNUtility.h"
+#include "SNDef.h"
+
+UWorld* SNUtility::GetWorld(){
+	return GetPrimaryWorld();
+}
 
 //----------------------------------------------------------------------//
 //

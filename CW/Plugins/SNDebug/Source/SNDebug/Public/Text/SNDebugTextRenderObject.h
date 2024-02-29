@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -34,7 +34,7 @@ struct FSNDebugTextParam{
 
 //----------------------------------------------------------------------//
 //
-//! @brief ƒfƒoƒbƒO—p‚Ì•`‰æƒIƒuƒWƒFƒNƒg
+//! @brief ãƒ‡ãƒãƒƒã‚°ç”¨ã®æç”»ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 //
 //----------------------------------------------------------------------//
 UCLASS()
@@ -43,29 +43,29 @@ class SNDEBUG_API USNDebugTextRenderObject : public UObject
 	GENERATED_BODY()
 	
 public:
-	//! @{@name ƒfƒtƒHƒ‹ƒgƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	//! @{@name ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	USNDebugTextRenderObject();
 	//! @}
 	
-	//! @{@name ƒfƒXƒgƒ‰ƒNƒ^
+	//! @{@name ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	~USNDebugTextRenderObject();
 	//! @}
 	
-	//! @{@name XVˆ—
+	//! @{@name æ›´æ–°å‡¦ç†
 	void Tick(float DeltaTime);
 	//! @}
 	
-	//! @{@name •`‰æˆ—
+	//! @{@name æç”»å‡¦ç†
 	void Draw(UCanvas* pCanvas);
 	//! @}
 	
-	//! @{@name •\¦‚·‚éƒfƒoƒbƒO•¶š‚ğ“o˜^
+	//! @{@name è¡¨ç¤ºã™ã‚‹ãƒ‡ãƒãƒƒã‚°æ–‡å­—ã‚’ç™»éŒ²
 	void AddString(const FString& text, FLinearColor color, float screenX, float screenY, float lifeTime, UFont* pFont, float scale, bool bScalePosition);
 	//! @}
 	
 private:
-	//!< ƒfƒoƒbƒOƒeƒLƒXƒg
+	//!< ãƒ‡ãƒãƒƒã‚°ãƒ†ã‚­ã‚¹ãƒˆ
 	TMap<int32, FSNDebugTextParam> DebugTextList;
-	//!< ƒL[î•ñ
+	//!< ã‚­ãƒ¼æƒ…å ±
 	int32 Key;
 };

@@ -3,3 +3,16 @@
 
 #include "CW/Camera/CWCameraActorBase.h"
 
+//----------------------------------------------------------------------//
+//
+//! @brief デフォルトコンストラクタ
+//
+//! @param ObjectInitializer イニシャライザ
+//
+//----------------------------------------------------------------------//
+ACWCameraActorBase::ACWCameraActorBase(const FObjectInitializer& ObjectInitializer)
+:Super(ObjectInitializer)
+{
+	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bStartWithTickEnabled = true;
+}
