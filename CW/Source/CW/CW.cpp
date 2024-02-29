@@ -3,9 +3,12 @@
 #include "CW.h"
 #include "CWDef.h"
 #include "CW/System/CWBlueprintFunctionLibrary.h"
-#include "System/SNGameInstance.h"
+#include "CW/System/CWGameInstance.h"
+#include "CW/Player/CWPlayerController.h"
+
 #include "Modules/ModuleManager.h"
 #include "Kismet/GameplayStatics.h"
+#include "Vehicle/CWWheeledVehiclePawn.h"
 
 IMPLEMENT_PRIMARY_GAME_MODULE(FDefaultGameModuleImpl, CW, "CW");
 
@@ -17,9 +20,9 @@ void DebugPrintScreen(const FString& text, const FLinearColor& textColor, float 
 
 //----------------------------------------------------------------------//
 //
-//! @brief CWGameInstance���擾
+//! @brief CWGameInstanceを取得
 //
-//! @retval CWGameInstance�ւ̃|�C���^
+//! @retval CWGameInstanceへのポインタ
 //
 //----------------------------------------------------------------------//
 UCWGameInstance* GetCWGameInstance(){
@@ -33,9 +36,9 @@ UCWGameInstance* GetCWGameInstance(){
 
 //----------------------------------------------------------------------//
 //
-//! @brief CWPlayerController���擾
+//! @brief CWPlayerControllerを取得
 //
-//! @retval CWPlayerController�ւ̃|�C���^
+//! @retval CWPlayerControllerへのポインタ
 //
 //----------------------------------------------------------------------//
 ACWPlayerController* GetCWPlayerController(){
@@ -43,4 +46,17 @@ ACWPlayerController* GetCWPlayerController(){
 	ACWPlayerController* pPlayerController = Cast<ACWPlayerController>(UGameplayStatics::GetGameInstance(GetPrimaryWorld())->GetPrimaryPlayerController());
 	
 	return pPlayerController;
+}
+
+ACWWheeledVehiclePawn* GetCurrentPlayer(){
+	
+	ACWWheeledVehiclePawn* Player = nullptr;
+	
+	ACWPlayerController* PlayerController = GetCWPlayerController();
+	
+	if(PlayerController != nullptr){
+		Player = Cast<ACWWheeledVehiclePawn>(PlayerController->GetPawn());
+	}
+	
+	return Player;	
 }
