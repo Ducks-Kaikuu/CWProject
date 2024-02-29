@@ -44,16 +44,6 @@ void UCWCameraOperation::ExecAction(const FInputActionValue& InputActionValue){
 void UCWCameraOperation::UpdateCarFocusedCamera(UCameraComponent* CamComponent, const FInputActionValue& InputActionValue){
 	
 	const FInputActionValue::Axis2D Axis(InputActionValue.Get<FInputActionValue::Axis2D>());
-#if 0
-	FRotator rot(CamComponent->GetRelativeRotation());
-	
-	rot.Yaw   += (FMath::Abs(Axis.X) < 0.01f) ? 0.0f : Axis.X;
-	rot.Pitch += (FMath::Abs(Axis.Y) < 0.01f) ? 0.0f : Axis.Y;
-	
-	rot.Pitch = FMath::Clamp(rot.Pitch, -60.0f, 75.0);
-	
-	//CamComponent->SetRelativeRotation(rot);
-#endif
 	// 現状のカメラを取得
 	ACWBattleCameraActor* CameraActor(SNUtility::GetCurrentCameraActor<ACWBattleCameraActor>());
 	// バトルカメラ出ない場合は処理をしない
@@ -61,7 +51,7 @@ void UCWCameraOperation::UpdateCarFocusedCamera(UCameraComponent* CamComponent, 
 		
 		float Yaw  (FMath::Abs(Axis.X) < 0.05f ? 0.0f : Axis.X);
 		float Pitch(FMath::Abs(Axis.Y) < 0.05f ? 0.0f : Axis.Y);
-
+		
 		Yaw   *= CameraActor->GetXAxisSpeed();
 		Pitch *= CameraActor->GetYAxisSpeed();
 		

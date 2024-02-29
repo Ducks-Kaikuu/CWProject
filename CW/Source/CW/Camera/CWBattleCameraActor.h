@@ -40,18 +40,30 @@ protected:
 	
 private:
 	
+	//!< アタッチするボーン名
 	UPROPERTY(EditAnyWhere, Category="CW|Camera|Parameter")
 	FName BoneName=NAME_None;
-
+	
+	//!< ターゲットからのオフセット情報
 	UPROPERTY(EditAnyWhere, Category="CW|Camera|Parameter")
 	FVector TargetOffset=FVector(845.0f, 0.0f, 300.0f);
-
+	
+	//!< 車をフォーカスしたカメラ
+	UPROPERTY(EditAnywhere, Category="CW|Camera|Parameter")
+	bool bCarFocusedCamera = false;
+	
+	//!< 操作時のスピード
 	UPROPERTY(EditAnywhere, Category="CW|Camera|Parameter")
 	float XAxisSpeed = 1.0f;
-
+	
+	//!< 操作時のスピード
 	UPROPERTY(EditAnywhere, Category="CW|Camera|Parameter")
 	float YAxisSpeed = 1.0f;
-
+	
+	UPROPERTY(EditAnywhere, Category="CW|Camera|Parameter")
+	float FocuedCameraHeight = 200.0f;
+	
+	//!< カメラの回転情報
 	UPROPERTY()
 	FRotator CameraRotate = FRotator::ZeroRotator;
 };
