@@ -1,0 +1,8 @@
+{
+	"BuildId": "27405482",
+	"Modules": 
+	{
+		"BTStd": "UnrealEditor-BTStd-Win64-DebugGame.dll",
+		"BTStdEditor": "UnrealEditor-BTStdEditor-Win64-DebugGame.dll"
+	}
+}

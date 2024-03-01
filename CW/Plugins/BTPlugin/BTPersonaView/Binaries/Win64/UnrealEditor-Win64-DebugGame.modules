@@ -1,0 +1,8 @@
+{
+	"BuildId": "27405482",
+	"Modules": 
+	{
+		"BTPersonaView": "UnrealEditor-BTPersonaView-Win64-DebugGame.dll",
+		"BTPersonaViewEditor": "UnrealEditor-BTPersonaViewEditor-Win64-DebugGame.dll"
+	}
+}

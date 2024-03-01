@@ -42,6 +42,10 @@
 		{
 			"Name": "GameFeatures",
 			"Enabled": true
+		},
+		{
+			"Name": "BTPersonaView",
+			"Enabled": true
 		}
 	]
 }
