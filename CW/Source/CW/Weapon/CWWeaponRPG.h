@@ -13,5 +13,8 @@ UCLASS()
 class CW_API ACWWeaponRPG : public ACWWeaponActorBase
 {
 	GENERATED_BODY()
+
+public:
 	
+	ACWWeaponRPG();
 };

@@ -3,3 +3,6 @@
 
 #include "CW/Weapon/CWWeaponRPG.h"
 
+ACWWeaponRPG::ACWWeaponRPG(){
+	SetRootComponent(CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent")));
+}
