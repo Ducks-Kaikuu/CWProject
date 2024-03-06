@@ -6,10 +6,11 @@
 #include "Engine/DataAsset.h"
 #include "SNContentsAsset.generated.h"
 
+class USNDataAssetManager;
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable, Meta = (BlueprintSpawnableComponent))
 class SNPLUGIN_API USNContentsAsset : public UDataAsset
 {
 	GENERATED_BODY()
@@ -20,6 +21,7 @@ public:
 	const TMap<FName, TSoftClassPtr<UObject>>& GetContentClassList() const ;
 	
 private:
+	friend USNDataAssetManager;
 	//!< コンテンツオブジェクトリスト
 	UPROPERTY(EditAnywhere, Category="Data")
 	TMap<FName, TSoftObjectPtr<UObject>> ContentsAssetList;

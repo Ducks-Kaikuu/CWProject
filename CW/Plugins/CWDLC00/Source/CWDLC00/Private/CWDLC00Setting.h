@@ -11,8 +11,12 @@ class CWDLC00_API UCWDLC00Setting : public UDeveloperSettings
 {
 	GENERATED_BODY()
 
-private:
+public:
 	
-	UPROPERTY(EditAnywhere, Category="DLC00 Contents Asset")
-	TObjectPtr<USNDataAssetManager> ContentsAssetManager = nullptr;
+	//! @{@name デフォルトコンストラクタ
+	UCWDLC00Setting();
+	//! @}
+	
+	UPROPERTY(EditAnywhere, config, Category="DLC00 Contents Asset")
+	TSoftClassPtr<USNDataAssetManager> ContentsAssetManager = nullptr;
 };

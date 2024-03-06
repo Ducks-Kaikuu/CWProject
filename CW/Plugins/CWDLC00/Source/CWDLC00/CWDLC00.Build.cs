@@ -25,7 +25,8 @@ public class CWDLC00 : ModuleRules
 		PublicDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"Core",
+				"Core", 
+				"SNPlugin",
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);

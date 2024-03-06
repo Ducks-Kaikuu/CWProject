@@ -2,7 +2,7 @@
 #include "CW/Weapon/CWWeaponAKM.h"
 
 ACWWeaponAKM::ACWWeaponAKM(){
-	SetRootComponent(CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent")));	
+		
 }
 
 

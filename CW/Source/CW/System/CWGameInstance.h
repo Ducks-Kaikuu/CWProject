@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "CW/Weapon/CWWeaponManager.h"
 #include "System/SNGameInstance.h"
 #include "CWGameInstance.generated.h"
 
@@ -10,9 +11,11 @@
 //----------------------------------------------------------------------//
 class UCWInputDataAsset;
 
-/**
- * 
- */
+//----------------------------------------------------------------------//
+//
+//! @brief ゲームインスタンス
+//
+//----------------------------------------------------------------------//
 UCLASS()
 class CW_API UCWGameInstance : public USNGameInstance
 {
@@ -24,6 +27,25 @@ public:
 	virtual void Init() override ;
 	//! @}
 	
+	//! @{@name 武器管理クラスを取得
+	UCWWeaponManager* GetWeaponManager();
+	//! @}
+	
+private:
+	//!< 武器管理クラス
+	UPROPERTY()
+	UCWWeaponManager* WeaponManager = nullptr;
 };
+
+//----------------------------------------------------------------------//
+//
+//! @brief 武器管理クラスを取得
+//
+//! @retval 武器管理クラスへのポインタ
+//
+//----------------------------------------------------------------------//
+FORCEINLINE UCWWeaponManager* UCWGameInstance::GetWeaponManager(){
+	return WeaponManager;
+}
 
 UCWGameInstance* GetCWGameInstance();

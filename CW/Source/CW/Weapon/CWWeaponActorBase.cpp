@@ -3,17 +3,21 @@
 
 #include "CW/Weapon/CWWeaponActorBase.h"
 
-// Sets default values
-ACWWeaponActorBase::ACWWeaponActorBase()
-{
+//----------------------------------------------------------------------//
+//
+//! @brief デフォルトコンストラクタ
+//
+//----------------------------------------------------------------------//
+ACWWeaponActorBase::ACWWeaponActorBase(){
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
+	// ルートコンポーネントを設定
+	SetRootComponent(CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent")));
 }
 
 // Called when the game starts or when spawned
-void ACWWeaponActorBase::BeginPlay()
-{
+void ACWWeaponActorBase::BeginPlay(){
+	
 	Super::BeginPlay();
 	
 }

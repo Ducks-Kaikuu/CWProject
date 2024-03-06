@@ -4,18 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "Modules/ModuleManager.h"
+#include "System/SNDLCModuleInterface.h"
 
 class USNDataAssetManager;
 
-class FCWDLC00Module : public IModuleInterface
+class FCWDLC00Module : public ISNDLCModuleInterface
 {
 public:
 
 	/** IModuleInterface implementation */
 	virtual void StartupModule() override;
 	virtual void ShutdownModule() override;
-
-private:
-	UPROPERTY(Config, EditAnywhere, Category="DLC00 Custom Setting")
-	TObjectPtr<USNDataAssetManager> AssetManager;
+	
+	TSoftClassPtr<USNDataAssetManager> GetAssetManagerSoftClassPtr() override ;
 };
