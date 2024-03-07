@@ -3,9 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/NoExportTypes.h"
+#include "Engine/AssetManager.h"
 #include "CWWeaponManager.generated.h"
 
+class ACWWheeledVehiclePawn;
 /**
  * 
  */
@@ -17,8 +18,11 @@ class CW_API UCWWeaponManager : public UObject
 public:
 	
 	void SetupWeaponDataAsset();
+
+	TSharedPtr<FStreamableHandle> LoadWeaponClass(FName Key, ACWWheeledVehiclePawn* Class=nullptr, typename TMemFunPtrType<false, ACWWheeledVehiclePawn, void ()>::Type Func=nullptr);
 	
 private:
+
 	UPROPERTY()
-	TMap<FName, TObjectPtr<UClass>> WeaponClassMap;
+	TMap<FName, TSoftClassPtr<UObject>> WeaponClassMap;
 };

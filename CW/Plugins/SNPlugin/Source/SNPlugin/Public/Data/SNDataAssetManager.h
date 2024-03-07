@@ -26,6 +26,10 @@ public:
 	const TMap<FName, TObjectPtr<USNContentsAsset>>& GetAssetList() const ;
 	//! @}
 	
+	//! @{@name コンテンツのアセットを取得
+	const USNContentsAsset* GetContentAsset(FName Key) const ;
+	//! @}
+	
 private:
 	
 	friend USNGameInstance;

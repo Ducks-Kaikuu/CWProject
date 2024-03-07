@@ -9,6 +9,24 @@
 
 //----------------------------------------------------------------------//
 //
+//! @brief コンテンツのアセットを取得
+//
+//! @param Key キー
+//
+//! @retval コンテンツのアセット
+//
+//----------------------------------------------------------------------//
+const USNContentsAsset* USNDataAssetManager::GetContentAsset(FName Key) const {
+	// データが存在するかチェック
+	if(DataAssetList.Find(Key) == nullptr){
+		return nullptr;
+	}
+
+	return DataAssetList[Key];
+}
+
+//----------------------------------------------------------------------//
+//
 //! @brief DLCに含まれるコンテンツの初期化処理
 //
 //! @retval true  正常終了

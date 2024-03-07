@@ -15,6 +15,8 @@ public:
 	//! @{@name デフォルトコンストラクタ
 	ACWWeaponActorBase();
 	//! @}
+
+	void AttachToOwner(FName SocketName);
 	
 protected:
 	// Called when the game starts or when spawned

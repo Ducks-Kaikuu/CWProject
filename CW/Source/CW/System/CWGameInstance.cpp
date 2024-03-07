@@ -23,4 +23,6 @@ void UCWGameInstance::Init(){
 	WeaponManager = NewObject<UCWWeaponManager>();
 	
 	CW_ASSERT(WeaponManager != nullptr, TEXT("Failed to Create WeaponManager"));
+
+	WeaponManager->SetupWeaponDataAsset();
 }

@@ -1,7 +1,13 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "CW/Vehicle/CWWheeledVehiclePawn.h"
+#include "CW/CWDef.h"
+#include "CW/System/CWGameInstance.h"
+#include "CW/Weapon/CWWeaponActorBase.h"
+
+#include "ChaosVehicleMovementComponent.h"
+#include "UObject/GarbageCollectionSchema.h"
 
 void	ACWWheeledVehiclePawn::Tick(float DeltaTime){
 	
@@ -62,5 +68,65 @@ void	ACWWheeledVehiclePawn::SetHandBrake(bool bBrake){
 	
 	if(bBrake == true){
 		Throttle = 0.0f;
+	}
+}
+
+void ACWWheeledVehiclePawn::BeginPlay(){
+	
+	Super::BeginPlay();
+	// 武器をロード
+	LStreamHandle = GetCWGameInstance()->GetWeaponManager()->LoadWeaponClass(FName(TEXT("AKM")), this, &ACWWheeledVehiclePawn::FinishLoadWeaponL);
+	RStreamHandle = GetCWGameInstance()->GetWeaponManager()->LoadWeaponClass(FName(TEXT("RPG")), this, &ACWWheeledVehiclePawn::FinishLoadWeaponR);
+}
+
+//----------------------------------------------------------------------//
+//
+//! @brief 左用武器がロードされた場合の処理
+//
+//----------------------------------------------------------------------//
+void ACWWheeledVehiclePawn::FinishLoadWeaponL(){
+	PostLoadWeapon(LStreamHandle, WeaponLAttachSocket);
+}
+
+//----------------------------------------------------------------------//
+//
+//! @brief 右用武器がロードされた場合の処理
+//
+//----------------------------------------------------------------------//
+void ACWWheeledVehiclePawn::FinishLoadWeaponR(){
+	PostLoadWeapon(RStreamHandle, WeaponRAttachSocket);
+}
+
+//----------------------------------------------------------------------//
+//
+//! @brief 武器のロードが終了した後の処理
+//
+//! @param StreamHandle 非同期ロードに使用したハンドル
+//
+//----------------------------------------------------------------------//
+void ACWWheeledVehiclePawn::PostLoadWeapon(TSharedPtr<FStreamableHandle> StreamHandle, FName SocketName){
+	// ロードが正常に終了しているかチェック
+	if((StreamHandle == nullptr) || (StreamHandle->HasLoadCompleted() == false)){
+		return;
+	}
+	// ロードしたオブジェクトを取得
+	UClass* WeaponClass = Cast<UClass>(StreamHandle->GetLoadedAsset());
+	// nullチェック
+	if(WeaponClass != nullptr){
+		
+		FActorSpawnParameters Parameter;
+		// オーナーを設定
+		Parameter.Owner = this;
+		// 武器アクターを生成
+		ACWWeaponActorBase* WeaponActor = GetWorld()->SpawnActor<ACWWeaponActorBase>(WeaponClass, Parameter);
+		// nullチェック
+		if(WeaponActor == nullptr){
+			
+			CW_LOG(TEXT("Failed to Spawn Weapon Actor : %s"), *StreamHandle->GetDebugName());
+			
+			return;
+		}
+		// 武器をアタッチ
+		WeaponActor->AttachToOwner(SocketName);
 	}
 }

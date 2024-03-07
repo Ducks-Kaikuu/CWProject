@@ -15,6 +15,25 @@ ACWWeaponActorBase::ACWWeaponActorBase(){
 	SetRootComponent(CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent")));
 }
 
+void ACWWeaponActorBase::AttachToOwner(FName SocketName){
+
+//	AActor* Owner = GetOwner();
+
+	if(Owner == nullptr)
+	{
+		return;
+	}
+
+	USkeletalMeshComponent* Mesh = Cast<USkeletalMeshComponent>(Owner->GetComponentByClass(USkeletalMeshComponent::StaticClass()));
+
+	if(Mesh == nullptr)
+	{
+		return;
+	}
+	
+	AttachToComponent(Mesh, FAttachmentTransformRules::KeepRelativeTransform, SocketName);
+}
+
 // Called when the game starts or when spawned
 void ACWWeaponActorBase::BeginPlay(){
 	

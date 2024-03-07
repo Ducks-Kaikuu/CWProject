@@ -3,7 +3,6 @@
 #include "SNDef.h"
 #include "Utility/SNUtility.h"
 #include "Action/SNActionBase.h"
-#include "Character/SNPlayablePawnComponent.h"
 #include "EnhancedInputComponent.h"
 
 //----------------------------------------------------------------------//

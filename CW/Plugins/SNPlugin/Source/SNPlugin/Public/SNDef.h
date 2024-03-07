@@ -33,5 +33,5 @@
 #endif// SNPLUGIN_ENABLE_DEBUGOUTPUT
 
 //! @{@name プライマリーワールドへのポインタを取得
-SNPLUGIN_API UWorld* GetPrimaryWorld();
+UWorld* GetPrimaryWorld();
 //! @}
