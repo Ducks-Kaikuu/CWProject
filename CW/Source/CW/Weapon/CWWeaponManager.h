@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -17,12 +17,18 @@ class CW_API UCWWeaponManager : public UObject
 
 public:
 	
+	//! @{@name 武器データのアセットを初期化
 	void SetupWeaponDataAsset();
-
+	//! @}
+	
+	//! @{@name 武器のクラス情報を非同期ロード
 	TSharedPtr<FStreamableHandle> LoadWeaponClass(FName Key, ACWWheeledVehiclePawn* Class=nullptr, typename TMemFunPtrType<false, ACWWheeledVehiclePawn, void ()>::Type Func=nullptr);
+	//! @}
+
 	
 private:
-
+	
+	//!< 武器のクラス情報
 	UPROPERTY()
 	TMap<FName, TSoftClassPtr<UObject>> WeaponClassMap;
 };

@@ -15,15 +15,25 @@ public:
 	//! @{@name デフォルトコンストラクタ
 	ACWWeaponActorBase();
 	//! @}
-
+	
+	//! @{@name オーナーアクターにアタッチ
 	void AttachToOwner(FName SocketName);
+	//! @}
+
+	virtual FName GetLaunchSocketName() const ;
+	
+	// Called every frame
+//	virtual void Tick(float DeltaTime) override;
 	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
+	
 public:	
-	// Called every frame
-//	virtual void Tick(float DeltaTime) override;
 
 };
+
+FORCEINLINE FName ACWWeaponActorBase::GetLaunchSocketName() const
+{
+	return FName(TEXT("Launch"));
+}

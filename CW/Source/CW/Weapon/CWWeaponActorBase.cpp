@@ -15,22 +15,25 @@ ACWWeaponActorBase::ACWWeaponActorBase(){
 	SetRootComponent(CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent")));
 }
 
+//----------------------------------------------------------------------//
+//
+//! @brief オーナーへアタッチ
+//
+//! @param SocketName アタッチするソケットの名前
+//
+//----------------------------------------------------------------------//
 void ACWWeaponActorBase::AttachToOwner(FName SocketName){
-
-//	AActor* Owner = GetOwner();
-
-	if(Owner == nullptr)
-	{
+	// オーナーがいるかチェック
+	if(Owner == nullptr){
 		return;
 	}
-
-	USkeletalMeshComponent* Mesh = Cast<USkeletalMeshComponent>(Owner->GetComponentByClass(USkeletalMeshComponent::StaticClass()));
-
-	if(Mesh == nullptr)
-	{
-		return;
-	}
+	// オーナーのスケルタルメッシュを取得
+	USkeletalMeshComponent* Mesh(Cast<USkeletalMeshComponent>(Owner->GetComponentByClass(USkeletalMeshComponent::StaticClass())));
 	
+	if(Mesh == nullptr){
+		return;
+	}
+	// アタッチ
 	AttachToComponent(Mesh, FAttachmentTransformRules::KeepRelativeTransform, SocketName);
 }
 

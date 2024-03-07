@@ -15,7 +15,8 @@
 				"SNPlugin",
 				"SNDebug",
 				"CoreUObject",
-				"AIModule"
+				"AIModule",
+				"UMG"
 			]
 		}
 	],

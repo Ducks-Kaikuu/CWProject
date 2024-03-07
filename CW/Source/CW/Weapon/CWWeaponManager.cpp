@@ -40,16 +40,26 @@ void UCWWeaponManager::SetupWeaponDataAsset(){
 	}
 }
 
-TSharedPtr<FStreamableHandle> UCWWeaponManager::LoadWeaponClass(FName Key, ACWWheeledVehiclePawn* Class, typename TMemFunPtrType<false, ACWWheeledVehiclePawn, void ()>::Type Func)
-{
-	if(WeaponClassMap.Find(Key) == nullptr)
-	{
+//----------------------------------------------------------------------//
+//
+//! @brief 武器のクラス情報を非同期ロード
+//
+//! @param Key   ロードする武器名
+//! @param Class ロード終了時に通知するビークルアクター
+//! @param Func  ロード終了時にコールするデリゲート
+//
+//! @retval 非同期ロードのハンドラ
+//
+//----------------------------------------------------------------------//
+TSharedPtr<FStreamableHandle> UCWWeaponManager::LoadWeaponClass(FName Key, ACWWheeledVehiclePawn* Class, typename TMemFunPtrType<false, ACWWheeledVehiclePawn, void ()>::Type Func){
+	// アセットが存在するかチェック
+	if(WeaponClassMap.Find(Key) == nullptr){
 		return nullptr;
 	}
-
+	
 	TArray<FSoftObjectPath> ObjectList;
-
+	
 	ObjectList.Add(WeaponClassMap[Key].ToSoftObjectPath());
-
+	// 非同期ロード
 	return SNUtility::RequestAsyncLoad(ObjectList, Class, Func);
 }
