@@ -16,8 +16,10 @@ ACWSceneBase::ACWSceneBase()
 	PrimaryActorTick.bCanEverTick = true;
 	// 最初はTickをOFF
 	PrimaryActorTick.bStartWithTickEnabled = false;
-
+	
 	SetActorTickEnabled(false);
+	// ルートを設定
+	SetRootComponent(CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent")));
 }
 
 // Called when the game starts or when spawned

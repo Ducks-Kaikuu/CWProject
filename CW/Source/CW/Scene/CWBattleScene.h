@@ -3,9 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "CW/Bullet/CWBulletManager.h"
 #include "CW/Scene/CWSceneBase.h"
 #include "CWBattleScene.generated.h"
 
+class UCWBulletManager;
+class ACWBulletBase;
 struct FStreamableHandle;
 class UCWUserWidgetBase;
 /**
@@ -34,11 +37,22 @@ private:
 	
 	//!< バトルHUDのクラス情報
 	UPROPERTY(EditAnywhere, Category="HUD")
-	TSoftClassPtr<UCWUserWidgetBase> BattleHudClass = nullptr;;
+	TSoftClassPtr<UCWUserWidgetBase> BattleHudClass = nullptr;
+
+	UPROPERTY(EditAnywhere, Category="Bullet")
+	TSoftClassPtr<UCWBulletManager> BulletManagerClass = UCWBulletManager::StaticClass();
+	
+	UPROPERTY(EditAnywhere, Category="Bullet")
+	TMap<TSoftClassPtr<ACWBulletBase>, int> SpawnBullet;
+
+	
 	
 	//!< バトルHUDへのポインタ
 	UPROPERTY()
 	TObjectPtr<UCWUserWidgetBase> BattleHud = nullptr;
+
+	UPROPERTY()
+	TObjectPtr<UCWBulletManager> BulletManager = nullptr;
 	
 	//!< バトルHUDの非同期ロードのハンドル
 	TSharedPtr<FStreamableHandle> HudStreamHandle;
