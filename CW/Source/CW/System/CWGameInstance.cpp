@@ -4,10 +4,13 @@
 #include "CW/System/CWGameInstance.h"
 
 #include "ModuleDescriptor.h"
+#include "Blueprint/UserWidget.h"
 #include "CW/CWDef.h"
 #include "GameplayTags/SNGameplayTags.h"
 
 #include "Components/GameFrameworkComponentManager.h"
+#include "CW/UI/Widget/CWMasterWidget.h"
+#include "Kismet/GameplayStatics.h"
 #include "Modules/ModuleManifest.h"
 #include "System/SNDLCModuleInterface.h"
 
@@ -25,4 +28,5 @@ void UCWGameInstance::Init(){
 	CW_ASSERT(WeaponManager != nullptr, TEXT("Failed to Create WeaponManager"));
 
 	WeaponManager->SetupWeaponDataAsset();
+
 }

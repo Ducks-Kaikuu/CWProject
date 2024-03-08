@@ -32,16 +32,11 @@ void UCWCameraOperation::ExecAction(const FInputActionValue& InputActionValue){
 	
 	if(Vehicle != nullptr){
 		
-		UCameraComponent* CamComponent = Cast<UCameraComponent>(Vehicle->GetComponentByClass(UCameraComponent::StaticClass()));
-		
-		if(CamComponent != nullptr){
-			
-			UpdateCarFocusedCamera(CamComponent, InputActionValue);
-		}
+		UpdateCarFocusedCamera(InputActionValue);
 	}
 }
 
-void UCWCameraOperation::UpdateCarFocusedCamera(UCameraComponent* CamComponent, const FInputActionValue& InputActionValue){
+void UCWCameraOperation::UpdateCarFocusedCamera(const FInputActionValue& InputActionValue){
 	
 	const FInputActionValue::Axis2D Axis(InputActionValue.Get<FInputActionValue::Axis2D>());
 	// 現状のカメラを取得

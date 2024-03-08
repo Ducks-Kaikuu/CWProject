@@ -28,7 +28,7 @@ public:
 	//! @}
 
 private:
-	void UpdateCarFocusedCamera(UCameraComponent* CamComponent, const FInputActionValue& axis);
+	void UpdateCarFocusedCamera(const FInputActionValue& axis);
 
 	FRotator CameraRotation;
 };

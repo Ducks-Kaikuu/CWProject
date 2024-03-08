@@ -56,6 +56,7 @@ void DebugPrintScreen(const FString& text, const FLinearColor& textColor, float 
 	#define CW_DEBUG_DISPLAY(text, color, x, y, duration, scale)
 #endif
 
+
 //----------------------------------------------------------------------//
 //----------------------------------------------------------------------//
 class UCWGameInstance;
