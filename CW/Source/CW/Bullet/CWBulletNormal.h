@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Blueprint/UserWidget.h"
-#include "CWUserWidgetBase.generated.h"
+#include "CW/Bullet/CWBulletBase.h"
+#include "CWBulletNormal.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class CW_API UCWUserWidgetBase : public UUserWidget
+class CW_API ACWBulletNormal : public ACWBulletBase
 {
 	GENERATED_BODY()
 	
