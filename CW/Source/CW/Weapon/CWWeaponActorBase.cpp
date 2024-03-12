@@ -43,6 +43,18 @@ void ACWWeaponActorBase::BeginPlay(){
 	Super::BeginPlay();
 	
 }
+
+FTransform ACWWeaponActorBase::GetLaunchTransform() const
+{
+	USkeletalMeshComponent* Mesh(Cast<USkeletalMeshComponent>(GetComponentByClass(USkeletalMeshComponent::StaticClass())));
+
+	if(Mesh == nullptr)
+	{
+		return FTransform::Identity;
+	}
+
+	return Mesh->GetSocketTransform(GetLaunchSocketName());
+}
 #if 0
 // Called every frame
 void ACWWeaponActorBase::Tick(float DeltaTime)

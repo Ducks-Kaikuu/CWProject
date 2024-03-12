@@ -46,6 +46,7 @@ public:
 	
 private:
 	//!< @brief デバッグ描画用オブジェクト
+	UPROPERTY()
 	TObjectPtr<USNDebugTextRenderObject> DebugDrawObject;
 	
 	// 

@@ -3,16 +3,8 @@
 
 #include "CW/System/CWGameInstance.h"
 
-#include "ModuleDescriptor.h"
-#include "Blueprint/UserWidget.h"
 #include "CW/CWDef.h"
-#include "GameplayTags/SNGameplayTags.h"
-
-#include "Components/GameFrameworkComponentManager.h"
-#include "CW/UI/Widget/CWMasterWidget.h"
-#include "Kismet/GameplayStatics.h"
-#include "Modules/ModuleManifest.h"
-#include "System/SNDLCModuleInterface.h"
+#include "CW/Scene/CWSceneBase.h"
 
 //----------------------------------------------------------------------//
 //
@@ -29,4 +21,14 @@ void UCWGameInstance::Init(){
 
 	WeaponManager->SetupWeaponDataAsset();
 
+}
+
+void UCWGameInstance::SetCurrentScene(ACWSceneBase* Scene)
+{
+	if((CurrentScene != nullptr) && (CurrentScene != Scene))
+	{
+		CurrentScene->Destroy();
+	}
+
+	CurrentScene = Scene;
 }

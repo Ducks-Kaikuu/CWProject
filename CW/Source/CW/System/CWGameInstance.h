@@ -10,6 +10,7 @@
 //----------------------------------------------------------------------//
 //----------------------------------------------------------------------//
 class UCWMasterWidget;
+class ACWSceneBase;
 
 //----------------------------------------------------------------------//
 //
@@ -30,11 +31,18 @@ public:
 	//! @{@name 武器管理クラスを取得
 	UCWWeaponManager* GetWeaponManager();
 	//! @}
+
+	void SetCurrentScene(ACWSceneBase* Scene);
+
+	ACWSceneBase* GetCurrentScene();
 	
 private:
 	//!< 武器管理クラス
 	UPROPERTY()
-	UCWWeaponManager* WeaponManager = nullptr;
+	TObjectPtr<UCWWeaponManager> WeaponManager = nullptr;
+
+	UPROPERTY()
+	TObjectPtr<ACWSceneBase> CurrentScene = nullptr;
 };
 
 //----------------------------------------------------------------------//
@@ -47,5 +55,11 @@ private:
 FORCEINLINE UCWWeaponManager* UCWGameInstance::GetWeaponManager(){
 	return WeaponManager;
 }
+
+FORCEINLINE ACWSceneBase* UCWGameInstance::GetCurrentScene()
+{
+	return CurrentScene;
+}
+
 
 UCWGameInstance* GetCWGameInstance();

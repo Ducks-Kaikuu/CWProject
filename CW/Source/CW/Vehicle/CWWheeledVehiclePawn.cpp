@@ -36,7 +36,7 @@ void	ACWWheeledVehiclePawn::Tick(float DeltaTime){
 //		VehicleComponent->SetThrottleInput(Value);
 		VehicleComponent->SetSteeringInput(XAxis);
 		VehicleComponent->SetHandbrakeInput(HandBrake);
-#if CW_DEBUG
+#if 0
 			
 			FString str00(TEXT("Throttle  Input : ") + FString::SanitizeFloat(VehicleComponent->GetThrottleInput()));
 			FString str01(TEXT("Brake     Input : ") + FString::SanitizeFloat(VehicleComponent->GetBrakeInput()));
@@ -85,7 +85,10 @@ void ACWWheeledVehiclePawn::BeginPlay(){
 //
 //----------------------------------------------------------------------//
 void ACWWheeledVehiclePawn::FinishLoadWeaponL(){
-	PostLoadWeapon(LStreamHandle, WeaponLAttachSocket);
+
+	ACWWeaponActorBase* Weapon(PostLoadWeapon(LStreamHandle, WeaponLAttachSocket));
+
+	WeaponMap.Add(FName(TEXT("Left")), Weapon);
 }
 
 //----------------------------------------------------------------------//
@@ -94,7 +97,10 @@ void ACWWheeledVehiclePawn::FinishLoadWeaponL(){
 //
 //----------------------------------------------------------------------//
 void ACWWheeledVehiclePawn::FinishLoadWeaponR(){
-	PostLoadWeapon(RStreamHandle, WeaponRAttachSocket);
+	
+	ACWWeaponActorBase* Weapon(PostLoadWeapon(RStreamHandle, WeaponRAttachSocket));
+
+	WeaponMap.Add(FName("Right"), Weapon);
 }
 
 //----------------------------------------------------------------------//
@@ -104,29 +110,41 @@ void ACWWheeledVehiclePawn::FinishLoadWeaponR(){
 //! @param StreamHandle 非同期ロードに使用したハンドル
 //
 //----------------------------------------------------------------------//
-void ACWWheeledVehiclePawn::PostLoadWeapon(TSharedPtr<FStreamableHandle> StreamHandle, FName SocketName){
+ACWWeaponActorBase* ACWWheeledVehiclePawn::PostLoadWeapon(TSharedPtr<FStreamableHandle> StreamHandle, FName SocketName){
 	// ロードが正常に終了しているかチェック
 	if((StreamHandle == nullptr) || (StreamHandle->HasLoadCompleted() == false)){
-		return;
+		return nullptr;
 	}
 	// ロードしたオブジェクトを取得
 	UClass* WeaponClass = Cast<UClass>(StreamHandle->GetLoadedAsset());
+
+	ACWWeaponActorBase* WeaponActor(nullptr);
 	// nullチェック
-	if(WeaponClass != nullptr){
-		
+	if(WeaponClass != nullptr)
+	{
 		FActorSpawnParameters Parameter;
 		// オーナーを設定
 		Parameter.Owner = this;
 		// 武器アクターを生成
-		ACWWeaponActorBase* WeaponActor = GetWorld()->SpawnActor<ACWWeaponActorBase>(WeaponClass, Parameter);
+		WeaponActor = GetWorld()->SpawnActor<ACWWeaponActorBase>(WeaponClass, Parameter);
 		// nullチェック
 		if(WeaponActor == nullptr){
-			
 			CW_LOG(TEXT("Failed to Spawn Weapon Actor : %s"), *StreamHandle->GetDebugName());
-			
-			return;
+		} else {
+			// 武器をアタッチ
+			WeaponActor->AttachToOwner(SocketName);
 		}
-		// 武器をアタッチ
-		WeaponActor->AttachToOwner(SocketName);
 	}
+
+	return WeaponActor;
+}
+
+ACWWeaponActorBase* ACWWheeledVehiclePawn::GetWeapon(const FName& Name)
+{
+	if(WeaponMap.Contains(Name) == false)
+	{
+		return nullptr;
+	}
+
+	return WeaponMap[Name];
 }

@@ -7,6 +7,7 @@
 #include "Engine/StreamableManager.h"
 #include "CWWheeledVehiclePawn.generated.h"
 
+class ACWWeaponActorBase;
 /**
  * 
  */
@@ -25,6 +26,8 @@ public:
 	
 	void	SetHandBrake(bool bBrake);
 
+	ACWWeaponActorBase* GetWeapon(const FName& Name);
+	
 protected:
 
 	void BeginPlay() override;
@@ -40,7 +43,7 @@ private:
 	//! @}
 	
 	//! @{@name 武器のロードが終了した後の処理
-	void PostLoadWeapon(TSharedPtr<FStreamableHandle> StreamHandle, FName SocketName);
+	ACWWeaponActorBase* PostLoadWeapon(TSharedPtr<FStreamableHandle> StreamHandle, FName SocketName);
 	//! @}
 	
 	float Throttle=0.0f;
@@ -58,6 +61,9 @@ private:
 	//!< 右側の武器をアタッチするソケット名
 	UPROPERTY(EditAnywhere, Category="Vehicle|Weapon")
 	FName WeaponRAttachSocket=FName(TEXT("WeaponR"));
+
+	UPROPERTY()
+	TMap<FName, TObjectPtr<ACWWeaponActorBase>> WeaponMap;
 	
 	//!< 武器の非同期ロード用のハンドル
 	TSharedPtr<FStreamableHandle> LStreamHandle = nullptr;

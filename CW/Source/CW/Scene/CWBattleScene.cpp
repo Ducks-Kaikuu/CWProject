@@ -4,6 +4,7 @@
 #include "CW/Scene/CWBattleScene.h"
 
 #include "Blueprint/UserWidget.h"
+#include "CW/CWDef.h"
 #include "CW/UI/Widget/CWMasterWidget.h"
 #include "CW/UI/Widget/BattleHUD/CWBattleHUD.h"
 #include "Kismet/GameplayStatics.h"
@@ -20,9 +21,29 @@ ACWBattleScene::ACWBattleScene()
 	
 }
 
+//----------------------------------------------------------------------//
+//
+//! @brief ゲーム開始時に呼ばれる関数
+//
+//----------------------------------------------------------------------//
 void ACWBattleScene::BeginPlay(){
 	
 	Super::BeginPlay();
+	// 弾丸管理クラスが設定されていない場合はアサート
+	// (初期値を設定しているので意図的にnullにしないと発生しないはず)
+	CW_ASSERT(BulletManagerClass.IsNull() == false, TEXT("The BulletManager class is not configured in Blueprint."));
+	// クラス情報をロード
+	UClass* Class = Cast<UClass>(BulletManagerClass.LoadSynchronous());
+	// ここも失敗しないはず…なのでアサート
+	CW_ASSERT(Class != nullptr, TEXT("BulletManager Class is nullptr"));
+	// 武器管理クラスを生成
+	BulletManager = NewObject<UCWBulletManager>(this, TEXT("BulletManager"));
+	// ここも失敗しないはず…なのでアサート
+	CW_ASSERT(BulletManager != nullptr, TEXT("Failed to Create BulletManager"));
+	
+	BulletManager->RegisterComponent();
+	
+	BulletManager->SetupBulletDataAsset();
 	
 	if(BattleHudClass.IsNull() == false){
 		

@@ -24,6 +24,8 @@ public:
 	//! @{@name デフォルトコンストラクタ
 	ACWBattleScene();
 	//! @}
+
+	UCWBulletManager* GetBulletManager();
 	
 protected:
 	
@@ -38,22 +40,24 @@ private:
 	//!< バトルHUDのクラス情報
 	UPROPERTY(EditAnywhere, Category="HUD")
 	TSoftClassPtr<UCWUserWidgetBase> BattleHudClass = nullptr;
-
+	
+	//!< 弾丸管理クラス情報
 	UPROPERTY(EditAnywhere, Category="Bullet")
 	TSoftClassPtr<UCWBulletManager> BulletManagerClass = UCWBulletManager::StaticClass();
-	
-	UPROPERTY(EditAnywhere, Category="Bullet")
-	TMap<TSoftClassPtr<ACWBulletBase>, int> SpawnBullet;
-
-	
 	
 	//!< バトルHUDへのポインタ
 	UPROPERTY()
 	TObjectPtr<UCWUserWidgetBase> BattleHud = nullptr;
-
+	
+	//!< 弾丸管理クラス
 	UPROPERTY()
 	TObjectPtr<UCWBulletManager> BulletManager = nullptr;
 	
 	//!< バトルHUDの非同期ロードのハンドル
 	TSharedPtr<FStreamableHandle> HudStreamHandle;
 };
+
+FORCEINLINE UCWBulletManager* ACWBattleScene::GetBulletManager()
+{
+	return BulletManager;
+}

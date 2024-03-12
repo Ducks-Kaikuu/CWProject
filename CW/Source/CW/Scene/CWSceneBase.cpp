@@ -7,6 +7,7 @@
 #include "CW/UI/Widget/CWMasterWidget.h"
 
 #include "Blueprint/UserWidget.h"
+#include "CW/System/CWGameInstance.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -27,6 +28,8 @@ void ACWSceneBase::BeginPlay()
 {
 	Super::BeginPlay();
 
+	GetCWGameInstance()->SetCurrentScene(this);
+	
 	if(MasterWidgetClass.IsNull() == false)
 	{
 		APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
@@ -59,3 +62,9 @@ void ACWSceneBase::Tick(float DeltaTime)
 
 }
 
+void ACWSceneBase::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	MasterWidget->ConditionalBeginDestroy();
+
+	MasterWidget = nullptr;
+}

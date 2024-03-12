@@ -14,6 +14,7 @@
 class UInputAction;
 class USNActionBase;
 class UEnhancedInputComponent;
+class UInputMappingContext;
 
 //----------------------------------------------------------------------//
 //
@@ -26,7 +27,6 @@ struct FSNInputAction{
 	GENERATED_BODY()
 	
 public:
-	
 	//!< アクションへのポインタ
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<const UInputAction> InputAction = nullptr;
@@ -62,7 +62,13 @@ public:
 	//! @}
 	
 	bool	InitializeInput(AActor* OwnerActor);
-	
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSoftObjectPtr<UDataTable> InputGameplayTag = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSoftObjectPtr<UInputMappingContext> InputMappingContext = nullptr;
+
 	//!< 入力アクション用リスト
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Meta = (TitleProperty = "InputAction"))
 	TArray<FSNInputAction> InputActionList;

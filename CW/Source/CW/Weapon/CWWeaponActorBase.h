@@ -21,6 +21,8 @@ public:
 	//! @}
 
 	virtual FName GetLaunchSocketName() const ;
+
+	FTransform GetLaunchTransform() const ;
 	
 	// Called every frame
 //	virtual void Tick(float DeltaTime) override;

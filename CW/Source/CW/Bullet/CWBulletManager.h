@@ -3,11 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "CW/Bullet/CWBulletData.h"
 #include "Components/ActorComponent.h"
 #include "CWBulletManager.generated.h"
 
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(Blueprintable, Meta = (BlueprintSpawnableComponent))
 class CW_API UCWBulletManager : public UActorComponent
 {
 	GENERATED_BODY()
@@ -15,18 +16,34 @@ class CW_API UCWBulletManager : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UCWBulletManager();
+	
+	void SetupBulletDataAsset();
 
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	void RequestSpawn(const FName& Key, const TSoftClassPtr<ACWBulletBase>& BulletClass, int Num);
 
+	void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override ;
+
+	ACWBulletBase* GetBullet(const FName& Name);
+
+	void RecycleBullet(ACWBulletBase* Bullet);
+	
 protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
 
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override ;
+
+	void RegistBullet(const FName& Name, ACWBulletBase* Bullet);
+	
 private:
 
-	UPROPERTY(EditAnywhere, Category="Settings")
-	int Distributed = 0;
+	void SpawnBullet(TSubclassOf<ACWBulletBase> Class, const FName& Key);
+
+	bool ExecSpawnBullet();
 	
-		
+	//!< 1回のスポーン処理で生成可能な弾の数
+	UPROPERTY(EditAnywhere, Category="Settings", meta=(ClampMin=10))
+	int Distributed = 10;
+	
+	//!< 弾管理用のリスト
+	UPROPERTY()
+	TMap<FName, FCWBullet> BulletMap;
 };
