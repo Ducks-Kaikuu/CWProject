@@ -43,6 +43,8 @@ public class SNPlugin : ModuleRules
 				"EnhancedInput",
 				"GameplayTags",
 				"ModularGameplay",
+				"OnlineSubsystem",
+				"OnlineSubsystemUtils"
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);

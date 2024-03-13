@@ -22,14 +22,22 @@ public:
 	FName GetBulletKey() const ;
 
 	void SetValidation(bool bValidate);
+
+	void SetStartTransform(const FTransform& Transform);
 	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 private:
+	UPROPERTY(EditAnywhere, Category="Settings")
+	float Speed = 1.0f;
+	
 	UPROPERTY()
 	FName BulletKey = NAME_None;
+
+	UPROPERTY()
+	FTransform StartTransform;
 };
 
 FORCEINLINE FName ACWBulletBase::GetBulletKey() const

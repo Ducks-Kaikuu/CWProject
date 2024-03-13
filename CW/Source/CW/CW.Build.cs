@@ -18,7 +18,9 @@ public class CW : ModuleRules
 				"GameplayTags",
 				"ModularGameplay",
 				"SNPlugin",
-				"InputCore"
+				"InputCore",
+				"OnlineSubsystem",
+				"OnlineSubsystemUtils"
 			}
 		);
 

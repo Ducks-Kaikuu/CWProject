@@ -6,6 +6,7 @@
 #include "Engine/GameInstance.h"
 #include "SNGameInstance.generated.h"
 
+class USNOnlineSystem;
 class USNDataAssetManager;
 /**
  * 
@@ -27,6 +28,13 @@ public:
 	USNDataAssetManager* GetDataAssetManager();
 	//! @}
 	
+	
+	bool StartOnlineSystem();
+
+	bool IsEnabledOnlineSystem() const ;
+	
+	USNOnlineSystem* GetOnlineSystem();
+	
 private:
 	
 	//!< データアセット管理クラス
@@ -36,6 +44,9 @@ private:
 	// データアセット管理クラスのインスタンス
 	UPROPERTY()
 	TObjectPtr<USNDataAssetManager> DataAssetManager = nullptr;
+
+	UPROPERTY()
+	TObjectPtr<USNOnlineSystem> OnlineSystem = nullptr;
 };
 
 //----------------------------------------------------------------------//
@@ -48,6 +59,16 @@ private:
 FORCEINLINE USNDataAssetManager* USNGameInstance::GetDataAssetManager(){
 	return DataAssetManager;
 }
+
+FORCEINLINE USNOnlineSystem* USNGameInstance::GetOnlineSystem()
+{
+	return OnlineSystem;
+}
+
+
+FORCEINLINE bool USNGameInstance::IsEnabledOnlineSystem() const {
+	return (OnlineSystem != nullptr) ? true : false;
+} 
 
 
 

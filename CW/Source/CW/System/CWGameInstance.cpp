@@ -5,6 +5,7 @@
 
 #include "CW/CWDef.h"
 #include "CW/Scene/CWSceneBase.h"
+#include "Kismet/GameplayStatics.h"
 
 //----------------------------------------------------------------------//
 //
@@ -20,7 +21,6 @@ void UCWGameInstance::Init(){
 	CW_ASSERT(WeaponManager != nullptr, TEXT("Failed to Create WeaponManager"));
 
 	WeaponManager->SetupWeaponDataAsset();
-
 }
 
 void UCWGameInstance::SetCurrentScene(ACWSceneBase* Scene)

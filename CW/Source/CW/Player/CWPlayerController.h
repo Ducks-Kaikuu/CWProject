@@ -19,5 +19,6 @@ public:
 	//! @{@name デフォルトコンストラクタ
 	ACWPlayerController(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 	//! @}
-	
+
+	void BeginPlay() override;
 };

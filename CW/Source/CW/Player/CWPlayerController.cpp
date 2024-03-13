@@ -2,6 +2,11 @@
 
 
 #include "CW/Player/CWPlayerController.h"
+#include "CW/CWDef.h"
+
+#include "OnlineSubsystem.h"
+#include "OnlineSubsystemUtils.h"
+#include "CW/System/CWGameInstance.h"
 
 //----------------------------------------------------------------------//
 //
@@ -12,4 +17,11 @@
 //----------------------------------------------------------------------//
 ACWPlayerController::ACWPlayerController(const FObjectInitializer& ObjectInitializer){
 	
+}
+
+void ACWPlayerController::BeginPlay()
+{
+	Super::BeginPlay();
+
+	GetCWGameInstance()->StartOnlineSystem();
 }

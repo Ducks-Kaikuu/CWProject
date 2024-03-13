@@ -18,20 +18,20 @@ void UCWVehicleShoot::ExecAction(const FInputActionValue& InputActionValue){
 	Super::ExecAction(InputActionValue);
 	
 	if(UKismetSystemLibrary::IsServer(GetWorld()) == true){
-		// ƒoƒgƒ‹‚ÌƒV[ƒ“î•ñ‚ğæ“¾
+		// ï¿½oï¿½gï¿½ï¿½ï¿½ÌƒVï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ“¾
 		ACWBattleScene* BattleScene(Cast<ACWBattleScene>(GetCWGameInstance()->GetCurrentScene()));
-		// ƒV[ƒ“‚ª‚È‚¢ê‡‚ÍI—¹
+		// ï¿½Vï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½ê‡ï¿½ÍIï¿½ï¿½
 		if(BattleScene == nullptr){
 			
 			CW_WARNING(TEXT("Battle Scene is not Found.[Bullet]"));
 			
 			return;
 		}
-		// ’eŠÇ—ƒNƒ‰ƒX‚ğæ“¾
+		// ï¿½eï¿½Ç—ï¿½ï¿½Nï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½æ“¾
 		UCWBulletManager* BulletManager(BattleScene->GetBulletManager());
 		
 		if(BulletManager != nullptr){
-			// ’e‚ğæ“¾
+			// ï¿½eï¿½ï¿½ï¿½æ“¾
 			ACWBulletBase* Bullet = BulletManager->GetBullet(FName(TEXT("Normal")));
 			
 			if(Bullet != nullptr){
@@ -48,7 +48,7 @@ void UCWVehicleShoot::ExecAction(const FInputActionValue& InputActionValue){
 						
 						FTransform Transform(Weapon->GetLaunchTransform());
 						
-						Bullet->SetActorTransform(Transform);
+						Bullet->SetStartTransform(Transform);
 					}
 				}
 			}

@@ -1,7 +1,7 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 #include "System/SNGameInstance.h"
 #include "SNDef.h"
-#include "System/SNDLCModuleInterface.h"
+#include "..\..\Public\Online\SNOnlineSystem.h"
 #include "GameplayTags/SNGameplayTags.h"
 #include "Data/SNDataAssetManager.h"
 
@@ -45,3 +45,19 @@ void USNGameInstance::Init()
 
 	DataAssetManager->SetupDLCContents();
 }
+
+bool USNGameInstance::StartOnlineSystem()
+{
+	UWorld* World(GetWorld());
+
+	SNPLUGIN_ASSERT(World != nullptr, TEXT("World is nullptr."));
+	
+	OnlineSystem = NewObject<USNOnlineSystem>(World);
+
+	if(OnlineSystem != nullptr)
+	{
+		OnlineSystem->Login();
+	}
+	return (OnlineSystem != nullptr) ? true : false;
+}
+
