@@ -16,7 +16,8 @@
 				"SNDebug",
 				"CoreUObject",
 				"AIModule",
-				"UMG"
+				"UMG",
+				"StateTreeModule"
 			]
 		}
 	],
