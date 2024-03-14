@@ -7,6 +7,7 @@
 #include "OnlineSubsystem.h"
 #include "OnlineSubsystemUtils.h"
 #include "CW/System/CWGameInstance.h"
+#include "Input/SNInputManagerSubsystem.h"
 
 //----------------------------------------------------------------------//
 //

@@ -45,7 +45,6 @@
 #endif// CW_ENABLE_DEBUGOUTPUT
 
 
-
 namespace CW{
 void DebugPrintScreen(const FString& text, const FLinearColor& textColor, float screenX, float screenY, float duration, float scale);
 }
@@ -62,10 +61,12 @@ void DebugPrintScreen(const FString& text, const FLinearColor& textColor, float 
 class UCWGameInstance;
 class ACWPlayerController;
 class ACWWheeledVehiclePawn;
+class USNInputManagerSubsystem;
 
 UCWGameInstance* GetCWGameInstance();
 ACWPlayerController* GetCWPlayerController();
 ACWWheeledVehiclePawn* GetCurrentPlayer();
+USNInputManagerSubsystem* GetCwInputManagerSubsystem();
 
 #endif	//	_CWDef_h_
 //----------------------------------------------------------------------//

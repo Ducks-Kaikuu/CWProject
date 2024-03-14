@@ -7,6 +7,7 @@
 #include "System/SNGameInstance.h"
 #include "CWGameInstance.generated.h"
 
+class USNInputConfig;
 //----------------------------------------------------------------------//
 //----------------------------------------------------------------------//
 class UCWMasterWidget;
@@ -43,6 +44,9 @@ private:
 
 	UPROPERTY()
 	TObjectPtr<ACWSceneBase> CurrentScene = nullptr;
+
+	UPROPERTY(EditAnywhere, Category="CW|Input")
+	TObjectPtr<USNInputConfig> MenuInputMapping = nullptr;
 };
 
 //----------------------------------------------------------------------//

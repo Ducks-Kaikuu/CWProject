@@ -6,10 +6,6 @@
 #include "Action/SNActionBase.h"
 #include "CWActionBase.generated.h"
 
-//----------------------------------------------------------------------//
-//----------------------------------------------------------------------//
-struct FInputActionValue;
-
 /**
  * 
  */
@@ -26,8 +22,5 @@ public:
 	//! @{@name デストラクタ
 	virtual ~UCWActionBase();
 	//! @}
-	
-private:
-	
 	
 };

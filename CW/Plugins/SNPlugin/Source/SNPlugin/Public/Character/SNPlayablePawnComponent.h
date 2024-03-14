@@ -32,10 +32,6 @@ public:
 	USNInputConfig* GetInputConfig();
 	//! @}
 	
-	//! @{@name マッピングコンテキストを取得
-	UInputMappingContext* GetInputMappingContext(FName name);
-	//! @}
-	
 	//~ Begin IGameFrameworkInitStateInterface interface
 	virtual FName GetFeatureName() const override { return FName(TEXT("Vehicle")); }
 	virtual bool CanChangeInitState(UGameFrameworkComponentManager* Manager, FGameplayTag CurrentState, FGameplayTag DesiredState) const override;
@@ -56,10 +52,6 @@ private:
 	//!< 入力コンフィグ
 	UPROPERTY(EditDefaultsOnly, Meta = (TitleProperty = "Input Config"))
 	TObjectPtr<USNInputConfig> InputConfig;
-	
-	//!< マッピングコンテキスト
-	UPROPERTY(EditDefaultsOnly, Meta = (TitleProperty = "Input Context Map"))
-	TMap<FName, TObjectPtr<UInputMappingContext>> InputMapContextMap;
 };
 
 //----------------------------------------------------------------------//
@@ -72,20 +64,3 @@ private:
 FORCEINLINE USNInputConfig* USNPlayablePawnComponent::GetInputConfig() {
 	return InputConfig;
 }
-
-//----------------------------------------------------------------------//
-//
-//! @brief マッピングコンテキストを取得
-//
-//! @param name コンテキスト名
-//
-//! @retval マッピングコンテキスト
-//
-//----------------------------------------------------------------------//
-FORCEINLINE UInputMappingContext* USNPlayablePawnComponent::GetInputMappingContext(FName name){
-	
-	UInputMappingContext* InputMappingContext = (InputMapContextMap.Find(name) != nullptr) ? InputMapContextMap[name] : nullptr;
-	
-	return InputMappingContext;
-}
-

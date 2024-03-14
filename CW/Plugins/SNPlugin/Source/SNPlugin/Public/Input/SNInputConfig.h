@@ -31,18 +31,12 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<const UInputAction> InputAction = nullptr;
 	
-	//!< ゲームプレイタグ
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Meta = (Categories = "InputTag"))
-	FGameplayTag InputTag;
-	
 	//!< ゲームプレイタグで実行するアクション
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Meta = (Categories = "Action"))
 	TSoftClassPtr<USNActionBase> ActionClass = nullptr;
 	
 	UPROPERTY()
 	TObjectPtr<USNActionBase> Action=nullptr;
-	
-	void BindActionForInput(UEnhancedInputComponent* InputComponent, ETriggerEvent TriggerEvent);
 };
 
 //----------------------------------------------------------------------//
@@ -61,26 +55,39 @@ public:
 	USNInputConfig(const FObjectInitializer& ObjectInitializer);
 	//! @}
 	
-	bool	InitializeInput(AActor* OwnerActor);
+	bool	InitializeInput(UObject* OwnerObject);
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSoftObjectPtr<UDataTable> InputGameplayTag = nullptr;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSoftObjectPtr<UInputMappingContext> InputMappingContext = nullptr;
-
-	//!< 入力アクション用リスト
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Meta = (TitleProperty = "InputAction"))
-	TArray<FSNInputAction> InputActionList;
+	const FName& GetName() const ;
 	
-	UPROPERTY()
-	TObjectPtr<AActor> Owner;
+	const TSoftObjectPtr<UInputMappingContext>& GetInputMappingContext() const ;
 	
 private:
 	
 	//! @{@name ロード終了処理
 	void FinishLoadAsset();
 	//! @}
+
+	UPROPERTY(EditAnywhere, Category = "Input")
+	FName Name=NAME_None;
+	
+	UPROPERTY(EditAnywhere, Category="Input")
+	TSoftObjectPtr<UInputMappingContext> InputMappingContext = nullptr;
+
+	//!< 入力アクション用リスト
+	UPROPERTY(EditDefaultsOnly, Meta = (TitleProperty = "InputAction"), Category="Input")
+	TArray<FSNInputAction> InputActionList;
+	
+	UPROPERTY()
+	TObjectPtr<UObject> Owner;
 	
 	TSharedPtr<FStreamableHandle> StreamableHandle;
 };
+
+FORCEINLINE const FName& USNInputConfig::GetName() const
+{
+	return Name;
+} 
+FORCEINLINE const TSoftObjectPtr<UInputMappingContext>& USNInputConfig::GetInputMappingContext() const
+{
+	return InputMappingContext;
+} 

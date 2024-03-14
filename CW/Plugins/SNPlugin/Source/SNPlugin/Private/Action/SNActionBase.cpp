@@ -23,7 +23,7 @@ USNActionBase::~USNActionBase(){
 	Owner = nullptr;
 }
 
-void USNActionBase::Initialize(UEnhancedInputComponent* InputComponent, const UInputAction* InputAction, AActor* Object){
+void USNActionBase::Initialize(UEnhancedInputComponent* InputComponent, const UInputAction* InputAction, UObject* Object){
 	
 	Owner = Object;
 	

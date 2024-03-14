@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/BTTaskNode.h"
+#include "InputActionValue.h"
 #include "SNActionBase.generated.h"
 
 //----------------------------------------------------------------------//
@@ -33,7 +34,7 @@ public:
 	virtual ~USNActionBase();
 	//! @}
 	
-	virtual void Initialize(UEnhancedInputComponent* InputComponent, const UInputAction* InputAction, AActor* Object);
+	virtual void Initialize(UEnhancedInputComponent* InputComponent, const UInputAction* InputAction, UObject* Object);
 	
 	//! @{@name オーナーを設定
 	void	SetOwner(AActor* Object) override ;
@@ -70,7 +71,7 @@ private:
 	FName Name;
 	
 	//!< オーナー
-	AActor*	Owner;
+	UObject*	Owner;
 };
 
 //----------------------------------------------------------------------//

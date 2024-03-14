@@ -13,6 +13,15 @@ ACWWeaponActorBase::ACWWeaponActorBase(){
 	PrimaryActorTick.bCanEverTick = true;
 	// ルートコンポーネントを設定
 	SetRootComponent(CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent")));
+
+	bNetLoadOnClient = true;
+	
+	SetReplicates(true);
+}
+
+void ACWWeaponActorBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const 
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 }
 
 //----------------------------------------------------------------------//

@@ -1,8 +1,8 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "CW/Action/CWVehicleAccel.h"
-#include "ChaosVehicleMovementComponent.h"
+#include "CW/Vehicle/Action/CWVehicleAccel.h"
+#include "CW/Vehicle/CWWheeledVehiclePawn.h"
 
 void UCWVehicleAccel::ExecAction(const FInputActionValue& InputActionValue){
 	

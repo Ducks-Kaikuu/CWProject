@@ -4,6 +4,10 @@
 #include "GameplayTags/SNGameplayTags.h"
 
 #include "EnhancedInputSubsystems.h"
+#include "OnlineSubsystemUtils.h"
+#include "SNDef.h"
+#include "Input/SNInputConfig.h"
+#include "Input/SNInputManagerSubsystem.h"
 #include "UserSettings/EnhancedInputUserSettings.h"
 
 //----------------------------------------------------------------------//
@@ -55,38 +59,13 @@ void USNPlayablePawnComponent::HandleChangeInitState(UGameFrameworkComponentMana
 	
 	if((CurrentState == SNGameplayTags::InitState_DataAvailable)
 	&& (DesiredState == SNGameplayTags::InitState_DataInitialized)){
-		
-		const APlayerController* PC = GetController<APlayerController>();
-		check(PC);
-		
-		const ULocalPlayer* LP = Cast<ULocalPlayer>(PC->GetLocalPlayer());
-		check(LP);
-		
-		UEnhancedInputLocalPlayerSubsystem* Subsystem = LP->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>();
-		check(Subsystem);
-		
-		Subsystem->ClearAllMappings();
-		
-		
-		if(UInputMappingContext* IMC = InputMapContextMap[FName(TEXT("Battle"))]){
-			
-			if(UEnhancedInputUserSettings* Settings = Subsystem->GetUserSettings()){
-				Settings->RegisterInputMappingContext(IMC);
-			}
-			
-			FModifyContextOptions Options = {};
-			
-			Options.bIgnoreAllPressedKeysUntilRelease = false;
-			
-			Subsystem->AddMappingContext(IMC, 0, Options);
-		}
-		
-		if(InputConfig != nullptr){
-			
+
+		if(InputConfig != nullptr)
+		{
 			APawn* Pawn = GetPawn<APawn>();
-			
-			check(Pawn);
-			
+
+			SNPLUGIN_ASSERT(Pawn != nullptr, TEXT("Failed to GetPawn"));
+				
 			InputConfig->InitializeInput(Pawn);
 		}
 	}

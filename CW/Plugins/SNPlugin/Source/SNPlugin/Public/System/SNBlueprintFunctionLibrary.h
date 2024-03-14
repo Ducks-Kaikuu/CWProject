@@ -17,6 +17,9 @@ class SNPLUGIN_API USNBlueprintFunctionLibrary : public UBlueprintFunctionLibrar
 
 public:
 
+	UFUNCTION(BlueprintCallable, Category="SN|Input")
+	static void SetInputMappingContext(FName Name, bool bClear=true);
+		
 	UFUNCTION(BlueprintCallable, Category="SN|Online")
 	static bool StartupOnlineSystem();
 

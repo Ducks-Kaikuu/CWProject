@@ -11,7 +11,10 @@ class CW_API ACWWeaponActorBase : public AActor
 {
 	GENERATED_BODY()
 	
-public:	
+public:
+
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	
 	//! @{@name デフォルトコンストラクタ
 	ACWWeaponActorBase();
 	//! @}

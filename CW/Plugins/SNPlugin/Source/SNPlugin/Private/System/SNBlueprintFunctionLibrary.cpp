@@ -4,10 +4,29 @@
 #include "System/SNBlueprintFunctionLibrary.h"
 
 #include "SNDef.h"
+#include "Input/SNInputManagerSubsystem.h"
 #include "Kismet/GameplayStatics.h"
 #include "Online/SNOnlineSystem.h"
 #include "System/SNGameInstance.h"
 
+void USNBlueprintFunctionLibrary::SetInputMappingContext(FName Name, bool bClear)
+{
+	USNGameInstance* GameInstance(Cast<USNGameInstance>(UGameplayStatics::GetGameInstance(GetPrimaryWorld())));
+
+	if(GameInstance == nullptr)
+	{
+		SNPLUGIN_LOG(TEXT("Failed to Start Online System because SNGameInstance is nullptr."));
+
+		return;
+	}
+
+	USNInputManagerSubsystem* InputManagerSubsystem(GameInstance->GetSubsystem<USNInputManagerSubsystem>());
+
+	if(InputManagerSubsystem != nullptr)
+	{
+		InputManagerSubsystem->SetInputMapping(Name, bClear);
+	}
+}
 bool USNBlueprintFunctionLibrary::StartupOnlineSystem()
 {
 	USNGameInstance* GameInstance(Cast<USNGameInstance>(UGameplayStatics::GetGameInstance(GetPrimaryWorld())));

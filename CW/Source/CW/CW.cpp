@@ -8,8 +8,8 @@
 #include "Utility/SNUtility.h"
 
 #include "Modules/ModuleManager.h"
-#include "Kismet/GameplayStatics.h"
 #include "Vehicle/CWWheeledVehiclePawn.h"
+#include "Input/SNInputManagerSubsystem.h"
 
 IMPLEMENT_PRIMARY_GAME_MODULE(FDefaultGameModuleImpl, CW, "CW");
 
@@ -50,4 +50,9 @@ ACWPlayerController* GetCWPlayerController(){
 //----------------------------------------------------------------------//
 ACWWheeledVehiclePawn* GetCurrentPlayer(){
 	return SNUtility::GetCurrentPlayer<ACWWheeledVehiclePawn>();
+}
+
+USNInputManagerSubsystem* GetCwInputManagerSubsystem()
+{
+	return GetCWGameInstance()->GetSubsystem<USNInputManagerSubsystem>();
 }

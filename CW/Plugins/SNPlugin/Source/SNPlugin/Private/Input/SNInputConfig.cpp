@@ -2,28 +2,12 @@
 #include "Input/SNInputConfig.h"
 #include "SNDef.h"
 #include "Utility/SNUtility.h"
+#include "Input/SNInputManagerSubsystem.h"
 #include "Action/SNActionBase.h"
-#include "EnhancedInputComponent.h"
 
-//----------------------------------------------------------------------//
-//
-//! @brief アクションを入力コンポーネントにバインド
-//
-//! @param InputComponent 入力コンポーネント
-//! @param TriggerEvent   トリガーイベント
-//
-//----------------------------------------------------------------------//
-void FSNInputAction::BindActionForInput(UEnhancedInputComponent* InputComponent, ETriggerEvent TriggerEvent){
-	
-	if(Action == nullptr){
-		
-		SNPLUGIN_WARNING(TEXT("Input Action Object does not set\n"));
-		
-		return;
-	}
-	
-	InputComponent->BindAction(InputAction.Get(), TriggerEvent, Action.Get(), &USNActionBase::InputAction);
-}
+#include "EnhancedInputComponent.h"
+#include "InputMappingContext.h"
+
 
 //----------------------------------------------------------------------//
 //
@@ -36,9 +20,25 @@ USNInputConfig::USNInputConfig(const FObjectInitializer& ObjectInitializer){
 	
 }
 
-bool	USNInputConfig::InitializeInput(AActor* OwnerActor){
+bool	USNInputConfig::InitializeInput(UObject* OwnerObject){
+
+	SNPLUGIN_ASSERT(OwnerObject != nullptr, TEXT("Should set Input Action Owner."));
 	
-	Owner = OwnerActor;
+	Owner = OwnerObject;
+	
+	UGameInstance* GameInstance(SNUtility::GetGameInstance<UGameInstance>());
+	
+	SNPLUGIN_ASSERT(GameInstance != nullptr, TEXT("GameInstance is nullptr"));
+	
+	USNInputManagerSubsystem* InputManagerSubsystem(GameInstance->GetSubsystem<USNInputManagerSubsystem>());
+	
+	SNPLUGIN_ASSERT(InputManagerSubsystem != nullptr, TEXT("InputManagerSubsystem is nullptr."));
+	
+	UInputMappingContext* InputMappingContextInstance(InputMappingContext.LoadSynchronous());
+	
+	SNPLUGIN_ASSERT(InputMappingContextInstance != nullptr, TEXT("InputMappingContext is nullptr."));
+	
+	InputManagerSubsystem->AddInputContext(Name, InputMappingContextInstance);
 	
 	TArray<FSoftObjectPath> assetList;
 	
@@ -54,11 +54,20 @@ bool	USNInputConfig::InitializeInput(AActor* OwnerActor){
 
 void	USNInputConfig::FinishLoadAsset(){
 	
+	UEnhancedInputComponent* InputComponent = nullptr;
+	
 	APawn* Pawn = Cast<APawn>(Owner);
 	
-	check(Pawn != nullptr);
-	
-	UEnhancedInputComponent* InputComponent = Cast<UEnhancedInputComponent>(Pawn->InputComponent);
+	if(Pawn != nullptr){
+		InputComponent = Cast<UEnhancedInputComponent>(Pawn->InputComponent);
+	} else {
+		
+		APlayerController* PlayerController(SNUtility::GetPlayerController<APlayerController>());
+		
+		SNPLUGIN_ASSERT(PlayerController != nullptr, TEXT("PlayerController is nullptr."));
+		
+		InputComponent = Cast<UEnhancedInputComponent>(PlayerController->InputComponent);
+	}
 	
 	check(InputComponent != nullptr);
 	
