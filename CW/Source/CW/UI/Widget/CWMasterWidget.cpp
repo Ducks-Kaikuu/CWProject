@@ -71,3 +71,25 @@ void UCWMasterWidget::SetLayer(EWidgetLayer Layer, UCWUserWidgetBase* Widget){
 		CanvasPanelSlot->SetOffsets(FMargin(0, 0, 0, 0));
 	}
 }
+
+void UCWMasterWidget::RemoveLyaer(EWidgetLayer Layer, UCWUserWidgetBase* Widget)
+{
+	// レンジチェック
+	CW_ASSERT(Layer < EWidgetLayer::Num, TEXT("Widget Layer is Invalid"));
+	// nullチェック
+	if(Widget == nullptr){
+		
+		CW_WARNING(TEXT("SetLayer : Widget is nullptr\n"));
+		
+		return;
+	}
+	// nullチェック
+	if(LayerPanel[(int)Layer] == nullptr){
+		
+		CW_WARNING(TEXT("SetLayer : Layer Panel is nullptr -> %d"), (int)Layer);
+		
+		return;
+	}
+
+	LayerPanel[(int)Layer]->RemoveChild(Widget);
+}

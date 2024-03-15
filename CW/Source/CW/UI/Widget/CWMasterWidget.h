@@ -32,6 +32,8 @@ public:
 	//! @{@name レイヤーにウィジェットを設定
 	void SetLayer(EWidgetLayer Layer, UCWUserWidgetBase* Widget);
 	//! @}
+
+	void RemoveLyaer(EWidgetLayer Layer, UCWUserWidgetBase* Widget);
 	
 private:
 	//!< レイヤー用パネル

@@ -64,7 +64,10 @@ void ACWSceneBase::Tick(float DeltaTime)
 
 void ACWSceneBase::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
-	MasterWidget->ConditionalBeginDestroy();
+	if(MasterWidget != nullptr)
+	{
+		MasterWidget->ConditionalBeginDestroy();
 
-	MasterWidget = nullptr;
+		MasterWidget = nullptr;
+	}
 }

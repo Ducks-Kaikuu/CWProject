@@ -13,5 +13,8 @@ UCLASS()
 class CW_API ACWSceneDirector : public ACWSceneBase
 {
 	GENERATED_BODY()
-	
+
+private:
+	UPROPERTY(VisibleAnywhere)
+	bool bTest = false;
 };
