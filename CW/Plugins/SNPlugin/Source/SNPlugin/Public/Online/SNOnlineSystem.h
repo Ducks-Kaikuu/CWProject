@@ -4,7 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "Interfaces/OnlineSessionInterface.h"
+#include "Interfaces/OnlineSessionDelegates.h"
 #include "SNOnlineSystem.generated.h"
+
+DECLARE_DYNAMIC_DELEGATE_TwoParams(FSNCompleteHostSession, FName, InSessionName, bool, bWasSuccessful);
+DECLARE_DYNAMIC_DELEGATE_OneParam(FSNCompleteFindSession, bool, bWasSuccessful);
+DECLARE_DYNAMIC_DELEGATE_TwoParams(FSNCompleteJoinSession, FName, InSessionName, bool, bResult);
 
 /**
  * 
@@ -20,7 +25,7 @@ public:
 	//! @}
 	
 	//! @{@name ホストとしてセッションを生成
-	bool HostSession();
+	bool HostSession(int ConnectionNum=4, FName Name=FName(TEXT("Session")));
 	//! @}
 	
 	//! @{@name セッションを検索
@@ -30,6 +35,12 @@ public:
 	//! @{@name セッションを終了
 	void KillSession();
 	//! @}
+
+	FSNCompleteHostSession OnCompleteHostSession;
+
+	FSNCompleteFindSession OnCompleteFindSession;
+
+	FSNCompleteJoinSession OnCompleteJoinSession;
 	
 private:
 	
@@ -52,15 +63,7 @@ private:
 	//! @{@name セッションへの参加が完了した際のでーりゲート
 	void OnJoinSessionComplete(FName InSessionName, EOnJoinSessionCompleteResult::Type Result);
 	//! @}
-	
-	//!< セッション名
-	UPROPERTY(EditAnywhere, Category="Online")
-	FName SessionName = FName(TEXT("Session"));
-	
-	//!< セッションへの接続数
-	UPROPERTY(EditAnywhere, Category="Online")
-	int ConnectionNum = 4;
-	
+
 	UPROPERTY(EditAnywhere, Category="Online")
 	bool bShouldIdAdvertise = true;
 	
@@ -81,6 +84,9 @@ private:
 	
 	UPROPERTY(EditAnywhere, Category="Online")
 	bool bUseLobbiesVoiceChatIfAvailable = true;
-	
+
+	UPROPERTY()
+	FName SessionName = NAME_None;
+		
 	TSharedPtr<class FOnlineSessionSearch> SearchSettings = nullptr;
 };

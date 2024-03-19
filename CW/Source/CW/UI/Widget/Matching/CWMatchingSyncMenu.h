@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "CW/Scene/CWSceneBase.h"
-#include "CWMatchingScene.generated.h"
+#include "CW/UI/Widget/CWUserWidgetBase.h"
+#include "CWMatchingSyncMenu.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class CW_API ACWMatchingScene : public ACWSceneBase
+class CW_API UCWMatchingSyncMenu : public UCWUserWidgetBase
 {
 	GENERATED_BODY()
 	

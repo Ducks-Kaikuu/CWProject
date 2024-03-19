@@ -25,6 +25,10 @@ public:
 	//! @{@name タスク終了
 	virtual void ExitState(FStateTreeExecutionContext& Context, const FStateTreeTransitionResult& Transition) override;
 	//! @}
+
+	virtual void HudPostLoad(){};
+
+	UCWUserWidgetBase* GetHud();
 	
 private:
 	
@@ -47,3 +51,8 @@ private:
 	//!< Widgetの非同期ロードのハンドル
 	TSharedPtr<FStreamableHandle> HudStreamHandle;
 };
+
+FORCEINLINE UCWUserWidgetBase* UCWSceneTaskBase::GetHud()
+{
+	return HudInstance;
+}

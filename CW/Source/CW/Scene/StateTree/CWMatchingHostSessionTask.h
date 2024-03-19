@@ -4,24 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "CW/Scene/StateTree/CWSceneTaskBase.h"
-#include "Blueprint/StateTreeTaskBlueprintBase.h"
-#include "CWMatchingTask.generated.h"
+#include "CWMatchingHostSessionTask.generated.h"
 
 class UCWButton;
-class UCWMatchingMenu;
-
-UENUM(BlueprintInternalUseOnly)
-enum class EMatchingState:uint8
-{
-	None UMETA(DisplayName = "Not Select"),
-	Host UMETA(DisplayName = "Create Host Session"),
-	Join UMETA(DisplayName = "Join Session")
-};
 /**
  * 
  */
 UCLASS()
-class CW_API UCWMatchingTask : public UCWSceneTaskBase
+class CW_API UCWMatchingHostSessionTask : public UCWSceneTaskBase
 {
 	GENERATED_BODY()
 
@@ -40,16 +30,21 @@ public:
 	//! @}
 
 	virtual void HudPostLoad() override;
-
-	UFUNCTION()
-	void OnClickHostSession(UCWButton* Button);
-
-	UFUNCTION()
-	void OnClickJoinSession(UCWButton* Button);
 	
 private:
-	// 
-	UPROPERTY(VisibleAnywhere)
-	int MatchingState = (int)EMatchingState::None;
+	UFUNCTION()
+	void OnCreateButtonClicked(UCWButton* Button);
 
+	UFUNCTION()
+	void OnCancelButtonClicked(UCWButton* Button);
+
+	UFUNCTION()
+	void OnCompleteHostSession(FName SessionName, bool bWasSuccessful);
+
+	UPROPERTY(VisibleAnywhere)
+	bool bSucceed = false;
+	
+	bool bCancel = false;
+	
+	bool bExit = false;
 };

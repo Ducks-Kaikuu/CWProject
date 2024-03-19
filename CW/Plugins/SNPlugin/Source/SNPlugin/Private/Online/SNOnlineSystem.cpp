@@ -61,11 +61,13 @@ void USNOnlineSystem::Login(){
 //! @retval false 異常終了
 //
 //----------------------------------------------------------------------//
-bool USNOnlineSystem::HostSession(){
+bool USNOnlineSystem::HostSession(int ConnectionNum, FName Name){
 	
 	IOnlineSubsystem* const OnlineSubsystem = Online::GetSubsystem(GetWorld());
 	
 	SNPLUGIN_ASSERT(OnlineSubsystem != nullptr, TEXT("OnlineSubsystem is nullptr"));
+
+	SessionName = Name;
 	
 	IOnlineSessionPtr Sessions = OnlineSubsystem->GetSessionInterface();
 	
@@ -96,6 +98,8 @@ bool USNOnlineSystem::HostSession(){
 		ULocalPlayer* LocalPlayer(PlayerController->GetLocalPlayer());
 		
 		if(LocalPlayer != nullptr){
+
+			
 			
 			TSharedPtr<const FUniqueNetId> UniqueNetIdptr = LocalPlayer->GetPreferredUniqueNetId().GetUniqueNetId();
 			
@@ -238,6 +242,8 @@ void USNOnlineSystem::OnCreateSessionComplete(FName InSessionName, bool bWasSucc
 	} else {
 		SNPLUGIN_ERROR(TEXT("Failed to Session Succeed [%s]."), *InSessionName.ToString());
 	}
+
+	OnCompleteHostSession.ExecuteIfBound(InSessionName, bWasSuccessful);
 }
 
 //----------------------------------------------------------------------//
@@ -266,6 +272,8 @@ void USNOnlineSystem::OnFindSessionsComplete(bool bWasSuccessful){
 		// セッション検索失敗
 		SNPLUGIN_LOG(TEXT("Find Session: Fail"));
 	}
+
+	OnCompleteFindSession.ExecuteIfBound(bWasSuccessful);
 }
 
 
@@ -329,4 +337,6 @@ void USNOnlineSystem::OnJoinSessionComplete(FName InSessionName, EOnJoinSessionC
 			}
 		}
 	}
+
+	OnCompleteJoinSession.ExecuteIfBound(InSessionName, Result == EOnJoinSessionCompleteResult::Success ? true : false);
 }

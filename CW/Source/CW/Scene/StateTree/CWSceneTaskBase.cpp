@@ -79,7 +79,7 @@ void UCWSceneTaskBase::FinishLoadHudClass(){
 	}
 	// クラス情報を取得
 	UClass* Class = Cast<UClass>(HudStreamHandle->GetLoadedAsset());
-
+	// nullチェック
 	if(Class == nullptr){
 		
 		CW_ERROR(TEXT("Hud Class is nullptr."));
@@ -98,14 +98,17 @@ void UCWSceneTaskBase::FinishLoadHudClass(){
 		ACWSceneBase* Scene = GetCWGameInstance()->GetCurrentScene();
 		
 		if(Scene != nullptr){
-			
+			// マスターを取得
 			UCWMasterWidget* MasterWidget = Scene->GetMasterWidget();
 			
 			if(MasterWidget != nullptr){
-				
+				// レイヤーに設定
 				MasterWidget->SetLayer(EWidgetLayer::Layer3, HudInstance);
-				
+				// 表示を設定
 				HudInstance->SetVisibility(ESlateVisibility::Visible);
+				// ロード終了を通知
+				HudPostLoad();
+				
 			} else {
 				CW_ERROR(TEXT("MasterWidget is nullptr."));
 			}

@@ -6,6 +6,7 @@
 #include "Engine/GameInstance.h"
 #include "SNGameInstance.generated.h"
 
+class USNInputConfig;
 class USNOnlineSystem;
 class USNDataAssetManager;
 /**
@@ -27,8 +28,7 @@ public:
 	//! @{@name データアセット管理クラスのポインタを取得
 	USNDataAssetManager* GetDataAssetManager();
 	//! @}
-	
-	
+
 	bool StartOnlineSystem();
 
 	bool IsEnabledOnlineSystem() const ;
@@ -40,7 +40,7 @@ private:
 	//!< データアセット管理クラス
 	UPROPERTY(EditAnywhere, Category="Data")
 	TSoftClassPtr<USNDataAssetManager> DataAssetManagerClass = nullptr;
-	
+
 	// データアセット管理クラスのインスタンス
 	UPROPERTY()
 	TObjectPtr<USNDataAssetManager> DataAssetManager = nullptr;

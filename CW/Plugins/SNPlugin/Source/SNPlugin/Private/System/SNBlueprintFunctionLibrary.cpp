@@ -9,6 +9,8 @@
 #include "Online/SNOnlineSystem.h"
 #include "System/SNGameInstance.h"
 
+#include "Interfaces/OnlineSessionDelegates.h"
+
 void USNBlueprintFunctionLibrary::SetInputMappingContext(FName Name, bool bClear)
 {
 	USNGameInstance* GameInstance(Cast<USNGameInstance>(UGameplayStatics::GetGameInstance(GetPrimaryWorld())));
@@ -52,7 +54,7 @@ void USNBlueprintFunctionLibrary::Login()
 	
 }
 
-void USNBlueprintFunctionLibrary::HostSession()
+void USNBlueprintFunctionLibrary::HostSession(FOnCreateSessionComplete Delegate)
 {
 	USNOnlineSystem* OnlineSystem(GetOnlineSystem());
 

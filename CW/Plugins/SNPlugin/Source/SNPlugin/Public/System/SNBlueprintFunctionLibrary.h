@@ -3,10 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Interfaces/OnlineSessionDelegates.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "SNBlueprintFunctionLibrary.generated.h"
 
 class USNOnlineSystem;
+
 /**
  * 
  */
@@ -26,8 +28,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category="SN|Online")
 	static void Login();
 
-	UFUNCTION(BlueprintCallable, Category="SN|Online")
-	static void HostSession();
+//	UFUNCTION(BlueprintCallable, Category="SN|Online")
+	static void HostSession(FOnCreateSessionComplete Delegate);
 	
 	UFUNCTION(BlueprintCallable, Category="SN|Online")
 	static void FindSession();
