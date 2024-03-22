@@ -36,6 +36,8 @@ public:
 	void KillSession();
 	//! @}
 
+	const TSharedPtr<class FOnlineSessionSearch>& GetSearchSessionList() const ;
+
 	FSNCompleteHostSession OnCompleteHostSession;
 
 	FSNCompleteFindSession OnCompleteFindSession;
@@ -90,3 +92,9 @@ private:
 		
 	TSharedPtr<class FOnlineSessionSearch> SearchSettings = nullptr;
 };
+
+FORCEINLINE const TSharedPtr<FOnlineSessionSearch>& USNOnlineSystem::GetSearchSessionList() const
+{
+	return SearchSettings;
+}
+ 

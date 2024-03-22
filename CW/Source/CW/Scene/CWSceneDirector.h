@@ -9,7 +9,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable, Meta = (BlueprintSpawnableComponent))
 class CW_API ACWSceneDirector : public ACWSceneBase
 {
 	GENERATED_BODY()

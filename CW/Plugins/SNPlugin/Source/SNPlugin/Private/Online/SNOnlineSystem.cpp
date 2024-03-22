@@ -86,9 +86,10 @@ bool USNOnlineSystem::HostSession(int ConnectionNum, FName Name){
 		SessionSettings->bAllowJoinViaPresence			= bAllowJoinViaPresense;
 		SessionSettings->bUseLobbiesIfAvailable			= bUseLobbiesIfAvailable;
 		SessionSettings->bUseLobbiesVoiceChatIfAvailable= bUseLobbiesVoiceChatIfAvailable;
+
 		
-		SessionSettings->Set(SEARCH_KEYWORDS, FString("Custom"), EOnlineDataAdvertisementType::ViaOnlineService);
-		
+		SessionSettings->Set(SEARCH_KEYWORDS, SessionName.ToString(), EOnlineDataAdvertisementType::ViaOnlineService);
+
 		Sessions->AddOnCreateSessionCompleteDelegate_Handle(FOnCreateSessionCompleteDelegate::CreateUObject(this, &USNOnlineSystem::OnCreateSessionComplete));
 		// プレイヤーコントローラを取得
 		APlayerController* PlayerController(UGameplayStatics::GetPlayerController(GetWorld(), 0));
@@ -99,12 +100,10 @@ bool USNOnlineSystem::HostSession(int ConnectionNum, FName Name){
 		
 		if(LocalPlayer != nullptr){
 
-			
-			
 			TSharedPtr<const FUniqueNetId> UniqueNetIdptr = LocalPlayer->GetPreferredUniqueNetId().GetUniqueNetId();
 			
 			bool bResult = Sessions->CreateSession(*UniqueNetIdptr, SessionName, *SessionSettings);
-			
+
 			if(bResult == true){
 				
 				SNPLUGIN_LOG(TEXT("Success to Create Session."))
@@ -140,7 +139,8 @@ void USNOnlineSystem::FindSession(){
 		
 		SearchSettings->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);
 		SearchSettings->QuerySettings.Set(SEARCH_LOBBIES, true, EOnlineComparisonOp::Equals);
-		SearchSettings->QuerySettings.Set(SEARCH_KEYWORDS, FString("Custom"), EOnlineComparisonOp::Equals);
+		//SearchSettings->QuerySettings.Set(SEARCH_KEYWORDS, FString("Custom"), EOnlineComparisonOp::Equals);
+		//SearchSettings->QuerySettings.Set(SETTING_CUSTOM, true, EOnlineComparisonOp::Equals);
 		
 		Sessions->AddOnFindSessionsCompleteDelegate_Handle(FOnFindSessionsCompleteDelegate::CreateUObject(this, &USNOnlineSystem::OnFindSessionsComplete));
 		
@@ -266,7 +266,7 @@ void USNOnlineSystem::OnFindSessionsComplete(bool bWasSuccessful){
 			
 			const TCHAR* SessionId = *SearchSettings->SearchResults[0].GetSessionIdStr();
 			// DISPLAY_LOG("Session ID: %s", SessionId);
-			JoinSession(SearchSettings->SearchResults[0]);
+			//JoinSession(SearchSettings->SearchResults[0]);
 		}
 	} else {
 		// セッション検索失敗
@@ -286,7 +286,7 @@ void USNOnlineSystem::JoinSession(FOnlineSessionSearchResult SearchResult){
 		IOnlineSessionPtr Sessions(OnlineSubsystem->GetSessionInterface());
 		
 		if(Sessions.IsValid()){
-			
+
 			if(SearchResult.IsValid()){
 				
 				Sessions->AddOnJoinSessionCompleteDelegate_Handle(FOnJoinSessionCompleteDelegate::CreateUObject(this, &USNOnlineSystem::OnJoinSessionComplete));

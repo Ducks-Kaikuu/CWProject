@@ -6,6 +6,7 @@
 #include "CW/Scene/StateTree/CWSceneTaskBase.h"
 #include "CWMatchingJoinSessionTask.generated.h"
 
+class UCWButton;
 /**
  * 
  */
@@ -27,5 +28,15 @@ public:
 	//! @{@name タスクの終了処理
 	virtual void ExitState(FStateTreeExecutionContext& Context, const FStateTreeTransitionResult& Transition) override;
 	//! @}
+
+	void HudPostLoad() override;
+
+private:
+
+	UFUNCTION()
+	void OnStartSearchSession(const FString& Name);
+	
+	UFUNCTION()
+	void OnCompleteSearchSession(bool bResult);
 
 };
