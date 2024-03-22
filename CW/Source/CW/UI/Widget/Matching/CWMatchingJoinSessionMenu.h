@@ -27,19 +27,17 @@ public:
 	UCWRoomItem* CreateRoomItem(const FString& SessionName, int ConnectionNum);
 
 	FOnJoinButtonClicked OnJoinButtonClickedDelegate;
-
-	UListView* GetRoomList();
 	
 private:
 
 	UFUNCTION()
 	void OnJoinButtonClicked(UCWButton* Button);
-	
-	UPROPERTY()
-	TObjectPtr<UListView> RoomList = nullptr;
-};
 
-FORCEINLINE UListView* UCWMatchingJoinSessionMenu::GetRoomList()
-{
-	return RoomList;
-}
+	UPROPERTY()
+	UCWRoomItem* RoomItem00 = nullptr;
+
+	UPROPERTY()
+	TArray<TObjectPtr<UCWRoomItem>> RoomItemList;
+
+	int RoomCount = 0;
+};

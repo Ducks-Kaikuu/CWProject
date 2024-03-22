@@ -65,3 +65,14 @@ void UCWButton::OnButtonUnhovered(){
 	}
 }
 
+void UCWButton::SetRootWidget(UCWUserWidgetBase* Root)
+{
+	RootWidget = Root;
+}
+
+UCWUserWidgetBase* UCWButton::GetRootWidget()
+{
+	return RootWidget;
+}
+
+

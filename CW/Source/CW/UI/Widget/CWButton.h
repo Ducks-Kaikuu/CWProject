@@ -6,6 +6,7 @@
 #include "Components/Button.h"
 #include "CWButton.generated.h"
 
+class UCWUserWidgetBase;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FCWButtonClicked, UCWButton*, Button);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FCWButtonHovered, UCWButton*, Button);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FCWButtonUnhovered, UCWButton*, Button);
@@ -35,6 +36,10 @@ public:
 	//! @{@name ボタンにホバーアウト時のイベント
 	FCWButtonUnhovered OnUnhoveredDelegate;
 	//! @}
+
+	void SetRootWidget(UCWUserWidgetBase* Root);
+
+	UCWUserWidgetBase* GetRootWidget();
 	
 	void BeginDestroy() override;
 	
@@ -54,4 +59,8 @@ protected:
 	UFUNCTION()
 	void OnButtonUnhovered();
 	//! @}
+
+private:
+	UPROPERTY()
+	UCWUserWidgetBase* RootWidget = nullptr;
 };

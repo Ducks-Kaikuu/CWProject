@@ -5,6 +5,7 @@
 
 #include "Components/HorizontalBox.h"
 #include "Components/TextBlock.h"
+#include "CW/CWDef.h"
 #include "CW/UI/Widget/CWButton.h"
 
 bool UCWRoomItem::Initialize()
@@ -17,9 +18,14 @@ bool UCWRoomItem::Initialize()
 	{
 		JoinButton = Cast<UCWButton>(GetWidgetFromName(TEXT("Join")));
 
-		SessionName = Cast<UTextBlock>(GetWidgetFromName(TEXT("SessionName")));
+		if(JoinButton != nullptr)
+		{
+			JoinButton->SetRootWidget(this);
+		}
+		
+		SessionName = Cast<UTextBlock>(GetWidgetFromName(TEXT("SessionNameText")));
 
-		ConnectionNum = Cast<UTextBlock>(GetWidgetFromName(TEXT("ConnectionNum")));
+		ConnectionNum = Cast<UTextBlock>(GetWidgetFromName(TEXT("ConnectionNumText")));
 	}
 
 	return Result;
@@ -29,7 +35,13 @@ void UCWRoomItem::SetRoom(const FString& Name, int Num)
 {
 	if(SessionName != nullptr)
 	{
-		SessionName->SetText(FText::FromString(Name));		
+		SessionName->SetText(FText::FromString(Name));
+
+		FText test = SessionName->GetText();
+
+		FString aaa = test.ToString();
+
+		CW_LOG(TEXT("%s"), *aaa);
 	}
 	
 	if(ConnectionNum != nullptr)

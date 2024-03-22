@@ -139,8 +139,6 @@ void USNOnlineSystem::FindSession(){
 		
 		SearchSettings->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);
 		SearchSettings->QuerySettings.Set(SEARCH_LOBBIES, true, EOnlineComparisonOp::Equals);
-		//SearchSettings->QuerySettings.Set(SEARCH_KEYWORDS, FString("Custom"), EOnlineComparisonOp::Equals);
-		//SearchSettings->QuerySettings.Set(SETTING_CUSTOM, true, EOnlineComparisonOp::Equals);
 		
 		Sessions->AddOnFindSessionsCompleteDelegate_Handle(FOnFindSessionsCompleteDelegate::CreateUObject(this, &USNOnlineSystem::OnFindSessionsComplete));
 		

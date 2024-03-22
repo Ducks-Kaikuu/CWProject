@@ -30,5 +30,13 @@
 			"Name": "ModularGameplay",
 			"Enabled": true
 		},
+		{
+			"Name": "OnlineSubsystemEOS",
+			"Enabled": true
+		},
+		{
+			"Name": "OnlineSubsystemUtils",
+			"Enabled": true
+		},
 	]
 }

@@ -81,17 +81,7 @@ void UCWMatchingJoinSessionTask::OnCompleteSearchSession(bool bResult)
 
 				FString RoomName = Setting.Data.ToString();
 
-				Menu->CreateRoomItem(RoomName, Result.Session.NumOpenPrivateConnections);
-
-				
-				FString tmp = Result.Session.SessionInfo->ToString();
-				FString dbg = Result.Session.SessionInfo->ToDebugString();
-				
-				FOnlineSessionSetting Name;
-				
-				//Result.Session.SessionSettings.Get(FName(TEXT("UseSessionName")), Name);
-				
-				CW_LOG(TEXT("Test."));
+				Menu->CreateRoomItem(RoomName, Result.Session.NumOpenPublicConnections);
 			}
 		}
 	}

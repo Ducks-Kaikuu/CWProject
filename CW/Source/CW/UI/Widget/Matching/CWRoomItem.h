@@ -25,7 +25,7 @@ public:
 	UCWButton* GetJoinButton();
 
 	FString GetSessionName() const ;
-	
+
 private:
 	UPROPERTY()
 	TObjectPtr<UCWButton> JoinButton = nullptr;
