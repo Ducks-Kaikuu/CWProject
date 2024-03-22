@@ -39,4 +39,10 @@ private:
 	UFUNCTION()
 	void OnCompleteSearchSession(bool bResult);
 
+	UFUNCTION()
+	void OnCompleteJoinSession(FName SessionName, bool bResult);
+
+	bool bJoinSucceed = false;
+
+	bool bExit = false;
 };

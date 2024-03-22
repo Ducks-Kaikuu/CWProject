@@ -32,6 +32,10 @@ public:
 	void FindSession();
 	//! @}
 	
+	//! @{@name セッションに参加
+	void JoinSession(FOnlineSessionSearchResult SearchResult);
+	//! @}
+	
 	//! @{@name セッションを終了
 	void KillSession();
 	//! @}
@@ -56,10 +60,6 @@ private:
 	
 	//! @{@name セッションの検索が終了した際のデリゲート
 	void OnFindSessionsComplete(bool bWasSuccessful);
-	//! @}
-	
-	//! @{@name セッションに参加
-	void JoinSession(FOnlineSessionSearchResult SearchResult);
 	//! @}
 	
 	//! @{@name セッションへの参加が完了した際のでーりゲート

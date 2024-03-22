@@ -15,9 +15,11 @@ EStateTreeRunStatus UCWMatchingJoinSessionTask::Tick(FStateTreeExecutionContext&
 {
 	EStateTreeRunStatus Result = Super::Tick(Context, DeltaTime);
 
-	//FinishTask();
+	if(bExit == true)
+	{
+		return (bJoinSucceed == true) ? EStateTreeRunStatus::Succeeded : EStateTreeRunStatus::Failed;
+	}
 	
-	//return EStateTreeRunStatus::Succeeded;
 	return Result;
 }
 
@@ -31,6 +33,8 @@ EStateTreeRunStatus UCWMatchingJoinSessionTask::EnterState(FStateTreeExecutionCo
 	{
 		OnlineSystem->OnCompleteFindSession.BindDynamic(this, &UCWMatchingJoinSessionTask::OnCompleteSearchSession);
 
+		OnlineSystem->OnCompleteJoinSession.BindDynamic(this, &UCWMatchingJoinSessionTask::OnCompleteJoinSession);
+		
 		OnlineSystem->FindSession();
 	}
 		
@@ -46,6 +50,8 @@ void UCWMatchingJoinSessionTask::ExitState(FStateTreeExecutionContext& Context, 
 	if(OnlineSystem != nullptr)
 	{
 		OnlineSystem->OnCompleteFindSession.Clear();
+
+		OnlineSystem->OnCompleteJoinSession.Clear();
 	}
 }
 
@@ -59,7 +65,30 @@ void UCWMatchingJoinSessionTask::HudPostLoad()
 
 void UCWMatchingJoinSessionTask::OnStartSearchSession(const FString& Name)
 {
-	
+	USNOnlineSystem* OnlineSystem(GetCWGameInstance()->GetOnlineSystem());
+
+	if(OnlineSystem != nullptr)
+	{
+		const TSharedPtr<FOnlineSessionSearch>& SessionList(OnlineSystem->GetSearchSessionList());
+
+		for(auto& Result:SessionList->SearchResults)
+		{
+			const FOnlineSessionSetting& Setting(Result.Session.SessionSettings.Settings[SEARCH_KEYWORDS]);
+
+			FString RoomName = Setting.Data.ToString();
+
+			if(RoomName == Name)
+			{
+				OnlineSystem->JoinSession(Result);
+
+				return;
+			}
+		}
+	}
+	// ここまで処理が来た場合は接続に失敗
+	bJoinSucceed = false;
+	// 処理を終了
+	bExit = true;
 }
 
 
@@ -71,6 +100,19 @@ void UCWMatchingJoinSessionTask::OnCompleteSearchSession(bool bResult)
 
 	if(SessionList != nullptr)
 	{
+		// 検索結果が0の場合は終了
+		// リトライをいれるべきか...
+		if(SessionList->SearchResults.Num() <= 0)
+		{
+			CW_LOG(TEXT("Host Session is not Found."))
+			// 接続失敗判定
+			bJoinSucceed = false;
+			// 処理を終了
+			bExit = true;
+			
+			return;
+		}
+		
 		UCWMatchingJoinSessionMenu* Menu = Cast<UCWMatchingJoinSessionMenu>(GetHud());
 
 		if(Menu != nullptr)
@@ -81,11 +123,19 @@ void UCWMatchingJoinSessionTask::OnCompleteSearchSession(bool bResult)
 
 				FString RoomName = Setting.Data.ToString();
 
-				Menu->CreateRoomItem(RoomName, Result.Session.NumOpenPublicConnections);
+				Menu->ShowRoomItem(RoomName, Result.Session.NumOpenPublicConnections);
 			}
 		}
 	}
 }
+
+void UCWMatchingJoinSessionTask::OnCompleteJoinSession(FName SessionName, bool bResult)
+{
+	bJoinSucceed = bResult;
+
+	bExit = true;
+}
+
 
 
 

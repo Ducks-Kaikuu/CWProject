@@ -3,63 +3,68 @@
 
 #include "CW/UI/Widget/Matching/CWRoomItem.h"
 
-#include "Components/HorizontalBox.h"
 #include "Components/TextBlock.h"
-#include "CW/CWDef.h"
 #include "CW/UI/Widget/CWButton.h"
 
-bool UCWRoomItem::Initialize()
-{
+//----------------------------------------------------------------------//
+//
+//! @brief 初期化処理
+//
+//! @retval true  正常終了
+//! @retval false 異常終了
+//
+//----------------------------------------------------------------------//
+bool UCWRoomItem::Initialize(){
+	
 	bool Result = Super::Initialize();
-
-	UHorizontalBox* RoomItem = Cast<UHorizontalBox>(GetWidgetFromName(TEXT("RoomItem")));
-
-//	if(RoomItem != nullptr)
-	{
-		JoinButton = Cast<UCWButton>(GetWidgetFromName(TEXT("Join")));
-
-		if(JoinButton != nullptr)
-		{
-			JoinButton->SetRootWidget(this);
-		}
-		
-		SessionName = Cast<UTextBlock>(GetWidgetFromName(TEXT("SessionNameText")));
-
-		ConnectionNum = Cast<UTextBlock>(GetWidgetFromName(TEXT("ConnectionNumText")));
+	// 参加ボタンを取得
+	JoinButton = Cast<UCWButton>(GetWidgetFromName(TEXT("Join")));
+	
+	if(JoinButton != nullptr){
+		// ルートとして自分を登録
+		JoinButton->SetRootWidget(this);
 	}
-
+	// セッション名用のテキストボックスを取得
+	SessionName = Cast<UTextBlock>(GetWidgetFromName(TEXT("SessionNameText")));
+	// 接続数用のテキストボックスを取得
+	ConnectionNum = Cast<UTextBlock>(GetWidgetFromName(TEXT("ConnectionNumText")));
+	
 	return Result;
 }
 
-void UCWRoomItem::SetRoom(const FString& Name, int Num)
-{
-	if(SessionName != nullptr)
-	{
+//----------------------------------------------------------------------//
+//
+//! @brief ルーム情報を設定
+//
+//! @param Name セッション名
+//! @param Num  接続数
+//
+//----------------------------------------------------------------------//
+void UCWRoomItem::SetRoom(const FString& Name, int Num){
+	
+	if(SessionName != nullptr){
 		SessionName->SetText(FText::FromString(Name));
-
-		FText test = SessionName->GetText();
-
-		FString aaa = test.ToString();
-
-		CW_LOG(TEXT("%s"), *aaa);
 	}
 	
-	if(ConnectionNum != nullptr)
-	{
-		ConnectionNum->SetText(FText::AsNumber(Num));	
+	if(ConnectionNum != nullptr){
+		ConnectionNum->SetText(FText::AsNumber(Num));
 	}
 }
 
-FString UCWRoomItem::GetSessionName() const
-{
+//----------------------------------------------------------------------//
+//
+//! @brief セッション名を取得
+//
+//! @retval セッション名
+//
+//----------------------------------------------------------------------//
+FString UCWRoomItem::GetSessionName() const{
+	
 	FString Name("");
-
-	if(SessionName != nullptr)
-	{
+	
+	if(SessionName != nullptr){
 		Name = SessionName->GetText().ToString();
 	}
-
+	
 	return Name;
 }
-
-

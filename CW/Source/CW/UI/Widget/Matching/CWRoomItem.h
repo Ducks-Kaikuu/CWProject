@@ -8,9 +8,12 @@
 
 class UTextBlock;
 class UCWButton;
-/**
- * 
- */
+
+//----------------------------------------------------------------------//
+//
+//! @brief ルーム情報管理用Widget
+//
+//----------------------------------------------------------------------//
 UCLASS()
 class CW_API UCWRoomItem : public UCWUserWidgetBase
 {
@@ -18,27 +21,45 @@ class CW_API UCWRoomItem : public UCWUserWidgetBase
 
 public:
 	
+	//! @{@name 初期化処理
 	bool Initialize() override;
-
+	//! @}
+	
+	//! @{@name ルーム情報を設定
 	void SetRoom(const FString& Name, int Num);
-
+	//! @}
+	
+	//! @{@name 接続用のボタンを取得
 	UCWButton* GetJoinButton();
-
+	//! @}
+	
+	//! @{@name セッション名を取得
 	FString GetSessionName() const ;
-
+	//! @}
+	
 private:
+	
+	//!< 接続用のボタン
 	UPROPERTY()
 	TObjectPtr<UCWButton> JoinButton = nullptr;
-
+	
+	//!< セッション名
 	UPROPERTY()
 	TObjectPtr<UTextBlock> SessionName = nullptr;
-
+	
+	//!< 接続数
 	UPROPERTY()
 	TObjectPtr<UTextBlock> ConnectionNum = nullptr;
 };
 
-FORCEINLINE UCWButton* UCWRoomItem::GetJoinButton()
-{
+//----------------------------------------------------------------------//
+//
+//! @brief 接続用のボタンを取得
+//
+//! @retval ボタンへのポインタ
+//
+//----------------------------------------------------------------------//
+FORCEINLINE UCWButton* UCWRoomItem::GetJoinButton(){
 	return JoinButton;
 }
 

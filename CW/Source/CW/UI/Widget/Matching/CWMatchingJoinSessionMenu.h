@@ -6,38 +6,48 @@
 #include "CW/UI/Widget/CWUserWidgetBase.h"
 #include "CWMatchingJoinSessionMenu.generated.h"
 
-class UCWButton;
 DECLARE_DYNAMIC_DELEGATE_OneParam(FOnJoinButtonClicked, const FString&, SessionName);
 
+class UCWButton;
 class UCWRoomItem;
 class UListView;
 class UTileView;
-/**
- * 
- */
+
+//----------------------------------------------------------------------//
+//
+//! @brief 接続用メニュークラス
+//
+//----------------------------------------------------------------------//
 UCLASS()
 class CW_API UCWMatchingJoinSessionMenu : public UCWUserWidgetBase
 {
 	GENERATED_BODY()
 
 public:
-
+	
+	//! @{@name 初期化処理
 	bool Initialize() override;
-
-	UCWRoomItem* CreateRoomItem(const FString& SessionName, int ConnectionNum);
-
+	//! @}
+	
+	//! @{@name ルーム情報を表示
+	UCWRoomItem* ShowRoomItem(const FString& SessionName, int ConnectionNum);
+	//! @}
+	
+	//! @{@name 接続ボタンを押された際のデリゲータ
 	FOnJoinButtonClicked OnJoinButtonClickedDelegate;
+	//! @}
 	
 private:
-
+	
+	//! @{@name 接続ボタンを押された際のデリゲート
 	UFUNCTION()
 	void OnJoinButtonClicked(UCWButton* Button);
-
-	UPROPERTY()
-	UCWRoomItem* RoomItem00 = nullptr;
-
+	//! @}
+	
+	//!< ルーム情報表示用Widgetリスト
 	UPROPERTY()
 	TArray<TObjectPtr<UCWRoomItem>> RoomItemList;
-
+	
+	//!< 表示しているルーム数
 	int RoomCount = 0;
 };
