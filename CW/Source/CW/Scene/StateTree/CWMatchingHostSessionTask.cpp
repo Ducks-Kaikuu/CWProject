@@ -7,6 +7,7 @@
 #include "CW/UI/Widget/CWButton.h"
 #include "CW/UI/Widget/Matching/CWMatchingHostSessionMenu.h"
 #include "Online/SNOnlineSystem.h"
+#include "UObject/FastReferenceCollector.h"
 #include "Utility/SNUtility.h"
 
 EStateTreeRunStatus UCWMatchingHostSessionTask::Tick(FStateTreeExecutionContext& Context, const float DeltaTime)
@@ -104,4 +105,9 @@ void UCWMatchingHostSessionTask::OnCompleteHostSession(FName SessionName, bool b
 	bSucceed = bWasSuccessful;
 
 	bExit = true;
+
+	if(bWasSuccessful == true)
+	{
+		UCWMatchingSceneBase::SetSessionName(SessionName);
+	}
 }

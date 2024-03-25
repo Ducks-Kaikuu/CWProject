@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "CW/Scene/StateTree/CWSceneTaskBase.h"
+#include "CW/Scene/StateTree/CWMatchingSceneBase.h"
 #include "CWMatchingJoinSessionTask.generated.h"
 
 class UCWButton;
@@ -11,7 +11,7 @@ class UCWButton;
  * 
  */
 UCLASS()
-class CW_API UCWMatchingJoinSessionTask : public UCWSceneTaskBase
+class CW_API UCWMatchingJoinSessionTask : public UCWMatchingSceneBase
 {
 	GENERATED_BODY()
 
@@ -42,7 +42,5 @@ private:
 	UFUNCTION()
 	void OnCompleteJoinSession(FName SessionName, bool bResult);
 
-	bool bJoinSucceed = false;
-
-	bool bExit = false;
+	bool bSucceed = false;
 };

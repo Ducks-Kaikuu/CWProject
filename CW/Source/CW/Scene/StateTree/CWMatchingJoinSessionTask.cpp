@@ -17,7 +17,7 @@ EStateTreeRunStatus UCWMatchingJoinSessionTask::Tick(FStateTreeExecutionContext&
 
 	if(bExit == true)
 	{
-		return (bJoinSucceed == true) ? EStateTreeRunStatus::Succeeded : EStateTreeRunStatus::Failed;
+		return (bSucceed == true) ? EStateTreeRunStatus::Succeeded : EStateTreeRunStatus::Failed;
 	}
 	
 	return Result;
@@ -86,7 +86,7 @@ void UCWMatchingJoinSessionTask::OnStartSearchSession(const FString& Name)
 		}
 	}
 	// ここまで処理が来た場合は接続に失敗
-	bJoinSucceed = false;
+	bSucceed = false;
 	// 処理を終了
 	bExit = true;
 }
@@ -106,7 +106,7 @@ void UCWMatchingJoinSessionTask::OnCompleteSearchSession(bool bResult)
 		{
 			CW_LOG(TEXT("Host Session is not Found."))
 			// 接続失敗判定
-			bJoinSucceed = false;
+			bSucceed = false;
 			// 処理を終了
 			bExit = true;
 			
@@ -131,9 +131,14 @@ void UCWMatchingJoinSessionTask::OnCompleteSearchSession(bool bResult)
 
 void UCWMatchingJoinSessionTask::OnCompleteJoinSession(FName SessionName, bool bResult)
 {
-	bJoinSucceed = bResult;
+	bSucceed = bResult;
 
 	bExit = true;
+
+	if(bSucceed == true)
+	{
+		UCWMatchingSceneBase::SetSessionName(SessionName);
+	}
 }
 
 

@@ -35,7 +35,7 @@ public:
 	static void FindSession();
 
 	UFUNCTION(BlueprintCallable, Category="SN|Online")
-	static void KillSession();
+	static void KillSession(FName SessionName);
 	
 private:
 	static USNOnlineSystem* GetOnlineSystem();

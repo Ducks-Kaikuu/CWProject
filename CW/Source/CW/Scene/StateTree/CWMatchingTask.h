@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "CW/Scene/StateTree/CWSceneTaskBase.h"
+#include "CW/Scene/StateTree/CWMatchingSceneBase.h"
 #include "Blueprint/StateTreeTaskBlueprintBase.h"
 #include "CWMatchingTask.generated.h"
 
@@ -21,7 +21,7 @@ enum class EMatchingState:uint8
  * 
  */
 UCLASS()
-class CW_API UCWMatchingTask : public UCWSceneTaskBase
+class CW_API UCWMatchingTask : public UCWMatchingSceneBase
 {
 	GENERATED_BODY()
 

@@ -37,7 +37,7 @@ public:
 	//! @}
 	
 	//! @{@name セッションを終了
-	void KillSession();
+	void KillSession(const FName& SessionName);
 	//! @}
 
 	const TSharedPtr<class FOnlineSessionSearch>& GetSearchSessionList() const ;
@@ -87,9 +87,6 @@ private:
 	UPROPERTY(EditAnywhere, Category="Online")
 	bool bUseLobbiesVoiceChatIfAvailable = true;
 
-	UPROPERTY()
-	FName SessionName = NAME_None;
-		
 	TSharedPtr<class FOnlineSessionSearch> SearchSettings = nullptr;
 };
 

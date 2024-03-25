@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "CW/Scene/StateTree/CWSceneTaskBase.h"
+#include "CW/Scene/StateTree/CWMatchingSceneBase.h"
 #include "CWMatchingHostSessionTask.generated.h"
 
 class UCWButton;
@@ -11,7 +11,7 @@ class UCWButton;
  * 
  */
 UCLASS()
-class CW_API UCWMatchingHostSessionTask : public UCWSceneTaskBase
+class CW_API UCWMatchingHostSessionTask : public UCWMatchingSceneBase
 {
 	GENERATED_BODY()
 
@@ -45,6 +45,4 @@ private:
 	bool bSucceed = false;
 	
 	bool bCancel = false;
-	
-	bool bExit = false;
 };

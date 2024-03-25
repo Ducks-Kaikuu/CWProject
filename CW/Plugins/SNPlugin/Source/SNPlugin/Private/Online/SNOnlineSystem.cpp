@@ -1,7 +1,7 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "Online\SNOnlineSystem.h"
+
+#include "GameplayTagsSettings.h"
 #include "SNDef.h"
 
 #include "GameFramework/PlayerState.h"
@@ -67,8 +67,6 @@ bool USNOnlineSystem::HostSession(int ConnectionNum, FName Name){
 	
 	SNPLUGIN_ASSERT(OnlineSubsystem != nullptr, TEXT("OnlineSubsystem is nullptr"));
 
-	SessionName = Name;
-	
 	IOnlineSessionPtr Sessions = OnlineSubsystem->GetSessionInterface();
 	
 	if(Sessions.IsValid()){
@@ -88,7 +86,7 @@ bool USNOnlineSystem::HostSession(int ConnectionNum, FName Name){
 		SessionSettings->bUseLobbiesVoiceChatIfAvailable= bUseLobbiesVoiceChatIfAvailable;
 
 		
-		SessionSettings->Set(SEARCH_KEYWORDS, SessionName.ToString(), EOnlineDataAdvertisementType::ViaOnlineService);
+		SessionSettings->Set(SEARCH_KEYWORDS, Name.ToString(), EOnlineDataAdvertisementType::ViaOnlineService);
 
 		Sessions->AddOnCreateSessionCompleteDelegate_Handle(FOnCreateSessionCompleteDelegate::CreateUObject(this, &USNOnlineSystem::OnCreateSessionComplete));
 		// プレイヤーコントローラを取得
@@ -102,7 +100,7 @@ bool USNOnlineSystem::HostSession(int ConnectionNum, FName Name){
 
 			TSharedPtr<const FUniqueNetId> UniqueNetIdptr = LocalPlayer->GetPreferredUniqueNetId().GetUniqueNetId();
 			
-			bool bResult = Sessions->CreateSession(*UniqueNetIdptr, SessionName, *SessionSettings);
+			bool bResult = Sessions->CreateSession(*UniqueNetIdptr, Name, *SessionSettings);
 
 			if(bResult == true){
 				
@@ -164,7 +162,7 @@ void USNOnlineSystem::FindSession(){
 //! @brief セッションを終了
 //
 //----------------------------------------------------------------------//
-void USNOnlineSystem::KillSession(){
+void USNOnlineSystem::KillSession(const FName& SessionName){
 	
 	IOnlineSubsystem* const OnlineSubsystem = Online::GetSubsystem(GetWorld());
 	
@@ -274,7 +272,6 @@ void USNOnlineSystem::OnFindSessionsComplete(bool bWasSuccessful){
 	OnCompleteFindSession.ExecuteIfBound(bWasSuccessful);
 }
 
-
 void USNOnlineSystem::JoinSession(FOnlineSessionSearchResult SearchResult){
 	
 	IOnlineSubsystem* const OnlineSubsystem = Online::GetSubsystem(GetWorld());
@@ -296,10 +293,19 @@ void USNOnlineSystem::JoinSession(FOnlineSessionSearchResult SearchResult){
 				ULocalPlayer* LocalPlayer(PlayerController->GetLocalPlayer());
 				
 				if(LocalPlayer != nullptr){
+
+					FName JoinSessionName(NAME_None);
+					
+					if(SearchResult.Session.SessionSettings.Settings.Contains(SEARCH_KEYWORDS) == true)
+					{
+						const FOnlineSessionSetting& Setting(SearchResult.Session.SessionSettings.Settings[SEARCH_KEYWORDS]);
+						
+						JoinSessionName = *Setting.Data.ToString();
+					}
 					
 					TSharedPtr<const FUniqueNetId> UniqueNetIdptr = LocalPlayer->GetPreferredUniqueNetId().GetUniqueNetId();
 					// セッションに参加
-					Sessions->JoinSession(*UniqueNetIdptr, SessionName, SearchResult);
+					Sessions->JoinSession(*UniqueNetIdptr, JoinSessionName, SearchResult);
 				}
 			} else {
 				SNPLUGIN_LOG(TEXT("Invalid session."));
@@ -322,7 +328,7 @@ void USNOnlineSystem::OnJoinSessionComplete(FName InSessionName, EOnJoinSessionC
 				// Client travel to the server
 				FString ConnectString;
 				
-				if(Sessions->GetResolvedConnectString(SessionName, ConnectString)){
+				if(Sessions->GetResolvedConnectString(InSessionName, ConnectString)){
 					
 					UE_LOG_ONLINE_SESSION(Log, TEXT("Join session: traveling to %s"), *ConnectString);
 					

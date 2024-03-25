@@ -74,13 +74,13 @@ void USNBlueprintFunctionLibrary::FindSession()
 	}
 }
 
-void USNBlueprintFunctionLibrary::KillSession()
+void USNBlueprintFunctionLibrary::KillSession(FName SessionName)
 {
 	USNOnlineSystem* OnlineSystem(GetOnlineSystem());
 
 	if(OnlineSystem != nullptr)
 	{
-		OnlineSystem->KillSession();
+		OnlineSystem->KillSession(SessionName);
 	}
 }
 
