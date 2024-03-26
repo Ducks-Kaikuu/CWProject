@@ -1,13 +1,9 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "CW/Player/CWPlayerController.h"
+#include "CW/Character/Player/CWPlayerController.h"
 #include "CW/CWDef.h"
-
-#include "OnlineSubsystem.h"
-#include "OnlineSubsystemUtils.h"
 #include "CW/System/CWGameInstance.h"
-#include "Input/SNInputManagerSubsystem.h"
 
 //----------------------------------------------------------------------//
 //

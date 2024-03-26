@@ -4,7 +4,7 @@
 #include "CW/Weapon/CWWeaponManager.h"
 #include "CW/CWDef.h"
 #include "CW/System/CWGameInstance.h"
-#include "CW/Vehicle/CWWheeledVehiclePawn.h"
+#include "CW/Character/Vehicle/CWWheeledVehiclePawn.h"
 
 #include "Data/SNContentsAsset.h"
 #include "Data/SNDataAssetManager.h"

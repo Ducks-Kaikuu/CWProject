@@ -1,10 +1,9 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "CW/Vehicle/Action/CWCameraOperation.h"
-#include "CW/Vehicle/CWWheeledVehiclePawn.h"
+#include "CW/Character//Vehicle/Action/CWCameraOperation.h"
+#include "CW/Character/Vehicle/CWWheeledVehiclePawn.h"
 
-#include "Camera/CameraComponent.h"
 #include "InputActionValue.h"
 #include "CW/Camera/CWBattleCameraActor.h"
 #include "Utility/SNUtility.h"

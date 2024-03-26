@@ -2,10 +2,8 @@
 
 
 #include "CW/Camera/CWBattleCameraActor.h"
-
-#include "SkeletalMeshAttributes.h"
 #include "CW/CWDef.h"
-#include "CW/Vehicle/CWWheeledVehiclePawn.h"
+#include "CW/Character/Vehicle/CWWheeledVehiclePawn.h"
 
 void ACWBattleCameraActor::Tick(float DeltaSeconds){
 	

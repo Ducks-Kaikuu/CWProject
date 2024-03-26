@@ -1,13 +1,21 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "CW/Vehicle/CWWheeledVehiclePawn.h"
+#include "CW/Character/Vehicle/CWWheeledVehiclePawn.h"
 #include "CW/CWDef.h"
 #include "CW/System/CWGameInstance.h"
 #include "CW/Weapon/CWWeaponActorBase.h"
 
 #include "ChaosVehicleMovementComponent.h"
-#include "UObject/GarbageCollectionSchema.h"
+#include "Net/UnrealNetwork.h"
+
+void ACWWheeledVehiclePawn::GetReplicatedCustomConditionState(FCustomPropertyConditionState& OutActiveState) const
+{
+	Super::GetReplicatedCustomConditionState(OutActiveState);
+
+	
+}
+
 
 void	ACWWheeledVehiclePawn::Tick(float DeltaTime){
 	

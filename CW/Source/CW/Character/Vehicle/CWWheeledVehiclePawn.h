@@ -17,6 +17,8 @@ class CW_API ACWWheeledVehiclePawn : public AWheeledVehiclePawn
 	GENERATED_BODY()
 	
 public:
+
+	virtual void GetReplicatedCustomConditionState(FCustomPropertyConditionState& OutActiveState) const override;
 	
 	void	Tick(float DeltaTime) override ;
 	

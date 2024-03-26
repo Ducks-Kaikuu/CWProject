@@ -1,9 +1,9 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "CW/Vehicle/Component/CWVehicleWeaponComponent.h"
+#include "CW/Character/Vehicle/Component/CWVehicleWeaponComponent.h"
 #include "CW/CWDef.h"
-#include "CW/Vehicle/CWWheeledVehiclePawn.h"
+#include "CW/Character/Vehicle/CWWheeledVehiclePawn.h"
 
 // Sets default values for this component's properties
 UCWVehicleWeaponComponent::UCWVehicleWeaponComponent()

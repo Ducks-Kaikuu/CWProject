@@ -4,11 +4,12 @@
 #include "CWDef.h"
 #include "CW/System/CWBlueprintFunctionLibrary.h"
 #include "CW/System/CWGameInstance.h"
-#include "CW/Player/CWPlayerController.h"
+#include "CW/Character/Player/CWPlayerController.h"
+#include "CW/Character/Vehicle/CWWheeledVehiclePawn.h"
+
 #include "Utility/SNUtility.h"
 
 #include "Modules/ModuleManager.h"
-#include "Vehicle/CWWheeledVehiclePawn.h"
 #include "Input/SNInputManagerSubsystem.h"
 
 IMPLEMENT_PRIMARY_GAME_MODULE(FDefaultGameModuleImpl, CW, "CW");

@@ -1,8 +1,8 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "CW/Vehicle/Action/CWVehicleHandBrake.h"
-#include "CW/Vehicle/CWWheeledVehiclePawn.h"
+#include "CW/Character/Vehicle/Action/CWVehicleHandBrake.h"
+#include "CW/Character/Vehicle/CWWheeledVehiclePawn.h"
 
 void UCWVehicleHandBrake::ExecAction(const FInputActionValue& InputActionValue){
 	

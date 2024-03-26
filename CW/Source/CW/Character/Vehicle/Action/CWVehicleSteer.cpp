@@ -1,9 +1,9 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
-#include "CW/Vehicle/Action/CWVehicleSteer.h"
+#include "CW/Character/Vehicle/Action/CWVehicleSteer.h"
+#include "CW/Character/Vehicle/CWWheeledVehiclePawn.h"
 
 #include "InputActionValue.h"
-#include "CW/Vehicle/CWWheeledVehiclePawn.h"
 
 void UCWVehicleSteer::ExecAction(const FInputActionValue& InputActionValue){
 	

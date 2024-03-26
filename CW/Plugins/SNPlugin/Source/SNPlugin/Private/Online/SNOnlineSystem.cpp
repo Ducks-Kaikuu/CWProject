@@ -77,6 +77,7 @@ bool USNOnlineSystem::HostSession(int ConnectionNum, FName Name){
 		// 生成するセッションの設定
 		SessionSettings->NumPublicConnections			= ConnectionNum;
 		SessionSettings->NumPrivateConnections			= 0;
+		SessionSettings->bIsLANMatch					= true;
 		SessionSettings->bShouldAdvertise				= bShouldIdAdvertise;
 		SessionSettings->bAllowJoinInProgress			= bAllowJoinInProgress;
 		SessionSettings->bAllowInvites					= bAllowInvites;
