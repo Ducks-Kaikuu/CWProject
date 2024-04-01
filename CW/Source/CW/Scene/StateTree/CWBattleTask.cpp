@@ -2,6 +2,9 @@
 
 
 #include "CW/Scene/StateTree/CWBattleTask.h"
+#include "CW/CWDef.h"
+
+#include "Input/SNInputManagerSubsystem.h"
 
 EStateTreeRunStatus UCWBattleTask::Tick(FStateTreeExecutionContext& Context, const float DeltaTime)
 {
@@ -10,6 +13,13 @@ EStateTreeRunStatus UCWBattleTask::Tick(FStateTreeExecutionContext& Context, con
 
 EStateTreeRunStatus UCWBattleTask::EnterState(FStateTreeExecutionContext& Context, const FStateTreeTransitionResult& Transition)
 {
+	USNInputManagerSubsystem* InputManagerSubsystem(GetCwInputManagerSubsystem());
+
+	if(InputManagerSubsystem != nullptr)
+	{
+		InputManagerSubsystem->SetInputMapping(FName(TEXT("Battle")));
+	}
+	
 	return Super::EnterState(Context, Transition);
 }
 
