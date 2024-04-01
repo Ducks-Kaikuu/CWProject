@@ -38,12 +38,35 @@ void USNOnlineSystem::Login(){
 			int Id = LocalPlayer->GetControllerId();
 			
 			if(Identity->GetLoginStatus(Id) != ELoginStatus::LoggedIn){
+
+				
+				//FOnlineAccountCredentials Credentials(TEXT("persistentauth"), TEXT(""), TEXT(""));
+				FOnlineAccountCredentials Credentials(TEXT("AccountPortal"), TEXT(""), TEXT(""));
+				//FOnlineAccountCredentials Credentials(TEXT("Developer"), TEXT("localhost:8080"), TEXT("Satoshi"));
 				
 				SNPLUGIN_WARNING(TEXT("CommandLine : %s"), FCommandLine::Get());
+
+				FName t0;
+				FName t1;
+				FName t2;
+
+				//FCommandLine::Set(TEXT("AUTH_TYPE=Developer"));
+				//FCommandLine::Set(TEXT("AUTH_LOGIN=localhost:8080"));
+				//FCommandLine::Set(TEXT("AUTH_PASSWORD=Satoshi"));
+
+				//FParse::Value(FCommandLine::Get(), TEXT("AUTH_TYPE="), t0);
+				//FParse::Value(FCommandLine::Get(), TEXT("AUTH_LOGIN="), t1);
+				//FParse::Value(FCommandLine::Get(), TEXT("AUTH_PASSWORD="), t2);
+				
+				
+				SNPLUGIN_LOG(TEXT("CommandLine : %s"), FCommandLine::Get());
 				
 				Identity->AddOnLoginCompleteDelegate_Handle(Id, FOnLoginCompleteDelegate::CreateUObject(this, &USNOnlineSystem::OnLoginComplete));
 				
-				Identity->AutoLogin(Id);
+				//Identity->AutoLogin(Id);
+
+				Identity->Login(Id, Credentials);
+				
 			}
 			
 			ELoginStatus::Type Status = Identity->GetLoginStatus(Id);
@@ -77,7 +100,7 @@ bool USNOnlineSystem::HostSession(int ConnectionNum, FName Name){
 		// 生成するセッションの設定
 		SessionSettings->NumPublicConnections			= ConnectionNum;
 		SessionSettings->NumPrivateConnections			= 0;
-		SessionSettings->bIsLANMatch					= true;
+		SessionSettings->bIsLANMatch					= false;
 		SessionSettings->bShouldAdvertise				= bShouldIdAdvertise;
 		SessionSettings->bAllowJoinInProgress			= bAllowJoinInProgress;
 		SessionSettings->bAllowInvites					= bAllowInvites;
@@ -148,6 +171,8 @@ void USNOnlineSystem::FindSession(){
 		SNPLUGIN_ASSERT(PlayerController != nullptr, TEXT("PlayerController is nullptr"));
 		// ローカルプレイヤーを取得
 		ULocalPlayer* LocalPlayer(PlayerController->GetLocalPlayer());
+
+		ENetMode Mode = GetWorld()->GetNetMode();
 		
 		if(LocalPlayer != nullptr){
 			// NetIdを取得

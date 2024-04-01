@@ -97,7 +97,15 @@ FORCEINLINE T* SNUtility::GetGameInstance(){
 //----------------------------------------------------------------------//
 template<class T>
 FORCEINLINE T* SNUtility::GetPlayerController(){
-	return Cast<T>(GetGameInstance<UGameInstance>()->GetPrimaryPlayerController());
+
+	UGameInstance* GameInstance = SNUtility::GetGameInstance<UGameInstance>();
+
+	if(GameInstance != nullptr)
+	{
+		return Cast<T>(GameInstance->GetFirstLocalPlayerController(GameInstance->GetWorld()));
+	}
+	
+	return nullptr;
 }
 
 //----------------------------------------------------------------------//

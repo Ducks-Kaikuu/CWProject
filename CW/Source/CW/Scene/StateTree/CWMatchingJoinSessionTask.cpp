@@ -3,11 +3,11 @@
 
 #include "CWMatchingJoinSessionTask.h"
 
-#include "OnlineSessionSettings.h"
-#include "Components/TileView.h"
 #include "CW/CWDef.h"
 #include "CW/System/CWGameInstance.h"
 #include "CW/UI/Widget/Matching/CWMatchingJoinSessionMenu.h"
+
+#include "OnlineSessionSettings.h"
 #include "Online/OnlineSessionNames.h"
 #include "Online/SNOnlineSystem.h"
 
