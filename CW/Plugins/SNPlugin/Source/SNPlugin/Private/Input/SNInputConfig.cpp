@@ -64,12 +64,20 @@ void	USNInputConfig::FinishLoadAsset(){
 		
 		APlayerController* PlayerController(SNUtility::GetPlayerController<APlayerController>());
 		
+		if (PlayerController == nullptr) {
+			return;
+		}
 		SNPLUGIN_ASSERT(PlayerController != nullptr, TEXT("PlayerController is nullptr."));
 		
 		InputComponent = Cast<UEnhancedInputComponent>(PlayerController->InputComponent);
 	}
 	
-	check(InputComponent != nullptr);
+	if(InputComponent == nullptr){
+		
+		SNPLUGIN_LOG(TEXT("InputComponent is nullptr."));
+
+		return;
+	}
 	
 	TArray<UObject*> ObjectList;
 	

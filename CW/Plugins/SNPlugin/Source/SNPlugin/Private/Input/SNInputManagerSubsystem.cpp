@@ -6,6 +6,7 @@
 
 #include "EnhancedInputSubsystems.h"
 #include "UserSettings/EnhancedInputUserSettings.h"
+#include "Utility/SNUtility.h"
 
 
 void USNInputManagerSubsystem::Initialize(FSubsystemCollectionBase& Collection)
@@ -27,7 +28,7 @@ void USNInputManagerSubsystem::SetInputMapping(const FName& Name, bool bClearMap
 		return;
 	}
 	
-	APlayerController* PlayerController(GetGameInstance()->GetPrimaryPlayerController());
+	APlayerController* PlayerController(SNUtility::GetPlayerController<APlayerController>());
 
 	SNPLUGIN_ASSERT(PlayerController != nullptr, TEXT("PlayerController is nullptr"));
 
