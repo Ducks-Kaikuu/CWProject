@@ -5,6 +5,7 @@
 
 #include "CWCameraActorBase.h"
 #include "CW/CWDef.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 ACWPlayerCameraManager::ACWPlayerCameraManager(const FObjectInitializer& Initializer)
 :Super(Initializer)
@@ -43,4 +44,14 @@ void ACWPlayerCameraManager::BeginPlay(){
 	}
 	
 	SetViewTarget(CameraInstanseMap[CurrentCamera]);
+}
+
+void ACWPlayerCameraManager::SetViewTarget(AActor* NewViewTarget, FViewTargetTransitionParams TransitionParams)
+{
+	APlayerController* PlayerController = GetOwningPlayerController();
+
+	if(PlayerController != nullptr)
+	{
+		Super::SetViewTarget(NewViewTarget, TransitionParams);
+	}
 }

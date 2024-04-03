@@ -20,6 +20,9 @@ protected:
 	ACWPlayerCameraManager(const FObjectInitializer& Initializer);
 	
 	void BeginPlay() override;
+
+	void SetViewTarget(AActor* NewViewTarget, FViewTargetTransitionParams TransitionParams = FViewTargetTransitionParams()) override;
+	
 private:
 	UPROPERTY(EditAnywhere, Category="CW|Camera")
 	TMap<FName, TSoftClassPtr<ACWCameraActorBase>> CameraClassMap;

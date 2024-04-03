@@ -35,6 +35,10 @@
 			"Enabled": true
 		},
 		{
+			"Name": "OnlineServicesEOS",
+			"Enabled": true
+		},
+		{
 			"Name": "OnlineSubsystemUtils",
 			"Enabled": true
 		},

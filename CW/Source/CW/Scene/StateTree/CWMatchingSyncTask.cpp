@@ -26,7 +26,7 @@ EStateTreeRunStatus UCWMatchingSyncTask::Tick(FStateTreeExecutionContext& Contex
 	{
 		EOnlineSessionState::Type Type = Sessions->GetSessionState(UCWMatchingSceneBase::GetSessionName());
 
-		CW_LOG(TEXT("Update."));
+		//CW_LOG(TEXT("Update."));
 	}
 	
 	return Result;

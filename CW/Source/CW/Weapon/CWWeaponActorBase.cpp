@@ -16,7 +16,7 @@ ACWWeaponActorBase::ACWWeaponActorBase(){
 
 	bNetLoadOnClient = true;
 	
-	SetReplicates(true);
+	//SetReplicates(true);
 }
 
 void ACWWeaponActorBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const 

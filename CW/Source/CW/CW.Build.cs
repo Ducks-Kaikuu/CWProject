@@ -21,7 +21,9 @@ public class CW : ModuleRules
 				"InputCore",
 				"StateTreeModule",
 				"OnlineSubsystem",
-				"OnlineSubsystemUtils"
+				"OnlineSubsystemUtils",
+				"Networking",
+				"Sockets",
 			}
 		);
 

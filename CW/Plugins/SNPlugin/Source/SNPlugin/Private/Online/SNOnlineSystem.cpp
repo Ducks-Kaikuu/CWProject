@@ -1,7 +1,6 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 #include "Online\SNOnlineSystem.h"
 
-#include "GameplayTagsSettings.h"
 #include "SNDef.h"
 
 #include "GameFramework/PlayerState.h"
@@ -328,6 +327,7 @@ void USNOnlineSystem::JoinSession(FOnlineSessionSearchResult SearchResult){
 						
 						JoinSessionName = *Setting.Data.ToString();
 					}
+
 					
 					TSharedPtr<const FUniqueNetId> UniqueNetIdptr = LocalPlayer->GetPreferredUniqueNetId().GetUniqueNetId();
 					// セッションに参加
@@ -353,15 +353,15 @@ void USNOnlineSystem::OnJoinSessionComplete(FName InSessionName, EOnJoinSessionC
 			if(Result == EOnJoinSessionCompleteResult::Success){
 				// Client travel to the server
 				FString ConnectString;
-				
+
 				if(Sessions->GetResolvedConnectString(InSessionName, ConnectString)){
-					
+
 					UE_LOG_ONLINE_SESSION(Log, TEXT("Join session: traveling to %s"), *ConnectString);
 					
 					APlayerController* PlayerController(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 					
 					SNPLUGIN_ASSERT(PlayerController != nullptr, TEXT("PlayerController is nullptr"));
-					
+
 					PlayerController->ClientTravel(ConnectString, TRAVEL_Absolute);
 				}
 			}
