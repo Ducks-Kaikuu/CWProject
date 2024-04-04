@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 
 #include "Engine/AssetManager.h"
+#include <Kismet/GameplayStatics.h>
 
 /**
  * 
@@ -102,7 +103,7 @@ FORCEINLINE T* SNUtility::GetPlayerController(){
 
 	if(GameInstance != nullptr)
 	{
-		return Cast<T>(GameInstance->GetFirstLocalPlayerController(GameInstance->GetWorld()));
+		return Cast<T>(UGameplayStatics::GetPlayerController(GameInstance->GetWorld(), 0));
 	}
 	
 	return nullptr;
