@@ -18,6 +18,13 @@ FString ASNOnlineGameModeBase::InitNewPlayer(APlayerController* NewPlayerControl
 {
 	FString Result = Super::InitNewPlayer(NewPlayerController, UniqueId, Options, Portal);
 
+	int PlayerID = NewPlayerController->PlayerState->GetPlayerId();
+
+	if(PlayerIDList.Contains(PlayerID) == false)
+	{
+		PlayerIDList.Add(PlayerID);
+	}
+	
 	return Result;
 }
 
