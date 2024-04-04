@@ -85,7 +85,7 @@ AActor* ASNOnlineGameModeBase::ChoosePlayerStart(AController* Player)
 			
 			int index = PlayerIDList.IndexOfByKey(PlayerID);
 
-			if(StartPoints.Num() < index)
+			if(index < StartPoints.Num())
 			{
 				return StartPoints[index];	
 			}
