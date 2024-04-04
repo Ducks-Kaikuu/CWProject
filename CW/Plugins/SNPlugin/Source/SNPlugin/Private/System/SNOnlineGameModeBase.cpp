@@ -3,6 +3,7 @@
 
 #include "System\SNOnlineGameModeBase.h"
 #include "EngineUtils.h"
+#include "SNDef.h"
 #include "Engine/PlayerStartPIE.h"
 #include "GameFramework/PlayerState.h"
 
@@ -16,10 +17,6 @@ void ASNOnlineGameModeBase::InitGameState()
 FString ASNOnlineGameModeBase::InitNewPlayer(APlayerController* NewPlayerController, const FUniqueNetIdRepl& UniqueId, const FString& Options, const FString& Portal)
 {
 	FString Result = Super::InitNewPlayer(NewPlayerController, UniqueId, Options, Portal);
-
-	int PlayerID = NewPlayerController->PlayerState->GetPlayerId();
-
-	PlayerIDList.Add(PlayerID);
 
 	return Result;
 }
@@ -70,9 +67,21 @@ AActor* ASNOnlineGameModeBase::ChoosePlayerStart(AController* Player)
 
 	if(APlayerState* PlayerState = Player->GetPlayerState<APlayerState>())
 	{
-		if(!StartPoints.IsEmpty())
-		{
-			return StartPoints[PlayerState->GetPlayerId()];
+		int PlayerID = PlayerState->GetPlayerId();
+		
+		if(!StartPoints.IsEmpty()){
+
+			if(PlayerIDList.Contains(PlayerID) == false)
+			{
+				PlayerIDList.Add(PlayerID);
+			}
+			
+			int index = PlayerIDList.IndexOfByKey(PlayerID);
+
+			if(StartPoints.Num() < index)
+			{
+				return StartPoints[index];	
+			}
 		}
 	}
 

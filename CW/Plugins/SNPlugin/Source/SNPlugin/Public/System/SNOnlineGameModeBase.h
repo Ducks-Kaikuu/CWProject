@@ -34,6 +34,6 @@ private:
 	bool bEnabledOnline = false;
 	
 	TArray<int> PlayerIDList;
-	
+
 	TArray<TObjectPtr<AActor>> PlayerStartList;
 };
