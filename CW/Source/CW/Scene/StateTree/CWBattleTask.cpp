@@ -17,7 +17,7 @@ EStateTreeRunStatus UCWBattleTask::EnterState(FStateTreeExecutionContext& Contex
 
 	if(InputManagerSubsystem != nullptr)
 	{
-		InputManagerSubsystem->SetInputMapping(FName(TEXT("Battle")));
+		InputManagerSubsystem->EnableInputMapping(FName(TEXT("Battle")));
 	}
 	
 	return Super::EnterState(Context, Transition);

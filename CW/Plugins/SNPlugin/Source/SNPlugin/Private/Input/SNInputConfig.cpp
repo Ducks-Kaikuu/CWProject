@@ -103,3 +103,36 @@ void	USNInputConfig::FinishLoadAsset(){
 		++Count;
 	}
 }
+
+void USNInputConfig::SetEnabled(bool bEnabled)
+{
+	UGameInstance* GameInstance(SNUtility::GetGameInstance<UGameInstance>());
+	
+	SNPLUGIN_ASSERT(GameInstance != nullptr, TEXT("GameInstance is nullptr"));
+	
+	USNInputManagerSubsystem* InputManagerSubsystem(GameInstance->GetSubsystem<USNInputManagerSubsystem>());
+	
+	if(InputManagerSubsystem != nullptr)
+	{
+		if(bEnabled == true){
+			InputManagerSubsystem->EnableInputMapping(GetKey());
+		} else {
+			InputManagerSubsystem->DisableInputMapping(GetKey());
+		}
+	}
+}
+
+void USNInputConfig::Release()
+{
+	UGameInstance* GameInstance(SNUtility::GetGameInstance<UGameInstance>());
+	
+	SNPLUGIN_ASSERT(GameInstance != nullptr, TEXT("GameInstance is nullptr"));
+	
+	USNInputManagerSubsystem* InputManagerSubsystem(GameInstance->GetSubsystem<USNInputManagerSubsystem>());
+	
+	if(InputManagerSubsystem != nullptr)
+	{
+		InputManagerSubsystem->RemoveInputContext(GetKey());
+	}
+}
+

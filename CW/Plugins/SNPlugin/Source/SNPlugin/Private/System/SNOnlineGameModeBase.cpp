@@ -24,6 +24,8 @@ FString ASNOnlineGameModeBase::InitNewPlayer(APlayerController* NewPlayerControl
 	{
 		PlayerIDList.Add(PlayerID);
 	}
+
+	SNPLUGIN_LOG(TEXT("Init New Player Done."))
 	
 	return Result;
 }
@@ -44,6 +46,8 @@ void ASNOnlineGameModeBase::PostLogin(APlayerController* NewPlayer)
 			}
 		}
 	}
+
+	SNPLUGIN_LOG(TEXT("Post Login."))
 }
 
 AActor* ASNOnlineGameModeBase::ChoosePlayerStart_Implementation(AController* Player)

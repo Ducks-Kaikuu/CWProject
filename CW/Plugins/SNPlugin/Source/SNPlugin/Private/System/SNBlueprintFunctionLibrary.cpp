@@ -26,7 +26,7 @@ void USNBlueprintFunctionLibrary::SetInputMappingContext(FName Name, bool bClear
 
 	if(InputManagerSubsystem != nullptr)
 	{
-		InputManagerSubsystem->SetInputMapping(Name, bClear);
+		InputManagerSubsystem->EnableInputMapping(Name, bClear);
 	}
 }
 bool USNBlueprintFunctionLibrary::StartupOnlineSystem()

@@ -57,9 +57,13 @@ public:
 	
 	bool	InitializeInput(UObject* OwnerObject);
 
-	const FName& GetName() const ;
+	void SetEnabled(bool bEnabled);
+
+	const FName& GetKey() const ;
 	
 	const TSoftObjectPtr<UInputMappingContext>& GetInputMappingContext() const ;
+
+	void Release();
 	
 private:
 	
@@ -83,7 +87,7 @@ private:
 	TSharedPtr<FStreamableHandle> StreamableHandle;
 };
 
-FORCEINLINE const FName& USNInputConfig::GetName() const
+FORCEINLINE const FName& USNInputConfig::GetKey() const
 {
 	return Name;
 } 

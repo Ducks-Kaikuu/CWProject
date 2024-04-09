@@ -33,6 +33,16 @@ public:
 protected:
 
 	void BeginPlay() override;
+
+	void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
+	virtual void PossessedBy(AController* NewController) override;
+
+	virtual void UnPossessed() override;
+
+	virtual void OnRep_Controller() override;
+
+	virtual void OnRep_PlayerState() override;
 	
 private:
 	

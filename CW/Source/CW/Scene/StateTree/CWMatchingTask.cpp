@@ -30,7 +30,7 @@ EStateTreeRunStatus UCWMatchingTask::EnterState(FStateTreeExecutionContext& Cont
 
 	if(InputManagerSubsystem != nullptr)
 	{
-		InputManagerSubsystem->SetInputMapping(FName(TEXT("Menu")));
+		InputManagerSubsystem->EnableInputMapping(FName(TEXT("Menu")));
 	}
 	return Result;
 }

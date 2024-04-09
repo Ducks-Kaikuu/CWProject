@@ -7,6 +7,8 @@
 #include "CW/Weapon/CWWeaponActorBase.h"
 
 #include "ChaosVehicleMovementComponent.h"
+#include "Character/SNPlayablePawnComponent.h"
+#include "Input/SNInputManagerSubsystem.h"
 #include "Net/UnrealNetwork.h"
 
 void ACWWheeledVehiclePawn::GetReplicatedCustomConditionState(FCustomPropertyConditionState& OutActiveState) const
@@ -22,7 +24,18 @@ void	ACWWheeledVehiclePawn::Tick(float DeltaTime){
 	Super::Tick(DeltaTime);
 	
 	UChaosVehicleMovementComponent* VehicleComponent = GetVehicleMovement();
-	
+
+	if(InputComponent != nullptr)
+	{
+		UCWGameInstance* GameInstance = GetCWGameInstance();
+		
+		USNInputManagerSubsystem* InputManagerSubsystem=GameInstance->GetSubsystem<USNInputManagerSubsystem>();
+
+		USNPlayablePawnComponent* PlayablePawnComponent = Cast<USNPlayablePawnComponent>(GetComponentByClass(USNPlayablePawnComponent::StaticClass()));
+
+		//CW_LOG(TEXT("TEST"));
+	}
+
 	if(VehicleComponent != nullptr){
 		
 		float Value = Throttle;
@@ -85,7 +98,47 @@ void ACWWheeledVehiclePawn::BeginPlay(){
 	// 武器をロード
 	LStreamHandle = GetCWGameInstance()->GetWeaponManager()->LoadWeaponClass(FName(TEXT("AKM")), this, &ACWWheeledVehiclePawn::FinishLoadWeaponL);
 	RStreamHandle = GetCWGameInstance()->GetWeaponManager()->LoadWeaponClass(FName(TEXT("RPG")), this, &ACWWheeledVehiclePawn::FinishLoadWeaponR);
+
+	if(InputComponent != nullptr)
+	{
+		CW_LOG(TEXT("Have Input Component"))
+	} else
+	{
+		CW_LOG(TEXT("None Input Component"))
+	}
 }
+
+void ACWWheeledVehiclePawn::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+}
+
+void ACWWheeledVehiclePawn::UnPossessed()
+{
+	Super::UnPossessed();
+}
+
+void ACWWheeledVehiclePawn::OnRep_Controller()
+{
+	Super::OnRep_Controller();
+}
+
+void ACWWheeledVehiclePawn::OnRep_PlayerState()
+{
+	Super::OnRep_PlayerState();
+}
+
+
+
+
+
+void ACWWheeledVehiclePawn::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+
+	CW_LOG(TEXT("End Play"))
+}
+
 
 //----------------------------------------------------------------------//
 //

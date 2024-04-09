@@ -17,7 +17,7 @@
 //
 //----------------------------------------------------------------------//
 void USNOnlineSystem::Login(){
-	
+	return;
 	IOnlineSubsystem* OnlineSubsystem(Online::GetSubsystem(GetWorld()));
 	
 	SNPLUGIN_ASSERT(OnlineSubsystem != nullptr, TEXT("OnlineSubsystem is nullptr"));
@@ -84,7 +84,7 @@ void USNOnlineSystem::Login(){
 //
 //----------------------------------------------------------------------//
 bool USNOnlineSystem::HostSession(int ConnectionNum, FName Name){
-	
+	return true;
 	IOnlineSubsystem* const OnlineSubsystem = Online::GetSubsystem(GetWorld());
 	
 	SNPLUGIN_ASSERT(OnlineSubsystem != nullptr, TEXT("OnlineSubsystem is nullptr"));
@@ -145,7 +145,7 @@ bool USNOnlineSystem::HostSession(int ConnectionNum, FName Name){
 //
 //----------------------------------------------------------------------//
 void USNOnlineSystem::FindSession(){
-	
+	return;
 	IOnlineSubsystem* const OnlineSubsystem = Online::GetSubsystem(GetWorld());
 	
 	SNPLUGIN_ASSERT(OnlineSubsystem != nullptr, TEXT("OnlineSubsystem is nullptr"));
@@ -188,7 +188,7 @@ void USNOnlineSystem::FindSession(){
 //
 //----------------------------------------------------------------------//
 void USNOnlineSystem::KillSession(const FName& SessionName){
-	
+	return;
 	IOnlineSubsystem* const OnlineSubsystem = Online::GetSubsystem(GetWorld());
 	
 	SNPLUGIN_ASSERT(OnlineSubsystem != nullptr, TEXT("OnlineSubsystem is nullptr"));

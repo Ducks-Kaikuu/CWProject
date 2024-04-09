@@ -3,6 +3,7 @@
 #include "Character/SNPlayablePawnComponent.h"
 #include "GameplayTags/SNGameplayTags.h"
 
+#include "Components/GameFrameworkComponentDelegates.h"
 #include "EnhancedInputSubsystems.h"
 #include "OnlineSubsystemUtils.h"
 #include "SNDef.h"
@@ -43,9 +44,19 @@ void USNPlayablePawnComponent::BeginPlay(){
 	CheckDefaultInitialization();
 }
 
+void USNPlayablePawnComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	UnregisterInitStateFeature();
+	
+	Super::EndPlay(EndPlayReason);
+
+	InputConfig->Release();
+}
+
+
 void USNPlayablePawnComponent::CheckDefaultInitialization(){
 	
-	static const TArray<FGameplayTag> StateChain = { SNGameplayTags::InitState_Spawned, SNGameplayTags::InitState_DataAvailable, SNGameplayTags::InitState_DataInitialized};
+	static const TArray<FGameplayTag> StateChain = { SNGameplayTags::InitState_Spawned, SNGameplayTags::InitState_DataAvailable, SNGameplayTags::InitState_DataInitialized, SNGameplayTags::InitState_GameplayReady};
 	
 	ContinueInitStateChain(StateChain);
 }
@@ -65,12 +76,28 @@ void USNPlayablePawnComponent::HandleChangeInitState(UGameFrameworkComponentMana
 			APawn* Pawn = GetPawn<APawn>();
 
 			SNPLUGIN_ASSERT(Pawn != nullptr, TEXT("Failed to GetPawn"));
+
+
+			if(Pawn->InputComponent != nullptr){
 				
-			InputConfig->InitializeInput(Pawn);
+				InputConfig->InitializeInput(Pawn);
+
+				InputConfig->SetEnabled(true);
+
+				OnCompleteInitInput.ExecuteIfBound(InputConfig->GetKey());
+			}
 		}
 	}
 }
 
 void USNPlayablePawnComponent::OnActorInitStateChanged(const FActorInitStateChangedParams& Params){
 	
+	if (Params.FeatureName == FName(TEXT("Vehicle")))
+	{
+		if (Params.FeatureState == SNGameplayTags::InitState_DataInitialized)
+		{
+			// If the extension component says all all other components are initialized, try to progress to next state
+			CheckDefaultInitialization();
+		}
+	}
 }

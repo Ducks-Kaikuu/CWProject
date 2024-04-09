@@ -39,6 +39,9 @@ public:
 	virtual void OnActorInitStateChanged(const FActorInitStateChangedParams& Params) override;
 	virtual void CheckDefaultInitialization() override;
 	//~ End IGameFrameworkInitStateInterface interface
+
+	DECLARE_DYNAMIC_DELEGATE_OneParam(FCompleteInitInput, FName, Name);
+	FCompleteInitInput OnCompleteInitInput;
 	
 protected:
 		
@@ -46,6 +49,8 @@ protected:
 	
 	// Called when the game starts
 	virtual void BeginPlay() override;
+
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 private:
 	
