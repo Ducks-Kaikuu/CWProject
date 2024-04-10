@@ -55,7 +55,7 @@ public:
 	USNInputConfig(const FObjectInitializer& ObjectInitializer);
 	//! @}
 	
-	bool	InitializeInput(UObject* OwnerObject);
+	bool	InitializeInput(FName InputName, UObject* OwnerObject);
 
 	void SetEnabled(bool bEnabled);
 
@@ -71,7 +71,7 @@ private:
 	void FinishLoadAsset();
 	//! @}
 
-	UPROPERTY(EditAnywhere, Category = "Input")
+	UPROPERTY()
 	FName Name=NAME_None;
 	
 	UPROPERTY(EditAnywhere, Category="Input")

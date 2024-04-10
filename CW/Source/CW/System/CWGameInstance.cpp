@@ -22,12 +22,12 @@ void UCWGameInstance::Init(){
 	CW_ASSERT(WeaponManager != nullptr, TEXT("Failed to Create WeaponManager"));
 
 	WeaponManager->SetupWeaponDataAsset();
-
+#if 0
 	if(MenuInputMapping != nullptr)
 	{
 		MenuInputMapping->InitializeInput(this);	
 	}
-	
+#endif
 }
 
 void UCWGameInstance::SetCurrentScene(ACWSceneBase* Scene)

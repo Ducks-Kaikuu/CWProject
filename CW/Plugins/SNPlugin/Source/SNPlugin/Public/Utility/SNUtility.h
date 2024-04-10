@@ -7,6 +7,7 @@
 #include "Engine/AssetManager.h"
 #include <Kismet/GameplayStatics.h>
 
+class USNInputManagerSubsystem;
 /**
  * 
  */
@@ -24,6 +25,8 @@ public:
 	
 	static TSharedPtr<FStreamableHandle> RequestAsyncLoad(TArray<FSoftObjectPath>& assetList, FStreamableDelegate delegate = FStreamableDelegate(), TAsyncLoadPriority priority = FStreamableManager::DefaultAsyncLoadPriority, bool bManageActiveHandle = false, bool bStartStalled = false, FString name = TEXT("ArrayDelegate"));
 	//! @}
+
+	static USNInputManagerSubsystem* GetSNInputManagerSubsystem();
 	
 	//! @{@name ゲームインスタンスを取得
 	template<class T>

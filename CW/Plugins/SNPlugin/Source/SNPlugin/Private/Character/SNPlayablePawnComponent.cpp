@@ -7,9 +7,11 @@
 #include "EnhancedInputSubsystems.h"
 #include "OnlineSubsystemUtils.h"
 #include "SNDef.h"
+#include "Character/SNPlayerController.h"
 #include "Input/SNInputConfig.h"
 #include "Input/SNInputManagerSubsystem.h"
 #include "UserSettings/EnhancedInputUserSettings.h"
+#include "Utility/SNUtility.h"
 
 //----------------------------------------------------------------------//
 //
@@ -77,17 +79,28 @@ void USNPlayablePawnComponent::HandleChangeInitState(UGameFrameworkComponentMana
 
 			SNPLUGIN_ASSERT(Pawn != nullptr, TEXT("Failed to GetPawn"));
 
-
+			ASNPlayerController* PlayerController(SNUtility::GetPlayerController<ASNPlayerController>());
+			
+			if(PlayerController != nullptr)
+			{
+				PlayerController->EnabledInputType(FName(TEXT("Battle")), true);
+			}
+#if 0
 			if(Pawn->InputComponent != nullptr){
 
-				SNPLUGIN_LOG(TEXT("Initialize Input."))
+				SNPLUGIN_LOG(TEXT("Initialize Input.[%s]"), *AActor::GetDebugName(Pawn));
 				
 				InputConfig->InitializeInput(Pawn);
 
 				InputConfig->SetEnabled(true);
 
 				OnCompleteInitInput.ExecuteIfBound(InputConfig->GetKey());
+			} else
+			{
+				SNPLUGIN_LOG(TEXT("Input Initialize is Failed.[%s]"), *AActor::GetDebugName(Pawn));
 			}
+#endif
+
 		}
 	}
 }

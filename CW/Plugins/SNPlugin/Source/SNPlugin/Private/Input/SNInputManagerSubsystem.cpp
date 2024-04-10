@@ -92,13 +92,14 @@ void USNInputManagerSubsystem::DisableInputMapping(const FName& Name)
 
 	UEnhancedInputLocalPlayerSubsystem* Subsystem(LocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>());
 
-	SNPLUGIN_ASSERT(Subsystem != nullptr, TEXT("Input Subsystem is nullptr."));
-
-	if(UInputMappingContext* IMC = InputMapContextMap[Name])
+	if(Subsystem != nullptr)
 	{
-		FModifyContextOptions Options = {};
+		if(UInputMappingContext* IMC = InputMapContextMap[Name])
+		{
+			FModifyContextOptions Options = {};
 
-		Subsystem->RemoveMappingContext(IMC, Options);
+			Subsystem->RemoveMappingContext(IMC, Options);
+		}
 	}
 }
 

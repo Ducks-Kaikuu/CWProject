@@ -9,6 +9,7 @@
 #include "ChaosVehicleMovementComponent.h"
 #include "Character/SNPawnExtensionComponent.h"
 #include "Character/SNPlayablePawnComponent.h"
+#include "CW/Character/Player/CWPlayerController.h"
 #include "Input/SNInputManagerSubsystem.h"
 #include "Net/UnrealNetwork.h"
 
@@ -138,6 +139,11 @@ void ACWWheeledVehiclePawn::SetupPlayerInputComponent(UInputComponent* PlayerInp
 
 	PawnExtComponent->SetupPlayerInputComponent();
 
+	ACWPlayerController* PlayerController(GetCWPlayerController());
+
+	CW_ASSERT(PlayerController != nullptr, TEXT("PlayerController is nullptr."));
+
+	PlayerController->InitializeInput();
 	
 	CW_LOG(TEXT("SetupPlayerInputComponent"));
 }

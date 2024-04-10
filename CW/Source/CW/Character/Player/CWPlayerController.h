@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Character/SNPlayerController.h"
 #include "GameFramework/PlayerController.h"
 #include "CWPlayerController.generated.h"
 
@@ -10,7 +11,7 @@
  * 
  */
 UCLASS()
-class CW_API ACWPlayerController : public APlayerController
+class CW_API ACWPlayerController : public ASNPlayerController
 {
 	GENERATED_BODY()
 	

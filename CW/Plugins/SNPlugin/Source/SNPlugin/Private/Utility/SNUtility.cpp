@@ -3,6 +3,7 @@
 
 #include "Utility/SNUtility.h"
 #include "SNDef.h"
+#include "Input/SNInputManagerSubsystem.h"
 
 UWorld* SNUtility::GetWorld(){
 	return GetPrimaryWorld();
@@ -34,4 +35,18 @@ TSharedPtr<FStreamableHandle> SNUtility::RequestAsyncLoad(TArray<FSoftObjectPath
 	
 	return handle;
 }
+
+USNInputManagerSubsystem* SNUtility::GetSNInputManagerSubsystem()
+{
+	UGameInstance* GameInstance = GetGameInstance<UGameInstance>();
+
+	SNPLUGIN_ASSERT(GameInstance != nullptr, TEXT("GameInstance is nullptr.[%s]"), __FUNCTIONW__);
+
+	USNInputManagerSubsystem* InputManagerSubsystem = GameInstance->GetSubsystem<USNInputManagerSubsystem>();
+
+	SNPLUGIN_ASSERT(InputManagerSubsystem != nullptr, TEXT("InputManagerSubsystem is nullptr.[%s]"), __FUNCTIONW__);
+
+	return InputManagerSubsystem;
+}
+
 

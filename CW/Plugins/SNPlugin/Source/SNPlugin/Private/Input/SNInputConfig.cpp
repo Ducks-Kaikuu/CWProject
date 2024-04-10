@@ -20,11 +20,13 @@ USNInputConfig::USNInputConfig(const FObjectInitializer& ObjectInitializer){
 	
 }
 
-bool	USNInputConfig::InitializeInput(UObject* OwnerObject){
+bool	USNInputConfig::InitializeInput(FName InputName, UObject* OwnerObject){
 
 	SNPLUGIN_ASSERT(OwnerObject != nullptr, TEXT("Should set Input Action Owner."));
 	
 	Owner = OwnerObject;
+
+	Name = InputName;
 	
 	UGameInstance* GameInstance(SNUtility::GetGameInstance<UGameInstance>());
 	
