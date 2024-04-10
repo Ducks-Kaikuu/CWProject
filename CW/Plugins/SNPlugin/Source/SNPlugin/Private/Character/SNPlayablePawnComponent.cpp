@@ -79,6 +79,8 @@ void USNPlayablePawnComponent::HandleChangeInitState(UGameFrameworkComponentMana
 
 
 			if(Pawn->InputComponent != nullptr){
+
+				SNPLUGIN_LOG(TEXT("Initialize Input."))
 				
 				InputConfig->InitializeInput(Pawn);
 

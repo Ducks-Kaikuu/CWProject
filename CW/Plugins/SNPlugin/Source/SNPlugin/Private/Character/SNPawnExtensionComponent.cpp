@@ -3,6 +3,7 @@
 
 #include "Character/SNPawnExtensionComponent.h"
 
+#include "GeometryTypes.h"
 #include "SNDef.h"
 #include "GameplayTags/SNGameplayTags.h"
 
@@ -65,6 +66,21 @@ void USNPawnExtensionComponent::EndPlay(const EEndPlayReason::Type EndPlayReason
 	UnregisterInitStateFeature();
 	
 	Super::EndPlay(EndPlayReason);
+}
+
+void USNPawnExtensionComponent::HandleControllerChanged()
+{
+	CheckDefaultInitialization();
+}
+
+void USNPawnExtensionComponent::HandlePlayerStateReplicated()
+{
+	CheckDefaultInitialization();
+}
+
+void USNPawnExtensionComponent::SetupPlayerInputComponent()
+{
+	CheckDefaultInitialization();
 }
 
 

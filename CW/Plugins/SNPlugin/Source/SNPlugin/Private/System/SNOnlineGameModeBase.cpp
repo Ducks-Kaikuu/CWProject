@@ -47,7 +47,7 @@ void ASNOnlineGameModeBase::PostLogin(APlayerController* NewPlayer)
 		}
 	}
 
-	SNPLUGIN_LOG(TEXT("Post Login."))
+	SNPLUGIN_LOG(TEXT("Post Login.[PlayerStart : %d]"), PlayerStartList.Num());
 }
 
 AActor* ASNOnlineGameModeBase::ChoosePlayerStart_Implementation(AController* Player)

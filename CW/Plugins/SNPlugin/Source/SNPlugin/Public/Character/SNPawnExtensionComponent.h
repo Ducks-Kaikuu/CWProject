@@ -31,6 +31,12 @@ public:
 	virtual void CheckDefaultInitialization() override;
 	//~ End IGameFrameworkInitStateInterface interface
 
+	void HandleControllerChanged();
+
+	void HandlePlayerStateReplicated();
+
+	void SetupPlayerInputComponent();
+	
 protected:
 
 	virtual void OnRegister() override;

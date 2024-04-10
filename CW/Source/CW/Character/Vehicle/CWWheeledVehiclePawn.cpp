@@ -7,15 +7,20 @@
 #include "CW/Weapon/CWWeaponActorBase.h"
 
 #include "ChaosVehicleMovementComponent.h"
+#include "Character/SNPawnExtensionComponent.h"
 #include "Character/SNPlayablePawnComponent.h"
 #include "Input/SNInputManagerSubsystem.h"
 #include "Net/UnrealNetwork.h"
 
-void ACWWheeledVehiclePawn::GetReplicatedCustomConditionState(FCustomPropertyConditionState& OutActiveState) const
+ACWWheeledVehiclePawn::ACWWheeledVehiclePawn(const FObjectInitializer& Initializer)
+	:Super(Initializer)
 {
-	Super::GetReplicatedCustomConditionState(OutActiveState);
+	PawnExtComponent = CreateDefaultSubobject<USNPawnExtensionComponent>(TEXT("ExtensionComponent"));
+}
 
-	
+void ACWWheeledVehiclePawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 }
 
 
@@ -106,26 +111,53 @@ void ACWWheeledVehiclePawn::BeginPlay(){
 	{
 		CW_LOG(TEXT("None Input Component"))
 	}
+
+	CW_LOG(TEXT("BeginPlay"));
 }
 
 void ACWWheeledVehiclePawn::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
+
+	PawnExtComponent->HandleControllerChanged();
+
+	CW_LOG(TEXT("PossessedBy"));
 }
 
 void ACWWheeledVehiclePawn::UnPossessed()
 {
 	Super::UnPossessed();
+
+	PawnExtComponent->HandleControllerChanged();
+
+	CW_LOG(TEXT("UnPossessed"));
+}
+void ACWWheeledVehiclePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+	PawnExtComponent->SetupPlayerInputComponent();
+
+	
+	CW_LOG(TEXT("SetupPlayerInputComponent"));
 }
 
 void ACWWheeledVehiclePawn::OnRep_Controller()
 {
 	Super::OnRep_Controller();
+
+	PawnExtComponent->HandleControllerChanged();
+
+	CW_LOG(TEXT("OnRep_Controller"));
 }
 
 void ACWWheeledVehiclePawn::OnRep_PlayerState()
 {
 	Super::OnRep_PlayerState();
+
+	PawnExtComponent->HandlePlayerStateReplicated();
+
+	CW_LOG(TEXT("OnRep_PlayerState"));
 }
 
 
@@ -136,7 +168,7 @@ void ACWWheeledVehiclePawn::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	Super::EndPlay(EndPlayReason);
 
-	CW_LOG(TEXT("End Play"))
+	CW_LOG(TEXT("EndPlay"));
 }
 
 

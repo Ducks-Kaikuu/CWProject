@@ -7,6 +7,7 @@
 #include "Engine/StreamableManager.h"
 #include "CWWheeledVehiclePawn.generated.h"
 
+class USNPawnExtensionComponent;
 class ACWWeaponActorBase;
 /**
  * 
@@ -18,7 +19,9 @@ class CW_API ACWWheeledVehiclePawn : public AWheeledVehiclePawn
 	
 public:
 
-	virtual void GetReplicatedCustomConditionState(FCustomPropertyConditionState& OutActiveState) const override;
+	ACWWheeledVehiclePawn(const FObjectInitializer& Initializer);
+	
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	
 	void	Tick(float DeltaTime) override ;
 	
@@ -39,6 +42,8 @@ protected:
 	virtual void PossessedBy(AController* NewController) override;
 
 	virtual void UnPossessed() override;
+
+	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 	virtual void OnRep_Controller() override;
 
@@ -80,4 +85,7 @@ private:
 	//!< 武器の非同期ロード用のハンドル
 	TSharedPtr<FStreamableHandle> LStreamHandle = nullptr;
 	TSharedPtr<FStreamableHandle> RStreamHandle = nullptr;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Lyra|Character", Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<USNPawnExtensionComponent> PawnExtComponent;
 };
