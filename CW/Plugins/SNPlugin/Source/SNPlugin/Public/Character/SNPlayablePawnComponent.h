@@ -28,10 +28,6 @@ public:
 	USNPlayablePawnComponent(const FObjectInitializer& ObjectInitializer);
 	//! @}
 	
-	//! @{@name 入力コンフィグを取得
-	USNInputConfig* GetInputConfig();
-	//! @}
-	
 	//~ Begin IGameFrameworkInitStateInterface interface
 	virtual FName GetFeatureName() const override { return FName(TEXT("Vehicle")); }
 	virtual bool CanChangeInitState(UGameFrameworkComponentManager* Manager, FGameplayTag CurrentState, FGameplayTag DesiredState) const override;
@@ -52,20 +48,5 @@ protected:
 
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
-private:
-	
-	//!< 入力コンフィグ
-	UPROPERTY(EditDefaultsOnly, Meta = (TitleProperty = "Input Config"))
-	TObjectPtr<USNInputConfig> InputConfig;
 };
 
-//----------------------------------------------------------------------//
-//
-//! @brief 入力コンフィグを取得
-//
-//! @retval 入力コンフィグ
-//
-//----------------------------------------------------------------------//
-FORCEINLINE USNInputConfig* USNPlayablePawnComponent::GetInputConfig() {
-	return InputConfig;
-}

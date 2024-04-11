@@ -10,6 +10,7 @@
 #include "Online/OnlineSessionNames.h"
 #include "OnlineSessionClient.h"
 #include "OnlineSessionSettings.h"
+#include "Utility/SNUtility.h"
 
 //----------------------------------------------------------------------//
 //
@@ -17,7 +18,7 @@
 //
 //----------------------------------------------------------------------//
 void USNOnlineSystem::Login(){
-	return;
+	
 	IOnlineSubsystem* OnlineSubsystem(Online::GetSubsystem(GetWorld()));
 	
 	SNPLUGIN_ASSERT(OnlineSubsystem != nullptr, TEXT("OnlineSubsystem is nullptr"));
@@ -26,7 +27,7 @@ void USNOnlineSystem::Login(){
 	// OnlineIdentityが有効なものかチェック
 	if(Identity.IsValid()){
 		// プレイヤーコントローラを取得
-		APlayerController* PlayerController(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+		APlayerController* PlayerController(SNUtility::GetPlayerController<APlayerController>());
 		
 		SNPLUGIN_ASSERT(PlayerController != nullptr, TEXT("PlayerController is nullptr"));
 		// ローカルプレイヤーを取得
@@ -84,7 +85,7 @@ void USNOnlineSystem::Login(){
 //
 //----------------------------------------------------------------------//
 bool USNOnlineSystem::HostSession(int ConnectionNum, FName Name){
-	return true;
+	
 	IOnlineSubsystem* const OnlineSubsystem = Online::GetSubsystem(GetWorld());
 	
 	SNPLUGIN_ASSERT(OnlineSubsystem != nullptr, TEXT("OnlineSubsystem is nullptr"));

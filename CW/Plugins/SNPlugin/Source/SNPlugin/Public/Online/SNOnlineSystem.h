@@ -14,7 +14,7 @@ DECLARE_DYNAMIC_DELEGATE_TwoParams(FSNCompleteJoinSession, FName, InSessionName,
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable)
 class SNPLUGIN_API USNOnlineSystem : public UObject
 {
 	GENERATED_BODY()

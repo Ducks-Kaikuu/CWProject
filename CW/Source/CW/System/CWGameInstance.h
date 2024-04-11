@@ -44,9 +44,6 @@ private:
 
 	UPROPERTY()
 	TObjectPtr<ACWSceneBase> CurrentScene = nullptr;
-
-	UPROPERTY(EditAnywhere, Category="CW|Input")
-	TObjectPtr<USNInputConfig> MenuInputMapping = nullptr;
 };
 
 //----------------------------------------------------------------------//

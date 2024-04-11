@@ -51,8 +51,6 @@ void USNPlayablePawnComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	UnregisterInitStateFeature();
 	
 	Super::EndPlay(EndPlayReason);
-
-	InputConfig->Release();
 }
 
 
@@ -73,34 +71,11 @@ void USNPlayablePawnComponent::HandleChangeInitState(UGameFrameworkComponentMana
 	if((CurrentState == SNGameplayTags::InitState_DataAvailable)
 	&& (DesiredState == SNGameplayTags::InitState_DataInitialized)){
 
-		if(InputConfig != nullptr)
+		ASNPlayerController* PlayerController(SNUtility::GetPlayerController<ASNPlayerController>());
+		
+		if(PlayerController != nullptr)
 		{
-			APawn* Pawn = GetPawn<APawn>();
-
-			SNPLUGIN_ASSERT(Pawn != nullptr, TEXT("Failed to GetPawn"));
-
-			ASNPlayerController* PlayerController(SNUtility::GetPlayerController<ASNPlayerController>());
-			
-			if(PlayerController != nullptr)
-			{
-				PlayerController->EnabledInputType(FName(TEXT("Battle")), true);
-			}
-#if 0
-			if(Pawn->InputComponent != nullptr){
-
-				SNPLUGIN_LOG(TEXT("Initialize Input.[%s]"), *AActor::GetDebugName(Pawn));
-				
-				InputConfig->InitializeInput(Pawn);
-
-				InputConfig->SetEnabled(true);
-
-				OnCompleteInitInput.ExecuteIfBound(InputConfig->GetKey());
-			} else
-			{
-				SNPLUGIN_LOG(TEXT("Input Initialize is Failed.[%s]"), *AActor::GetDebugName(Pawn));
-			}
-#endif
-
+			PlayerController->EnabledInputType(FName(TEXT("Battle")), true);
 		}
 	}
 }
