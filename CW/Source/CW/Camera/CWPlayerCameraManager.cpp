@@ -50,7 +50,10 @@ void ACWPlayerCameraManager::SetViewTarget(AActor* NewViewTarget, FViewTargetTra
 {
 	APlayerController* PlayerController = GetOwningPlayerController();
 
-	if(PlayerController != nullptr)
+	ACWCameraActorBase* Camera(Cast<ACWCameraActorBase>(NewViewTarget));
+	// Cameraのベースクラスにキャストできない場合はターゲットに設定しない。
+	// 初期化の順番によってPawnなどもここに飛んでくるため。
+	if((PlayerController != nullptr) && (Camera != nullptr))
 	{
 		Super::SetViewTarget(NewViewTarget, TransitionParams);
 	}

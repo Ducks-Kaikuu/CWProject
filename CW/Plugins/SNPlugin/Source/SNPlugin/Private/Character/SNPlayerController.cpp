@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Character/SNPlayerController.h"
@@ -10,34 +10,34 @@
 
 //----------------------------------------------------------------------//
 //
-//! @brief ƒvƒŒƒC‚ªI—¹‚µ‚½Û‚ÌƒCƒxƒ“ƒg
+//! @brief ãƒ—ãƒ¬ã‚¤ãŒçµ‚äº†ã—ãŸéš›ã®ã‚¤ãƒ™ãƒ³ãƒˆ
 //
-//! @param EndPlayReason I—¹‚·‚éŒ´ˆö
+//! @param EndPlayReason çµ‚äº†ã™ã‚‹åŽŸå› 
 //
 //----------------------------------------------------------------------//
 void ASNPlayerController::EndPlay(const EEndPlayReason::Type EndPlayReason){
 	
 	Super::EndPlay(EndPlayReason);
-	// “ü—ÍŠÇ——pƒ}ƒl[ƒWƒƒ[‚ðŽæ“¾
+	// å…¥åŠ›ç®¡ç†ç”¨ãƒžãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã‚’å–å¾—
 	USNInputManagerSubsystem* InputManagerSubsystem(SNUtility::GetSNInputManagerSubsystem());
 	
 	if(bInitializedInput == true){
 		
 		for(auto& InputConfig:InputConfigMap){
-			// “ü—Íƒ}ƒbƒsƒ“ƒO‚ð–³Œø‰»
+			// å…¥åŠ›ãƒžãƒƒãƒ”ãƒ³ã‚°ã‚’ç„¡åŠ¹åŒ–
 			InputManagerSubsystem->DisableInputMapping(InputConfig.Key);
-			// ƒŠƒ\[ƒX‚ð‰ð•ú
+			// ãƒªã‚½ãƒ¼ã‚¹ã‚’è§£æ”¾
 			InputConfig.Value->Release();
 		}
 	}
 }
 
 bool ASNPlayerController::InitializeInput(){
-	// ƒI[ƒi[—p‚Ìƒ|[ƒ“‚ðŽæ“¾
+	// ã‚ªãƒ¼ãƒŠãƒ¼ç”¨ã®ãƒãƒ¼ãƒ³ã‚’å–å¾—
 	APawn* OwnerPawn = GetPawn();
 	// 
 	SNPLUGIN_ASSERT(OwnerPawn != nullptr, TEXT("Pawn is nullptr. This function should be called from Pawn's SetupPlayerInputComponent."));
-	// ‰Šú‰»ˆ—
+	// åˆæœŸåŒ–å‡¦ç†
 	for(auto& InputConfig:InputConfigMap){
 		InputConfig.Value->InitializeInput(InputConfig.Key, OwnerPawn);
 	}
@@ -47,9 +47,9 @@ bool ASNPlayerController::InitializeInput(){
 	bInitializedInput = true;
 	
 	if(CurrentInputTypes.Num() > 0){
-		// ƒJƒŒƒ“ƒg‚ÉÝ’è‚³‚ê‚Ä‚¢‚éƒ^ƒCƒv‚ðÝ’è
+		// ã‚«ãƒ¬ãƒ³ãƒˆã«è¨­å®šã•ã‚Œã¦ã„ã‚‹ã‚¿ã‚¤ãƒ—ã‚’è¨­å®š
 		for(auto& Name:CurrentInputTypes){
-			EnabledInputType(Name, false);
+			SetEnableInput(Name, false);
 		}
 	}
 
@@ -59,7 +59,7 @@ bool ASNPlayerController::InitializeInput(){
 void ASNPlayerController::EnabledInputType(FName Name, bool bClearAll){
 	
 	if(bClearAll){
-		// ƒJƒŒƒ“ƒgƒ^ƒCƒv‚ðƒNƒŠƒA
+		// ã‚«ãƒ¬ãƒ³ãƒˆã‚¿ã‚¤ãƒ—ã‚’ã‚¯ãƒªã‚¢
 		CurrentInputTypes.Empty();
 	}
 	
@@ -67,11 +67,7 @@ void ASNPlayerController::EnabledInputType(FName Name, bool bClearAll){
 	
 	if(bInitializedInput == true){
 		
-		USNInputManagerSubsystem* InputManagerSubsystem(SNUtility::GetSNInputManagerSubsystem());
-		// Žw’è‚³‚ê‚½ƒ}ƒbƒsƒ“ƒO‚ð—LŒø‰»
-		InputManagerSubsystem->EnableInputMapping(Name, bClearAll);
-		
-		SNPLUGIN_LOG(TEXT("Current Input Type : %s"), *Name.ToString());
+		SetEnableInput(Name, bClearAll);
 	}
 }
 
@@ -81,10 +77,26 @@ void ASNPlayerController::DisableInputType(FName Name){
 	
 	if(bInitializedInput == true){
 		
-		USNInputManagerSubsystem* InputManagerSubsystem(SNUtility::GetSNInputManagerSubsystem());
-		
-		InputManagerSubsystem->DisableInputMapping(Name);
-		
-		SNPLUGIN_LOG(TEXT("Disable Input Type : %s"), *Name.ToString());
+		SetDisableInput(Name);
 	}
 }
+
+void ASNPlayerController::SetEnableInput(FName Name, bool bClearAll)
+{
+	USNInputManagerSubsystem* InputManagerSubsystem(SNUtility::GetSNInputManagerSubsystem());
+	// æŒ‡å®šã•ã‚ŒãŸãƒžãƒƒãƒ”ãƒ³ã‚°ã‚’æœ‰åŠ¹åŒ–
+	InputManagerSubsystem->EnableInputMapping(Name, bClearAll);
+		
+	SNPLUGIN_LOG(TEXT("Current Input Type : %s"), *Name.ToString());
+}
+
+void ASNPlayerController::SetDisableInput(FName Name)
+{
+	USNInputManagerSubsystem* InputManagerSubsystem(SNUtility::GetSNInputManagerSubsystem());
+		
+	InputManagerSubsystem->DisableInputMapping(Name);
+		
+	SNPLUGIN_LOG(TEXT("Disable Input Type : %s"), *Name.ToString());
+}
+
+

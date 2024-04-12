@@ -7,9 +7,9 @@
 #include "Interfaces/OnlineSessionDelegates.h"
 #include "SNOnlineSystem.generated.h"
 
-DECLARE_DYNAMIC_DELEGATE_TwoParams(FSNCompleteHostSession, FName, InSessionName, bool, bWasSuccessful);
-DECLARE_DYNAMIC_DELEGATE_OneParam(FSNCompleteFindSession, bool, bWasSuccessful);
-DECLARE_DYNAMIC_DELEGATE_TwoParams(FSNCompleteJoinSession, FName, InSessionName, bool, bResult);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FSNCompleteHostSession, FName, InSessionName, bool, bWasSuccessful);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSNCompleteFindSession, bool, bWasSuccessful);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FSNCompleteJoinSession, FName, InSessionName, bool, bResult);
 
 /**
  * 
@@ -42,10 +42,13 @@ public:
 
 	const TSharedPtr<class FOnlineSessionSearch>& GetSearchSessionList() const ;
 
+	UPROPERTY(BlueprintAssignable, Category = "Online|Session")
 	FSNCompleteHostSession OnCompleteHostSession;
 
+	UPROPERTY(BlueprintAssignable, Category = "Online|Session")
 	FSNCompleteFindSession OnCompleteFindSession;
 
+	UPROPERTY(BlueprintAssignable, Category = "Online|Session")
 	FSNCompleteJoinSession OnCompleteJoinSession;
 	
 private:

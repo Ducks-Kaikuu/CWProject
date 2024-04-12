@@ -146,7 +146,7 @@ bool USNOnlineSystem::HostSession(int ConnectionNum, FName Name){
 //
 //----------------------------------------------------------------------//
 void USNOnlineSystem::FindSession(){
-	return;
+	
 	IOnlineSubsystem* const OnlineSubsystem = Online::GetSubsystem(GetWorld());
 	
 	SNPLUGIN_ASSERT(OnlineSubsystem != nullptr, TEXT("OnlineSubsystem is nullptr"));
@@ -189,7 +189,7 @@ void USNOnlineSystem::FindSession(){
 //
 //----------------------------------------------------------------------//
 void USNOnlineSystem::KillSession(const FName& SessionName){
-	return;
+	
 	IOnlineSubsystem* const OnlineSubsystem = Online::GetSubsystem(GetWorld());
 	
 	SNPLUGIN_ASSERT(OnlineSubsystem != nullptr, TEXT("OnlineSubsystem is nullptr"));
@@ -265,7 +265,10 @@ void USNOnlineSystem::OnCreateSessionComplete(FName InSessionName, bool bWasSucc
 		SNPLUGIN_ERROR(TEXT("Failed to Session Succeed [%s]."), *InSessionName.ToString());
 	}
 
-	OnCompleteHostSession.ExecuteIfBound(InSessionName, bWasSuccessful);
+	if(OnCompleteHostSession.IsBound())
+	{
+		OnCompleteHostSession.Broadcast(InSessionName, bWasSuccessful);
+	}
 }
 
 //----------------------------------------------------------------------//
@@ -288,14 +291,17 @@ void USNOnlineSystem::OnFindSessionsComplete(bool bWasSuccessful){
 			
 			const TCHAR* SessionId = *SearchSettings->SearchResults[0].GetSessionIdStr();
 			// DISPLAY_LOG("Session ID: %s", SessionId);
-			//JoinSession(SearchSettings->SearchResults[0]);
+			JoinSession(SearchSettings->SearchResults[0]);
 		}
 	} else {
 		// セッション検索失敗
 		SNPLUGIN_LOG(TEXT("Find Session: Fail"));
 	}
 
-	OnCompleteFindSession.ExecuteIfBound(bWasSuccessful);
+	if(OnCompleteFindSession.IsBound())
+	{
+		OnCompleteFindSession.Broadcast(bWasSuccessful);	
+	}
 }
 
 void USNOnlineSystem::JoinSession(FOnlineSessionSearchResult SearchResult){
@@ -369,5 +375,8 @@ void USNOnlineSystem::OnJoinSessionComplete(FName InSessionName, EOnJoinSessionC
 		}
 	}
 
-	OnCompleteJoinSession.ExecuteIfBound(InSessionName, Result == EOnJoinSessionCompleteResult::Success ? true : false);
+	if(OnCompleteJoinSession.IsBound())
+	{
+		OnCompleteJoinSession.Broadcast(InSessionName, Result == EOnJoinSessionCompleteResult::Success ? true : false);	
+	}
 }

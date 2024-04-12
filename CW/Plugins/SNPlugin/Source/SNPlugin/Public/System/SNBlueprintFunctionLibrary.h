@@ -28,15 +28,15 @@ public:
 	UFUNCTION(BlueprintCallable, Category="SN|Online")
 	static void Login();
 
-//	UFUNCTION(BlueprintCallable, Category="SN|Online")
-	static void HostSession(FOnCreateSessionComplete Delegate);
+	UFUNCTION(BlueprintCallable, Category="SN|Online")
+	static void HostSession();
 	
 	UFUNCTION(BlueprintCallable, Category="SN|Online")
 	static void FindSession();
 
 	UFUNCTION(BlueprintCallable, Category="SN|Online")
 	static void KillSession(FName SessionName);
-	
-private:
+
+	UFUNCTION(BlueprintCallable, Category="SN|Online")
 	static USNOnlineSystem* GetOnlineSystem();
 };

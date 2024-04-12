@@ -75,7 +75,7 @@ void UCWMatchingHostSessionTask::OnCreateButtonClicked(UCWButton* Button)
 
 	if(OnlineSystem != nullptr)
 	{
-		OnlineSystem->OnCompleteHostSession.BindDynamic(this, &UCWMatchingHostSessionTask::OnCompleteHostSession);
+		OnlineSystem->OnCompleteHostSession.AddDynamic(this, &UCWMatchingHostSessionTask::OnCompleteHostSession);
 
 		FName Name = FName(TEXT("Session"));
 

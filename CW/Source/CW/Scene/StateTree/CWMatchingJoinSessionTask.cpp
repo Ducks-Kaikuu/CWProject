@@ -31,9 +31,9 @@ EStateTreeRunStatus UCWMatchingJoinSessionTask::EnterState(FStateTreeExecutionCo
 
 	if(OnlineSystem != nullptr)
 	{
-		OnlineSystem->OnCompleteFindSession.BindDynamic(this, &UCWMatchingJoinSessionTask::OnCompleteSearchSession);
+		OnlineSystem->OnCompleteFindSession.AddDynamic(this, &UCWMatchingJoinSessionTask::OnCompleteSearchSession);
 
-		OnlineSystem->OnCompleteJoinSession.BindDynamic(this, &UCWMatchingJoinSessionTask::OnCompleteJoinSession);
+		OnlineSystem->OnCompleteJoinSession.AddDynamic(this, &UCWMatchingJoinSessionTask::OnCompleteJoinSession);
 		
 		OnlineSystem->FindSession();
 	}

@@ -27,6 +27,11 @@ public:
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	
 private:
+
+	void SetEnableInput(FName Name, bool bClearAll);
+
+	void SetDisableInput(FName Name);
+	
 	//!< 入力用コンフィグのリスト
 	UPROPERTY(EditAnyWhere, Category="Input")
 	TMap<FName, TObjectPtr<USNInputConfig>> InputConfigMap;

@@ -54,7 +54,7 @@ void USNBlueprintFunctionLibrary::Login()
 	
 }
 
-void USNBlueprintFunctionLibrary::HostSession(FOnCreateSessionComplete Delegate)
+void USNBlueprintFunctionLibrary::HostSession()
 {
 	USNOnlineSystem* OnlineSystem(GetOnlineSystem());
 
