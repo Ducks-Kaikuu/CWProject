@@ -16,6 +16,7 @@ class SNPLUGIN_API ASNWheeledVehiclePlayerBase : public ASNWheeledVehiclePawnBas
 
 protected:
 	
+	//! @{@name プレイヤーインプットコンポーネントの初期化
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
-	
+	//! @}
 };

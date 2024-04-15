@@ -166,6 +166,13 @@ void ACWWheeledVehiclePawn::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	Super::EndPlay(EndPlayReason);
 
+	for(auto& Weapon:WeaponMap)
+	{
+		Weapon.Value->ConditionalBeginDestroy();
+	}
+
+	WeaponMap.Empty();
+	
 	CW_LOG(TEXT("EndPlay"));
 }
 

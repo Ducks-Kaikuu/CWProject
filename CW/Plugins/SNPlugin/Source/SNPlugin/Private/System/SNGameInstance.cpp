@@ -7,6 +7,11 @@
 
 #include "Components/GameFrameworkComponentManager.h"
 
+//----------------------------------------------------------------------//
+//
+//! @brief デフォルトコンストラクタ
+//
+//----------------------------------------------------------------------//
 USNGameInstance::USNGameInstance()
 :Super()
 ,DataAssetManagerClass(USNDataAssetManager::StaticClass())
@@ -30,33 +35,31 @@ void USNGameInstance::Init()
 		ComponentManager->RegisterInitState(SNGameplayTags::InitState_DataAvailable  , false, SNGameplayTags::InitState_Spawned);
 		ComponentManager->RegisterInitState(SNGameplayTags::InitState_DataInitialized, false, SNGameplayTags::InitState_DataAvailable);
 	}
-
-	if(DataAssetManagerClass.IsNull() == false){
-
-		UClass* Class = DataAssetManagerClass.LoadSynchronous();
-		
-		if(Class != nullptr)
-		{
-			DataAssetManager = NewObject<USNDataAssetManager>(this, Class);
-		}
+	// クラス情報をロード
+	UClass* AssetClass = DataAssetManagerClass.LoadSynchronous();
+	// nullチェック
+	if(AssetClass != nullptr)
+	{
+		// インスタンスを生成
+		DataAssetManager = NewObject<USNDataAssetManager>(this, AssetClass);
 	}
-
+	
+	SNPLUGIN_ASSERT(DataAssetManager != nullptr, TEXT("DataAssetManager Is Null"));
+	
+	DataAssetManager->SetupDLCContents();
+	// クラス情報が設定されているかチェック
 	if(OnlineSystemClass.IsNull() == false)
 	{
-		UClass* Class = OnlineSystemClass.LoadSynchronous();
-
-		if(Class != nullptr)
+		UClass* OnlineClass = OnlineSystemClass.LoadSynchronous();
+		
+		if(OnlineClass != nullptr)
 		{
-			OnlineSystem = NewObject<USNOnlineSystem>(this, Class);
-
+			OnlineSystem = NewObject<USNOnlineSystem>(this, OnlineClass);
+			
 			if(OnlineSystem != nullptr)
 			{
 				SNPLUGIN_LOG(TEXT("Online System is Enabled."));
 			}
 		}
 	}
-
-	SNPLUGIN_ASSERT(DataAssetManager != nullptr, TEXT("DataAssetManager Is Null"));
-
-	DataAssetManager->SetupDLCContents();
 }
