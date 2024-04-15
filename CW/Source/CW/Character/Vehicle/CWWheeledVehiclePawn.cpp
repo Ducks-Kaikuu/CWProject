@@ -138,14 +138,6 @@ void ACWWheeledVehiclePawn::SetupPlayerInputComponent(UInputComponent* PlayerInp
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	PawnExtComponent->SetupPlayerInputComponent();
-
-	ACWPlayerController* PlayerController(GetCWPlayerController());
-
-	CW_ASSERT(PlayerController != nullptr, TEXT("PlayerController is nullptr."));
-
-	PlayerController->InitializeInput();
-	
-	CW_LOG(TEXT("SetupPlayerInputComponent"));
 }
 
 void ACWWheeledVehiclePawn::OnRep_Controller()

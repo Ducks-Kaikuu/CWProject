@@ -38,4 +38,7 @@ public:
 
 	void HudPostLoad() override;
 
+private:
+	UPROPERTY(EditAnywhere, Category="Battle")
+	TSoftObjectPtr<UObject> BattleMap;
 };

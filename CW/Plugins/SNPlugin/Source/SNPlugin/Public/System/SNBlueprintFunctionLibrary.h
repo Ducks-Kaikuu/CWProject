@@ -23,9 +23,6 @@ public:
 	static void SetInputMappingContext(FName Name, bool bClear=true);
 		
 	UFUNCTION(BlueprintCallable, Category="SN|Online")
-	static bool StartupOnlineSystem();
-
-	UFUNCTION(BlueprintCallable, Category="SN|Online")
 	static void Login();
 
 	UFUNCTION(BlueprintCallable, Category="SN|Online")

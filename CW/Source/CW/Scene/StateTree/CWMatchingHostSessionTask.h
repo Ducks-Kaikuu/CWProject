@@ -41,6 +41,9 @@ private:
 	UFUNCTION()
 	void OnCompleteHostSession(FName SessionName, bool bWasSuccessful);
 
+	UPROPERTY(EditAnywhere, Category="Lobby")
+	TSoftObjectPtr<UObject> LobbyMap;
+	
 	UPROPERTY(VisibleAnywhere)
 	bool bSucceed = false;
 	

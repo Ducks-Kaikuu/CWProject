@@ -20,5 +20,5 @@ void ACWPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	GetCWGameInstance()->StartOnlineSystem();
+	//GetCWGameInstance()->StartOnlineSystem();
 }

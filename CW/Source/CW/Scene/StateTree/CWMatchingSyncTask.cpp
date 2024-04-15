@@ -10,6 +10,8 @@
 #include "CW/CWDef.h"
 #include "CW/UI/Widget/Matching/CWMatchingSyncMenu.h"
 #include "Interfaces/OnlineSessionInterface.h"
+#include "Kismet/GameplayStatics.h"
+#include "Utility/SNUtility.h"
 
 
 EStateTreeRunStatus UCWMatchingSyncTask::Tick(FStateTreeExecutionContext& Context, const float DeltaTime)
@@ -43,6 +45,14 @@ void UCWMatchingSyncTask::ExitState(FStateTreeExecutionContext& Context, const F
 {
 	Super::ExitState(Context, Transition);
 
+	APlayerController* PlayerController(SNUtility::GetPlayerController<APlayerController>());
+
+	CW_ASSERT(PlayerController != nullptr, TEXT("PlayerController is nullptr."));
+	
+	if((BattleMap.IsNull() == false) && ((PlayerController->GetNetMode() == NM_ListenServer) || (PlayerController->GetNetMode() == NM_Standalone)))
+	{
+		UGameplayStatics::OpenLevel(GetWorld(), *BattleMap.GetAssetName(), true, "listen");
+	}
 }
 
 void UCWMatchingSyncTask::HudPostLoad()

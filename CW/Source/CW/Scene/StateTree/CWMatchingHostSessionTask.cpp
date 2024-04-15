@@ -48,6 +48,11 @@ void UCWMatchingHostSessionTask::ExitState(FStateTreeExecutionContext& Context, 
 	{
 		OnlineSystem->OnCompleteHostSession.Clear();
 	}
+
+	if(LobbyMap.IsNull() == false)
+	{
+		UGameplayStatics::OpenLevel(GetWorld(), *LobbyMap.GetAssetName(), true, "listen");	
+	}
 }
 
 void UCWMatchingHostSessionTask::HudPostLoad()

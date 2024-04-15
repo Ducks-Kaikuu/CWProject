@@ -41,23 +41,22 @@ void USNGameInstance::Init()
 		}
 	}
 
+	if(OnlineSystemClass.IsNull() == false)
+	{
+		UClass* Class = OnlineSystemClass.LoadSynchronous();
+
+		if(Class != nullptr)
+		{
+			OnlineSystem = NewObject<USNOnlineSystem>(this, Class);
+
+			if(OnlineSystem != nullptr)
+			{
+				SNPLUGIN_LOG(TEXT("Online System is Enabled."));
+			}
+		}
+	}
+
 	SNPLUGIN_ASSERT(DataAssetManager != nullptr, TEXT("DataAssetManager Is Null"));
 
 	DataAssetManager->SetupDLCContents();
 }
-
-bool USNGameInstance::StartOnlineSystem()
-{
-	UWorld* World(GetWorld());
-
-	SNPLUGIN_ASSERT(World != nullptr, TEXT("World is nullptr."));
-	
-	OnlineSystem = NewObject<USNOnlineSystem>(World);
-
-	if(OnlineSystem != nullptr)
-	{
-		OnlineSystem->Login();
-	}
-	return (OnlineSystem != nullptr) ? true : false;
-}
-

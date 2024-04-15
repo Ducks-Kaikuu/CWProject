@@ -291,7 +291,7 @@ void USNOnlineSystem::OnFindSessionsComplete(bool bWasSuccessful){
 			
 			const TCHAR* SessionId = *SearchSettings->SearchResults[0].GetSessionIdStr();
 			// DISPLAY_LOG("Session ID: %s", SessionId);
-			JoinSession(SearchSettings->SearchResults[0]);
+			// JoinSession(SearchSettings->SearchResults[0]);
 		}
 	} else {
 		// セッション検索失敗

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "WheeledVehiclePawn.h"
+#include "Character/Base/SNWheeledVehiclePlayerBase.h"
 #include "Engine/StreamableManager.h"
 #include "CWWheeledVehiclePawn.generated.h"
 
@@ -13,7 +14,7 @@ class ACWWeaponActorBase;
  * 
  */
 UCLASS()
-class CW_API ACWWheeledVehiclePawn : public AWheeledVehiclePawn
+class CW_API ACWWheeledVehiclePawn : public ASNWheeledVehiclePlayerBase
 {
 	GENERATED_BODY()
 	

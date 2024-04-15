@@ -29,8 +29,6 @@ public:
 	USNDataAssetManager* GetDataAssetManager();
 	//! @}
 
-	bool StartOnlineSystem();
-
 	bool IsEnabledOnlineSystem() const ;
 	
 	USNOnlineSystem* GetOnlineSystem();
@@ -41,6 +39,9 @@ private:
 	UPROPERTY(EditAnywhere, Category="Data")
 	TSoftClassPtr<USNDataAssetManager> DataAssetManagerClass = nullptr;
 
+	UPROPERTY(EditAnywhere, Category="Online")
+	TSoftClassPtr<USNOnlineSystem> OnlineSystemClass = nullptr;
+	
 	// データアセット管理クラスのインスタンス
 	UPROPERTY()
 	TObjectPtr<USNDataAssetManager> DataAssetManager = nullptr;

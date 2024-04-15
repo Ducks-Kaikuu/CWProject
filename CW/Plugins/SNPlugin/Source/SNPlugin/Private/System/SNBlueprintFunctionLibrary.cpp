@@ -29,19 +29,6 @@ void USNBlueprintFunctionLibrary::SetInputMappingContext(FName Name, bool bClear
 		InputManagerSubsystem->EnableInputMapping(Name, bClear);
 	}
 }
-bool USNBlueprintFunctionLibrary::StartupOnlineSystem()
-{
-	USNGameInstance* GameInstance(Cast<USNGameInstance>(UGameplayStatics::GetGameInstance(GetPrimaryWorld())));
-
-	if(GameInstance == nullptr)
-	{
-		SNPLUGIN_LOG(TEXT("Failed to Start Online System because SNGameInstance is nullptr."));
-
-		return false;
-	}
-
-	return GameInstance->StartOnlineSystem();
-}
 
 void USNBlueprintFunctionLibrary::Login()
 {
