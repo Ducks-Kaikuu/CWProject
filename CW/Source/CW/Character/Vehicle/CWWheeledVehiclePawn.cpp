@@ -12,6 +12,7 @@
 #include "CW/Character/Player/CWPlayerController.h"
 #include "Input/SNInputManagerSubsystem.h"
 #include "Net/UnrealNetwork.h"
+#include "Online/SNOnlineSystem.h"
 
 ACWWheeledVehiclePawn::ACWWheeledVehiclePawn(const FObjectInitializer& Initializer)
 	:Super(Initializer)
@@ -114,6 +115,12 @@ void ACWWheeledVehiclePawn::BeginPlay(){
 	}
 
 	CW_LOG(TEXT("BeginPlay"));
+
+	UCWGameInstance* GameInstance(GetCWGameInstance());
+
+	FString Nickname(GameInstance->GetOnlineSystem()->GetNickname());
+
+	CW_LOG(TEXT("%s"), *Nickname);
 }
 
 void ACWWheeledVehiclePawn::PossessedBy(AController* NewController)

@@ -10,6 +10,7 @@
 #include "Online/OnlineSessionNames.h"
 #include "OnlineSessionClient.h"
 #include "OnlineSessionSettings.h"
+#include "ToolContextInterfaces.h"
 #include "Utility/SNUtility.h"
 
 //----------------------------------------------------------------------//
@@ -380,3 +381,80 @@ void USNOnlineSystem::OnJoinSessionComplete(FName InSessionName, EOnJoinSessionC
 		OnCompleteJoinSession.Broadcast(InSessionName, Result == EOnJoinSessionCompleteResult::Success ? true : false);	
 	}
 }
+
+
+
+
+void USNOnlineSystem::Initialize()
+{
+	//CreateOnlineContexts();
+}
+
+void USNOnlineSystem::CreateOnlineContexts()
+{
+	// First initialize default
+	DefaultContextInternal = new FOnlineContextCache();
+#if COMMONUSER_OSSV1
+	DefaultContextInternal->OnlineSubsystem = Online::GetSubsystem(GetWorld());
+	check(DefaultContextInternal->OnlineSubsystem);
+	DefaultContextInternal->IdentityInterface = DefaultContextInternal->OnlineSubsystem->GetIdentityInterface();
+	check(DefaultContextInternal->IdentityInterface.IsValid());
+
+	IOnlineSubsystem* PlatformSub = IOnlineSubsystem::GetByPlatform();
+
+	if (PlatformSub && DefaultContextInternal->OnlineSubsystem != PlatformSub)
+	{
+		// Set up the optional platform service if it exists
+		PlatformContextInternal = new FOnlineContextCache();
+		PlatformContextInternal->OnlineSubsystem = PlatformSub;
+		PlatformContextInternal->IdentityInterface = PlatformSub->GetIdentityInterface();
+		check(PlatformContextInternal->IdentityInterface.IsValid());
+	}
+#else
+	DefaultContextInternal->OnlineServices = GetServices(GetWorld(), EOnlineServices::Default);
+	check(DefaultContextInternal->OnlineServices);
+	DefaultContextInternal->AuthService = DefaultContextInternal->OnlineServices->GetAuthInterface();
+	check(DefaultContextInternal->AuthService);
+
+	UE::Online::IOnlineServicesPtr PlatformServices = GetServices(GetWorld(), EOnlineServices::Platform);
+	if (PlatformServices && DefaultContextInternal->OnlineServices != PlatformServices)
+	{
+		PlatformContextInternal = new FOnlineContextCache();
+		PlatformContextInternal->OnlineServices = PlatformServices;
+		PlatformContextInternal->AuthService = PlatformContextInternal->OnlineServices->GetAuthInterface();
+		check(PlatformContextInternal->AuthService);
+	}
+#endif
+}
+
+FString USNOnlineSystem::GetNickname() const
+{
+#if COMMONUSER_OSSV1
+		//IOnlineIdentity* Identity = DefaultContextInternal;
+	
+		//if (ensure(Identity))
+		{
+			APlayerController* PlayerController(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+
+			ULocalPlayer* LocalPlayer(PlayerController->GetLocalPlayer());
+
+			
+			return LocalPlayer->GetNickname();
+		}
+#else
+		if (IAuthPtr AuthService = Subsystem->GetOnlineAuth(ECommonUserOnlineContext::Game))
+		{
+			if (TSharedPtr<FAccountInfo> AccountInfo = Subsystem->GetOnlineServiceAccountInfo(AuthService, GetPlatformUserId()))
+			{
+				if (const FSchemaVariant* DisplayName = AccountInfo->Attributes.Find(AccountAttributeData::DisplayName))
+				{
+					return DisplayName->GetString();
+				}
+			}
+		}
+#endif // COMMONUSER_OSSV1
+
+	return FString();
+
+}
+

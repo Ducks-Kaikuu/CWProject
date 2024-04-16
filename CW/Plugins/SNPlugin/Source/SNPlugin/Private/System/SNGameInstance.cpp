@@ -59,6 +59,8 @@ void USNGameInstance::Init()
 			if(OnlineSystem != nullptr)
 			{
 				SNPLUGIN_LOG(TEXT("Online System is Enabled."));
+
+				OnlineSystem->Initialize();
 			}
 		}
 	}

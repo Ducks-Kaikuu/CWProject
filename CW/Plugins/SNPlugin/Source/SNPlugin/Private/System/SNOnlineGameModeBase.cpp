@@ -67,6 +67,8 @@ FString ASNOnlineGameModeBase::InitNewPlayer(APlayerController* NewPlayerControl
 //
 //! @param NewPlayer ログインしたプレイヤーの情報
 //
+//! @note ホストはPIE後1回、クライアントはセッションを開始した後に1回呼ばれます。
+//
 //----------------------------------------------------------------------//
 void ASNOnlineGameModeBase::PostLogin(APlayerController* NewPlayer){
 	

@@ -8,6 +8,8 @@ public class SNPlugin : ModuleRules
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 		
+		bool bUseOnlineSubsystemV1 = true;
+		
 		PublicIncludePaths.AddRange(
 			new string[] {
 				// ... add public include paths required here ...
@@ -26,17 +28,29 @@ public class SNPlugin : ModuleRules
 			new string[]
 			{
 				"Core",
-				"OnlineSubsystem", 
+				"CoreOnline",
 				"ChaosVehicles",
+				"GameplayTags",
 				// ... add other public dependencies that you statically link with here ...
 			}
-			);
-			
+		);
+		
+		if (bUseOnlineSubsystemV1)
+		{
+			PublicDependencyModuleNames.Add("OnlineSubsystem");
+		}
+		else
+		{
+			PublicDependencyModuleNames.Add("OnlineServicesInterface");
+		}
+		
+		PublicDefinitions.Add("COMMONUSER_OSSV1=" + (bUseOnlineSubsystemV1 ? "1" : "0"));
 		
 		PrivateDependencyModuleNames.AddRange(
 			new string[]
 			{
 				"Core",
+				"CoreOnline",
 				"CoreUObject",
 				"Engine",
 				"Slate",
@@ -45,7 +59,6 @@ public class SNPlugin : ModuleRules
 				"EnhancedInput",
 				"GameplayTags",
 				"ModularGameplay",
-				"OnlineSubsystem",
 				"OnlineSubsystemUtils"
 				// ... add private dependencies that you statically link with here ...	
 			}
