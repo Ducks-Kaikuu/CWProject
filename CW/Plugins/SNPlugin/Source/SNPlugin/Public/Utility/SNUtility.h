@@ -27,6 +27,8 @@ public:
 	//! @}
 
 	static USNInputManagerSubsystem* GetSNInputManagerSubsystem();
+
+	static TSharedPtr<const FUniqueNetId> GetUniqueNetId(APlayerController* PlayerController);
 	
 	//! @{@name ゲームインスタンスを取得
 	template<class T>

@@ -7,6 +7,10 @@
 #include "CWMatchingSyncMenu.generated.h"
 
 class UTextBlock;
+class UCWButton;
+
+DECLARE_DYNAMIC_DELEGATE(FOnStartButtonClicked);
+
 /**
  * 
  */
@@ -20,8 +24,21 @@ public:
 	bool Initialize() override;
 
 	void SetSessionName(const FName& Name);
-	
+
+	UCWButton* GetStartButton() const;
+
 private:
+
+	
 	UPROPERTY()
 	TObjectPtr<UTextBlock> SessionName = nullptr;
+
+	UPROPERTY()
+	TObjectPtr<UCWButton>	StartButton = nullptr;
 };
+
+FORCEINLINE UCWButton* UCWMatchingSyncMenu::GetStartButton() const
+{
+	return StartButton;
+}
+

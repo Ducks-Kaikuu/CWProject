@@ -6,6 +6,9 @@
 #include "SNDef.h"
 #include "Engine/PlayerStartPIE.h"
 #include "GameFramework/PlayerState.h"
+#include "Online/SNOnlineSystem.h"
+#include "System/SNGameInstance.h"
+#include "Utility/SNUtility.h"
 
 //----------------------------------------------------------------------//
 //
@@ -73,6 +76,23 @@ FString ASNOnlineGameModeBase::InitNewPlayer(APlayerController* NewPlayerControl
 void ASNOnlineGameModeBase::PostLogin(APlayerController* NewPlayer){
 	
 	Super::PostLogin(NewPlayer);
+
+	FString Nickname;
+	
+	if(ULocalPlayer* LocalPlayer = NewPlayer->GetLocalPlayer())
+	{
+		Nickname = LocalPlayer->GetNickname();
+
+		
+	} else
+	if(UNetConnection* NetConnection = NewPlayer->GetNetConnection())
+	{
+		Nickname = NetConnection->GetPlayerOnlinePlatformName().ToString();
+	}
+
+	Nickname = SNUtility::GetGameInstance<USNGameInstance>()->GetOnlineSystem()->GetNickname(NewPlayer);
+
+	SNPLUGIN_LOG(TEXT("%s"), *Nickname);
 	
 	SNPLUGIN_LOG(TEXT("Post Login.[Player Start Num : %d]"), PlayerStartList.Num());
 }

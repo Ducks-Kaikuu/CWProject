@@ -2,16 +2,15 @@
 #include "Online\SNOnlineSystem.h"
 
 #include "SNDef.h"
+#include "Utility/SNUtility.h"
 
 #include "GameFramework/PlayerState.h"
-#include "Kismet/GameplayStatics.h"
 #include "OnlineSubsystem.h"
 #include "OnlineSubsystemUtils.h"
 #include "Online/OnlineSessionNames.h"
 #include "OnlineSessionClient.h"
 #include "OnlineSessionSettings.h"
-#include "ToolContextInterfaces.h"
-#include "Utility/SNUtility.h"
+
 
 //----------------------------------------------------------------------//
 //
@@ -109,32 +108,33 @@ bool USNOnlineSystem::HostSession(int ConnectionNum, FName Name){
 		SessionSettings->bAllowJoinViaPresence			= bAllowJoinViaPresense;
 		SessionSettings->bUseLobbiesIfAvailable			= bUseLobbiesIfAvailable;
 		SessionSettings->bUseLobbiesVoiceChatIfAvailable= bUseLobbiesVoiceChatIfAvailable;
-
 		
 		SessionSettings->Set(SEARCH_KEYWORDS, Name.ToString(), EOnlineDataAdvertisementType::ViaOnlineService);
-
+		
 		Sessions->AddOnCreateSessionCompleteDelegate_Handle(FOnCreateSessionCompleteDelegate::CreateUObject(this, &USNOnlineSystem::OnCreateSessionComplete));
 		// プレイヤーコントローラを取得
-		APlayerController* PlayerController(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-		
+		APlayerController* PlayerController(SNUtility::GetPlayerController<APlayerController>());
+		// プレイヤーコントローラがない場合はアサート
 		SNPLUGIN_ASSERT(PlayerController != nullptr, TEXT("PlayerController is nullptr"));
-		// ローカルプレイヤーを取得
-		ULocalPlayer* LocalPlayer(PlayerController->GetLocalPlayer());
 		
-		if(LocalPlayer != nullptr){
-
-			TSharedPtr<const FUniqueNetId> UniqueNetIdptr = LocalPlayer->GetPreferredUniqueNetId().GetUniqueNetId();
+		TSharedPtr<const FUniqueNetId> UniqueNetIdPtr(SNUtility::GetUniqueNetId(PlayerController));
+		// ネットワームIDが有効かチェック
+		if(UniqueNetIdPtr.IsValid()){
 			
-			bool bResult = Sessions->CreateSession(*UniqueNetIdptr, Name, *SessionSettings);
-
+			bool bResult = Sessions->CreateSession(*UniqueNetIdPtr, Name, *SessionSettings);
+			
 			if(bResult == true){
 				
 				SNPLUGIN_LOG(TEXT("Success to Create Session."))
+
+				MaxPlayerNum = ConnectionNum;
 				
 				return true;
 			} else {
 				SNPLUGIN_ERROR(TEXT("CreateSession: Fail"));
 			}
+		} else {
+			SNPLUGIN_ERROR(TEXT("CreateSession : Unique Net Id is none."))
 		}
 	}
 	
@@ -167,19 +167,23 @@ void USNOnlineSystem::FindSession(){
 		
 		TSharedRef<FOnlineSessionSearch> SearchSettingsRef = SearchSettings.ToSharedRef();
 		// プレイヤーコントローラを取得
-		APlayerController* PlayerController(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+		APlayerController* PlayerController(SNUtility::GetPlayerController<APlayerController>());
 		
 		SNPLUGIN_ASSERT(PlayerController != nullptr, TEXT("PlayerController is nullptr"));
-		// ローカルプレイヤーを取得
-		ULocalPlayer* LocalPlayer(PlayerController->GetLocalPlayer());
-
-		ENetMode Mode = GetWorld()->GetNetMode();
 		
-		if(LocalPlayer != nullptr){
-			// NetIdを取得
-			TSharedPtr<const FUniqueNetId> UniqueNetIdptr = LocalPlayer->GetPreferredUniqueNetId().GetUniqueNetId();
+		TSharedPtr<const FUniqueNetId> UniqueNetIdPtr(SNUtility::GetUniqueNetId(PlayerController));
+		
+		if(UniqueNetIdPtr.IsValid()){
 			// セッションの検索を開始
-			bool bIsSuccess = Sessions->FindSessions(*UniqueNetIdptr, SearchSettingsRef);
+			bool bResult = Sessions->FindSessions(*UniqueNetIdPtr, SearchSettingsRef);
+			
+			if(bResult == true){
+				SNPLUGIN_LOG(TEXT("Success to FindSession."))
+			} else {
+				SNPLUGIN_ERROR(TEXT("FindSession: Fail"));
+			}
+		} else {
+			SNPLUGIN_ERROR(TEXT("FindSession : Unique Net Id is none."))
 		}
 	}
 }
@@ -227,7 +231,7 @@ void USNOnlineSystem::OnLoginComplete(int32 LocalUserNum, bool bWasSuccessful, c
 	
 	if(Identity.IsValid()){
 		
-		APlayerController* PlayerController(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+		APlayerController* PlayerController(SNUtility::GetPlayerController<APlayerController>());
 		
 		SNPLUGIN_ASSERT(PlayerController != nullptr, TEXT("PlayerController is nullptr"));
 		
@@ -265,9 +269,8 @@ void USNOnlineSystem::OnCreateSessionComplete(FName InSessionName, bool bWasSucc
 	} else {
 		SNPLUGIN_ERROR(TEXT("Failed to Session Succeed [%s]."), *InSessionName.ToString());
 	}
-
-	if(OnCompleteHostSession.IsBound())
-	{
+	
+	if(OnCompleteHostSession.IsBound()){
 		OnCompleteHostSession.Broadcast(InSessionName, bWasSuccessful);
 	}
 }
@@ -305,6 +308,13 @@ void USNOnlineSystem::OnFindSessionsComplete(bool bWasSuccessful){
 	}
 }
 
+//----------------------------------------------------------------------//
+//
+//! @brief セッションに参加
+//
+//! @param SearchResult 参加するセッションの検索結果
+//
+//----------------------------------------------------------------------//
 void USNOnlineSystem::JoinSession(FOnlineSessionSearchResult SearchResult){
 	
 	IOnlineSubsystem* const OnlineSubsystem = Online::GetSubsystem(GetWorld());
@@ -314,35 +324,34 @@ void USNOnlineSystem::JoinSession(FOnlineSessionSearchResult SearchResult){
 		IOnlineSessionPtr Sessions(OnlineSubsystem->GetSessionInterface());
 		
 		if(Sessions.IsValid()){
-
+			
 			if(SearchResult.IsValid()){
 				
 				Sessions->AddOnJoinSessionCompleteDelegate_Handle(FOnJoinSessionCompleteDelegate::CreateUObject(this, &USNOnlineSystem::OnJoinSessionComplete));
 				
-				APlayerController* PlayerController(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+				APlayerController* PlayerController(SNUtility::GetPlayerController<APlayerController>());
 				
 				SNPLUGIN_ASSERT(PlayerController != nullptr, TEXT("PlayerController is nullptr"));
 				
-				ULocalPlayer* LocalPlayer(PlayerController->GetLocalPlayer());
+				TSharedPtr<const FUniqueNetId> UniqueNetIdPtr(SNUtility::GetUniqueNetId(PlayerController));
 				
-				if(LocalPlayer != nullptr){
-
-					FName JoinSessionName(NAME_None);
+				if(UniqueNetIdPtr.IsValid()){
 					
-					if(SearchResult.Session.SessionSettings.Settings.Contains(SEARCH_KEYWORDS) == true)
-					{
+					FName JoinSessionName(NAME_None);
+					// 検索結果にキーワードが含まれているかチェック
+					if(SearchResult.Session.SessionSettings.Settings.Contains(SEARCH_KEYWORDS) == true){
+						// オンライン設定を取得
 						const FOnlineSessionSetting& Setting(SearchResult.Session.SessionSettings.Settings[SEARCH_KEYWORDS]);
-						
+						// データからセッション名を取得
 						JoinSessionName = *Setting.Data.ToString();
 					}
-
-					
-					TSharedPtr<const FUniqueNetId> UniqueNetIdptr = LocalPlayer->GetPreferredUniqueNetId().GetUniqueNetId();
 					// セッションに参加
-					Sessions->JoinSession(*UniqueNetIdptr, JoinSessionName, SearchResult);
+					Sessions->JoinSession(*UniqueNetIdPtr, JoinSessionName, SearchResult);
+				} else {
+					SNPLUGIN_ERROR(TEXT("JointSession : Unique Net Id is none."))
 				}
 			} else {
-				SNPLUGIN_LOG(TEXT("Invalid session."));
+				SNPLUGIN_ERROR(TEXT("Invalid session."));
 			}
 		}
 	}
@@ -361,23 +370,22 @@ void USNOnlineSystem::OnJoinSessionComplete(FName InSessionName, EOnJoinSessionC
 			if(Result == EOnJoinSessionCompleteResult::Success){
 				// Client travel to the server
 				FString ConnectString;
-
+				
 				if(Sessions->GetResolvedConnectString(InSessionName, ConnectString)){
-
+					
 					UE_LOG_ONLINE_SESSION(Log, TEXT("Join session: traveling to %s"), *ConnectString);
 					
-					APlayerController* PlayerController(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+					APlayerController* PlayerController(SNUtility::GetPlayerController<APlayerController>());
 					
 					SNPLUGIN_ASSERT(PlayerController != nullptr, TEXT("PlayerController is nullptr"));
-
+					
 					PlayerController->ClientTravel(ConnectString, TRAVEL_Absolute);
 				}
 			}
 		}
 	}
-
-	if(OnCompleteJoinSession.IsBound())
-	{
+	
+	if(OnCompleteJoinSession.IsBound()){
 		OnCompleteJoinSession.Broadcast(InSessionName, Result == EOnJoinSessionCompleteResult::Success ? true : false);	
 	}
 }
@@ -385,76 +393,34 @@ void USNOnlineSystem::OnJoinSessionComplete(FName InSessionName, EOnJoinSessionC
 
 
 
-void USNOnlineSystem::Initialize()
-{
-	//CreateOnlineContexts();
-}
-
-void USNOnlineSystem::CreateOnlineContexts()
-{
-	// First initialize default
-	DefaultContextInternal = new FOnlineContextCache();
-#if COMMONUSER_OSSV1
-	DefaultContextInternal->OnlineSubsystem = Online::GetSubsystem(GetWorld());
-	check(DefaultContextInternal->OnlineSubsystem);
-	DefaultContextInternal->IdentityInterface = DefaultContextInternal->OnlineSubsystem->GetIdentityInterface();
-	check(DefaultContextInternal->IdentityInterface.IsValid());
-
-	IOnlineSubsystem* PlatformSub = IOnlineSubsystem::GetByPlatform();
-
-	if (PlatformSub && DefaultContextInternal->OnlineSubsystem != PlatformSub)
-	{
-		// Set up the optional platform service if it exists
-		PlatformContextInternal = new FOnlineContextCache();
-		PlatformContextInternal->OnlineSubsystem = PlatformSub;
-		PlatformContextInternal->IdentityInterface = PlatformSub->GetIdentityInterface();
-		check(PlatformContextInternal->IdentityInterface.IsValid());
-	}
-#else
-	DefaultContextInternal->OnlineServices = GetServices(GetWorld(), EOnlineServices::Default);
-	check(DefaultContextInternal->OnlineServices);
-	DefaultContextInternal->AuthService = DefaultContextInternal->OnlineServices->GetAuthInterface();
-	check(DefaultContextInternal->AuthService);
-
-	UE::Online::IOnlineServicesPtr PlatformServices = GetServices(GetWorld(), EOnlineServices::Platform);
-	if (PlatformServices && DefaultContextInternal->OnlineServices != PlatformServices)
-	{
-		PlatformContextInternal = new FOnlineContextCache();
-		PlatformContextInternal->OnlineServices = PlatformServices;
-		PlatformContextInternal->AuthService = PlatformContextInternal->OnlineServices->GetAuthInterface();
-		check(PlatformContextInternal->AuthService);
-	}
-#endif
-}
-
-FString USNOnlineSystem::GetNickname() const
-{
-#if COMMONUSER_OSSV1
-		//IOnlineIdentity* Identity = DefaultContextInternal;
+void USNOnlineSystem::Initialize(){
 	
-		//if (ensure(Identity))
-		{
-			APlayerController* PlayerController(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+}
 
-			ULocalPlayer* LocalPlayer(PlayerController->GetLocalPlayer());
-
-			
-			return LocalPlayer->GetNickname();
+//----------------------------------------------------------------------//
+//
+//! @brief 指定されたプレイヤーコントローラのニックネームを取得
+//
+//! @param PlayerController プレイヤーコントローラ
+//
+//! @retval ニックネーム
+//
+//----------------------------------------------------------------------//
+FString USNOnlineSystem::GetNickname(APlayerController* PlayerController) const {
+	
+	FString Nickname;
+	
+	IOnlineIdentityPtr Identity(Online::GetIdentityInterface(GetWorld()));
+	
+	if(Identity.IsValid()){
+		
+		TSharedPtr<const FUniqueNetId> UniqueNetId(SNUtility::GetUniqueNetId(PlayerController));
+		
+		if(UniqueNetId.IsValid()){
+			Nickname = Identity->GetPlayerNickname(*UniqueNetId);
 		}
-#else
-		if (IAuthPtr AuthService = Subsystem->GetOnlineAuth(ECommonUserOnlineContext::Game))
-		{
-			if (TSharedPtr<FAccountInfo> AccountInfo = Subsystem->GetOnlineServiceAccountInfo(AuthService, GetPlatformUserId()))
-			{
-				if (const FSchemaVariant* DisplayName = AccountInfo->Attributes.Find(AccountAttributeData::DisplayName))
-				{
-					return DisplayName->GetString();
-				}
-			}
-		}
-#endif // COMMONUSER_OSSV1
-
-	return FString();
-
+	}
+	
+	return Nickname;
 }
 

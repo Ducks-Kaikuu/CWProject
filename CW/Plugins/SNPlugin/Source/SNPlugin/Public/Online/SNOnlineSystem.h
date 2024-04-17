@@ -52,6 +52,8 @@ public:
 	void KillSession(const FName& SessionName);
 	//! @}
 
+	int GetMaxPlayerNum() const ;
+
 	const TSharedPtr<class FOnlineSessionSearch>& GetSearchSessionList() const ;
 
 	UPROPERTY(BlueprintAssignable, Category = "Online|Session")
@@ -65,50 +67,7 @@ public:
 
 
 
-	FString GetNickname() const ;
-	
-protected:
-	// Lylaからのテスト
-	struct FOnlineContextCache
-	{
-#if COMMONUSER_OSSV1
-		/** Pointer to base subsystem, will stay valid as long as game instance does */
-		IOnlineSubsystem* OnlineSubsystem = nullptr;
-
-		/** Cached identity system, this will always be valid */
-		IOnlineIdentityPtr IdentityInterface;
-
-		/** Last connection status that was passed into the HandleNetworkConnectionStatusChanged hander */
-		EOnlineServerConnectionStatus::Type	CurrentConnectionStatus = EOnlineServerConnectionStatus::Normal;
-#else
-		/** Online services, accessor to specific services */
-		UE::Online::IOnlineServicesPtr OnlineServices;
-		/** Cached auth service */
-		UE::Online::IAuthPtr AuthService;
-		/** Login status changed event handle */
-		UE::Online::FOnlineEventDelegateHandle LoginStatusChangedHandle;
-		/** Connection status changed event handle */
-		UE::Online::FOnlineEventDelegateHandle ConnectionStatusChangedHandle;
-		/** Last connection status that was passed into the HandleNetworkConnectionStatusChanged hander */
-		UE::Online::EOnlineServicesConnectionStatus CurrentConnectionStatus = UE::Online::EOnlineServicesConnectionStatus::NotConnected;
-#endif
-
-		/** Resets state, important to clear all shared ptrs */
-		void Reset()
-		{
-#if COMMONUSER_OSSV1
-			OnlineSubsystem = nullptr;
-			IdentityInterface.Reset();
-			CurrentConnectionStatus = EOnlineServerConnectionStatus::Normal;
-#else
-			OnlineServices.Reset();
-			AuthService.Reset();
-			CurrentConnectionStatus = UE::Online::EOnlineServicesConnectionStatus::NotConnected;
-#endif
-		}
-	};
-
-	virtual void CreateOnlineContexts();
+	FString GetNickname(APlayerController* PlayerController) const ;
 	
 private:
 	
@@ -149,9 +108,8 @@ private:
 	UPROPERTY(EditAnywhere, Category="Online")
 	bool bUseLobbiesVoiceChatIfAvailable = true;
 
-	FOnlineContextCache* DefaultContextInternal = nullptr;
-
-	FOnlineContextCache* PlatformContextInternal = nullptr;
+	UPROPERTY()
+	int MaxPlayerNum = -1;
 	
 	TSharedPtr<class FOnlineSessionSearch> SearchSettings = nullptr;
 };
@@ -160,4 +118,8 @@ FORCEINLINE const TSharedPtr<FOnlineSessionSearch>& USNOnlineSystem::GetSearchSe
 {
 	return SearchSettings;
 }
- 
+
+FORCEINLINE int USNOnlineSystem::GetMaxPlayerNum() const
+{
+	return MaxPlayerNum;
+}

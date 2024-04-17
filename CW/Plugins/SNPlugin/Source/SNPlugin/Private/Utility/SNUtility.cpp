@@ -49,4 +49,24 @@ USNInputManagerSubsystem* SNUtility::GetSNInputManagerSubsystem()
 	return InputManagerSubsystem;
 }
 
+TSharedPtr<const FUniqueNetId> SNUtility::GetUniqueNetId(APlayerController* PlayerController)
+{
+	TSharedPtr<const FUniqueNetId> UniqueNetId;
+
+			
+	if(ULocalPlayer* LocalPlayer = Cast<ULocalPlayer>(PlayerController->Player))
+	{
+		UniqueNetId = LocalPlayer->GetPreferredUniqueNetId().GetUniqueNetId();	
+	} else
+	if(UNetConnection* NetConnection = Cast<UNetConnection>(PlayerController->Player))
+	{
+		UniqueNetId = NetConnection->PlayerId.GetUniqueNetId();
+	} else
+	{
+		SNPLUGIN_LOG(TEXT("Unique Net Id is None."));
+	}
+
+	return UniqueNetId;
+}
+
 

@@ -115,12 +115,6 @@ void ACWWheeledVehiclePawn::BeginPlay(){
 	}
 
 	CW_LOG(TEXT("BeginPlay"));
-
-	UCWGameInstance* GameInstance(GetCWGameInstance());
-
-	FString Nickname(GameInstance->GetOnlineSystem()->GetNickname());
-
-	CW_LOG(TEXT("%s"), *Nickname);
 }
 
 void ACWWheeledVehiclePawn::PossessedBy(AController* NewController)

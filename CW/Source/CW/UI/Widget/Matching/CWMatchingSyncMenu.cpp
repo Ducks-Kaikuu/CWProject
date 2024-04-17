@@ -2,9 +2,9 @@
 
 
 #include "CW/UI/Widget/Matching/CWMatchingSyncMenu.h"
+#include "CW/UI/Widget/CWButton.h"
 
 #include "Components/TextBlock.h"
-#include "CW/Scene/StateTree/CWMatchingSyncTask.h"
 
 
 bool UCWMatchingSyncMenu::Initialize()
@@ -12,6 +12,8 @@ bool UCWMatchingSyncMenu::Initialize()
 	bool bResult = Super::Initialize();
 
 	SessionName = Cast<UTextBlock>(GetWidgetFromName(FName(TEXT("MatchingSessionName"))));
+
+	StartButton = Cast<UCWButton>(GetWidgetFromName(TEXT("Start")));
 	
 	return bResult;
 }
@@ -23,3 +25,4 @@ void UCWMatchingSyncMenu::SetSessionName(const FName& Name)
 		SessionName->SetText(FText::FromString(Name.ToString()));
 	}
 }
+
