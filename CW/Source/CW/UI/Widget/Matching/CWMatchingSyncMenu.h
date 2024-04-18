@@ -28,8 +28,7 @@ public:
 	UCWButton* GetStartButton() const;
 
 private:
-
-	
+		
 	UPROPERTY()
 	TObjectPtr<UTextBlock> SessionName = nullptr;
 

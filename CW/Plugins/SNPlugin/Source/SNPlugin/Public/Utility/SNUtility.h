@@ -27,8 +27,14 @@ public:
 	//! @}
 
 	static USNInputManagerSubsystem* GetSNInputManagerSubsystem();
-
+	
+	//! @{@name 指定されたプレイヤーコントローラのネットワークIDを取得
 	static TSharedPtr<const FUniqueNetId> GetUniqueNetId(APlayerController* PlayerController);
+	//! @}
+	
+	//! @{@name サーバーかどうかの判定
+	static bool IsServer(UWorld* World);
+	//! @}
 	
 	//! @{@name ゲームインスタンスを取得
 	template<class T>

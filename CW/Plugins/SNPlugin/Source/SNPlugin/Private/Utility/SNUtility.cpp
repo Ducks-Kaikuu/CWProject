@@ -69,4 +69,10 @@ TSharedPtr<const FUniqueNetId> SNUtility::GetUniqueNetId(APlayerController* Play
 	return UniqueNetId;
 }
 
+bool SNUtility::IsServer(UWorld* World)
+{
+	return UKismetSystemLibrary::IsServer(World);
+}
+
+
 

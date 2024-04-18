@@ -23,6 +23,8 @@ class CW_API UCWMatchingSyncTask : public UCWMatchingSceneBase
 	GENERATED_BODY()
 
 public:
+
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	
 	//! @{@name 毎フレームの更新処理
 	virtual EStateTreeRunStatus Tick(FStateTreeExecutionContext& Context, const float DeltaTime) override;
@@ -39,6 +41,12 @@ public:
 	void HudPostLoad() override;
 
 private:
+	
+	UFUNCTION()
+	void OnCreateButtonClicked(UCWButton* Button);
+	
 	UPROPERTY(EditAnywhere, Category="Battle")
 	TSoftObjectPtr<UObject> BattleMap;
+
+	
 };
