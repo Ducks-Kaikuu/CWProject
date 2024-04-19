@@ -23,14 +23,13 @@ public:
 	bool IsReadyToBattle() const ;
 	
 private:
+
+	UFUNCTION(Server, Reliable)
+	void SendServerReadyToBattle(bool bFlag);
+	
 	UPROPERTY(Replicated)
 	bool bReadyToBattle = false;
 };
-
-FORCEINLINE void ACWPlayerState::SetReadyToBattle(bool bFlag)
-{
-	bReadyToBattle = bFlag;
-}
 
 FORCEINLINE bool ACWPlayerState::IsReadyToBattle() const
 {
