@@ -111,6 +111,11 @@ void UCWMatchingSyncTask::OnCreateButtonClicked(UCWButton* Button)
 	if(PlayerState != nullptr)
 	{
 		PlayerState->SetReadyToBattle(true);
+		
+		CW_LOG(TEXT("Ready To Battle On."));
+	} else
+	{
+		CW_LOG(TEXT("PlayerState is nullptr."));
 	}
 	if(BattleMap.IsNull() == false)
 	{
