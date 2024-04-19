@@ -77,7 +77,7 @@ void UCWMatchingSyncTask::ExitState(FStateTreeExecutionContext& Context, const F
 
 	CW_ASSERT(PlayerController != nullptr, TEXT("PlayerController is nullptr."));
 	
-	if((BattleMap.IsNull() == false) && ((PlayerController->GetNetMode() == NM_ListenServer) || (PlayerController->GetNetMode() == NM_Standalone)))
+	if((BattleMap.IsNull() == false) && (SNUtility::IsServer(GetWorld()) == true))
 	{
 		UGameplayStatics::OpenLevel(GetWorld(), *BattleMap.GetAssetName(), true, "listen");
 	}
