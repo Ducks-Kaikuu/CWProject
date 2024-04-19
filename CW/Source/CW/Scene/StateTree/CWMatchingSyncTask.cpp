@@ -37,7 +37,8 @@ EStateTreeRunStatus UCWMatchingSyncTask::Tick(FStateTreeExecutionContext& Contex
 			{
 				if(BattleMap.IsNull() == false)
 				{
-					UGameplayStatics::OpenLevel(GetWorld(), *BattleMap.GetAssetName(), true, "listen");
+					GetWorld()->ServerTravel(*BattleMap.GetAssetName(), true);
+					//UGameplayStatics::OpenLevel(GetWorld(), *BattleMap.GetAssetName(), true, "listen");
 				}
 				FinishTask();
 
@@ -79,6 +80,7 @@ void UCWMatchingSyncTask::ExitState(FStateTreeExecutionContext& Context, const F
 	
 	if((BattleMap.IsNull() == false) && (SNUtility::IsServer(GetWorld()) == true))
 	{
+		
 		UGameplayStatics::OpenLevel(GetWorld(), *BattleMap.GetAssetName(), true, "listen");
 	}
 }
