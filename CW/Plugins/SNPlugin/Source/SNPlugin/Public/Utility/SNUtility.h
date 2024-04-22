@@ -35,7 +35,9 @@ public:
 	//! @{@name サーバーかどうかの判定
 	static bool IsServer(UWorld* World);
 	//! @}
-	
+
+	static void Travel(const FString& MapName);
+
 	//! @{@name ゲームインスタンスを取得
 	template<class T>
 	static T*	GetGameInstance();

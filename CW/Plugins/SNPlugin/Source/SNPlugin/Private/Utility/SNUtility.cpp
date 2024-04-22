@@ -4,6 +4,8 @@
 #include "Utility/SNUtility.h"
 #include "SNDef.h"
 #include "Input/SNInputManagerSubsystem.h"
+#include "Online/SNOnlineSystem.h"
+#include "System/SNGameInstance.h"
 
 UWorld* SNUtility::GetWorld(){
 	return GetPrimaryWorld();
@@ -73,6 +75,24 @@ bool SNUtility::IsServer(UWorld* World)
 {
 	return UKismetSystemLibrary::IsServer(World);
 }
+
+void SNUtility::Travel(const FString& MapName)
+{
+	USNGameInstance* GameInstance(GetGameInstance<USNGameInstance>());
+
+	SNPLUGIN_ASSERT(GameInstance != nullptr, TEXT("GameInstance is nullptr."));
+
+	if(GameInstance->IsEnabledOnlineSystem() == true)
+	{
+		GameInstance->GetOnlineSystem()->MapTravel(MapName);
+	} else
+	{
+		SNPLUGIN_LOG(TEXT("Open Level : %s"), *MapName);
+		
+		UGameplayStatics::OpenLevel(GetWorld(), *MapName, true, "listen");
+	}
+}
+
 
 
 

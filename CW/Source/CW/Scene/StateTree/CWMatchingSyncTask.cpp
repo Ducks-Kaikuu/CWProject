@@ -16,12 +16,6 @@
 #include "Kismet/GameplayStatics.h"
 #include "Utility/SNUtility.h"
 
-void UCWMatchingSyncTask::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-	
-}
 
 EStateTreeRunStatus UCWMatchingSyncTask::Tick(FStateTreeExecutionContext& Context, const float DeltaTime)
 {
@@ -37,7 +31,8 @@ EStateTreeRunStatus UCWMatchingSyncTask::Tick(FStateTreeExecutionContext& Contex
 			{
 				if(BattleMap.IsNull() == false)
 				{
-					GetWorld()->ServerTravel(*BattleMap.GetAssetName(), true);
+					SNUtility::Travel(BattleMap.GetAssetName());
+					//GetWorld()->ServerTravel(*BattleMap.GetAssetName(), true);
 					//UGameplayStatics::OpenLevel(GetWorld(), *BattleMap.GetAssetName(), true, "listen");
 				}
 				FinishTask();
@@ -80,7 +75,6 @@ void UCWMatchingSyncTask::ExitState(FStateTreeExecutionContext& Context, const F
 	
 	if((BattleMap.IsNull() == false) && (SNUtility::IsServer(GetWorld()) == true))
 	{
-		
 		UGameplayStatics::OpenLevel(GetWorld(), *BattleMap.GetAssetName(), true, "listen");
 	}
 }

@@ -24,8 +24,6 @@ class CW_API UCWMatchingSyncTask : public UCWMatchingSceneBase
 
 public:
 
-	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-	
 	//! @{@name 毎フレームの更新処理
 	virtual EStateTreeRunStatus Tick(FStateTreeExecutionContext& Context, const float DeltaTime) override;
 	//! @}

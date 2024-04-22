@@ -204,9 +204,10 @@ void USNOnlineSystem::KillSession(const FName& SessionName){
 	if(Sessions.IsValid()){
 		// セッションを終了
 		Sessions->DestroySession(SessionName);
+		
+		ConnectURL = TEXT("");
 	}
 }
-
 
 //----------------------------------------------------------------------//
 //
@@ -368,18 +369,16 @@ void USNOnlineSystem::OnJoinSessionComplete(FName InSessionName, EOnJoinSessionC
 		if(Sessions.IsValid()){
 			
 			if(Result == EOnJoinSessionCompleteResult::Success){
-				// Client travel to the server
-				FString ConnectString;
 				
-				if(Sessions->GetResolvedConnectString(InSessionName, ConnectString)){
+				if(Sessions->GetResolvedConnectString(InSessionName, ConnectURL)){
 					
-					UE_LOG_ONLINE_SESSION(Log, TEXT("Join session: traveling to %s"), *ConnectString);
+					UE_LOG_ONLINE_SESSION(Log, TEXT("Join session: traveling to %s"), *ConnectURL);
 					
 					APlayerController* PlayerController(SNUtility::GetPlayerController<APlayerController>());
 					
 					SNPLUGIN_ASSERT(PlayerController != nullptr, TEXT("PlayerController is nullptr"));
 					
-					PlayerController->ClientTravel(ConnectString, TRAVEL_Absolute);
+					PlayerController->ClientTravel(ConnectURL, TRAVEL_Absolute);
 				}
 			}
 		}
@@ -390,9 +389,11 @@ void USNOnlineSystem::OnJoinSessionComplete(FName InSessionName, EOnJoinSessionC
 	}
 }
 
-
-
-
+//----------------------------------------------------------------------//
+//
+//! @brief 初期化処理
+//
+//----------------------------------------------------------------------//
 void USNOnlineSystem::Initialize(){
 	
 }
@@ -422,5 +423,57 @@ FString USNOnlineSystem::GetNickname(APlayerController* PlayerController) const 
 	}
 	
 	return Nickname;
+}
+
+void USNOnlineSystem::MapTravel(const FString& MapName){
+
+	UWorld* World = GetWorld();
+	
+	if(World == nullptr){
+		
+		SNPLUGIN_ERROR(TEXT("MapTravel_OnServer : World is nullptr."));
+		
+		return;
+	}
+	
+	if(SNUtility::IsServer(World) == true){
+		
+		World->ServerTravel(MapName, true);
+
+		SNPLUGIN_LOG(TEXT("MapTravel_OnServer : ServerTravel is done."));
+		
+		MapTravel_OnMulticast();
+	} else
+	{
+		SNPLUGIN_LOG(TEXT("MapTravel_OnServer : Called in Client."));
+	}
+}
+
+void USNOnlineSystem::MapTravel_OnMulticast_Implementation()
+{
+	UWorld* World = GetWorld();
+	
+	if(World == nullptr){
+		
+		SNPLUGIN_ERROR(TEXT("MapTravel : World is nullptr."));
+		
+		return;
+	}
+	
+	if(SNUtility::IsServer(World) == false)
+	{
+		APlayerController* PlayerController(SNUtility::GetPlayerController<APlayerController>());
+
+		SNPLUGIN_ASSERT(PlayerController != nullptr, TEXT("PlayerController is nullptr."));
+
+		SNPLUGIN_ASSERT(PlayerController->IsLocalController() != false, TEXT("PlayerControler is not Local Controller."));
+
+		PlayerController->ClientTravel(GetConnectURL(), TRAVEL_Absolute);
+
+		SNPLUGIN_LOG(TEXT("MapTravel_OnMulticast : ClientTravel is done."));
+	} else
+	{
+		SNPLUGIN_LOG(TEXT("MapTravel_OnMulticast : Server is coming."));
+	}
 }
 

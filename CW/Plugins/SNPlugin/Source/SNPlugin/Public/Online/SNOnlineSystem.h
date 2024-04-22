@@ -51,22 +51,30 @@ public:
 	//! @{@name セッションを終了
 	void KillSession(const FName& SessionName);
 	//! @}
-
+	
+	//! @{@name 最大コネクト数を取得
 	int GetMaxPlayerNum() const ;
-
+	//! @}
+	
+	//! @{@name 接続したURLを取得
+	const FString& GetConnectURL() const ;
+	//! @}
+	
+	//! @{@name 別マップへの移動処理
+	void MapTravel(const FString& MapName);
+	//! @}
+	
 	const TSharedPtr<class FOnlineSessionSearch>& GetSearchSessionList() const ;
-
+	
 	UPROPERTY(BlueprintAssignable, Category = "Online|Session")
 	FSNCompleteHostSession OnCompleteHostSession;
-
+	
 	UPROPERTY(BlueprintAssignable, Category = "Online|Session")
 	FSNCompleteFindSession OnCompleteFindSession;
-
+	
 	UPROPERTY(BlueprintAssignable, Category = "Online|Session")
 	FSNCompleteJoinSession OnCompleteJoinSession;
-
-
-
+	
 	FString GetNickname(APlayerController* PlayerController) const ;
 	
 private:
@@ -85,8 +93,11 @@ private:
 	
 	//! @{@name セッションへの参加が完了した際のでーりゲート
 	void OnJoinSessionComplete(FName InSessionName, EOnJoinSessionCompleteResult::Type Result);
-	//! @}
-
+	//! 
+	
+	UFUNCTION(NetMulticast, Reliable)
+	void MapTravel_OnMulticast();
+	
 	UPROPERTY(EditAnywhere, Category="Online")
 	bool bShouldIdAdvertise = true;
 	
@@ -107,7 +118,10 @@ private:
 	
 	UPROPERTY(EditAnywhere, Category="Online")
 	bool bUseLobbiesVoiceChatIfAvailable = true;
-
+	
+	UPROPERTY()
+	FString ConnectURL = TEXT("");
+	
 	UPROPERTY()
 	int MaxPlayerNum = -1;
 	
@@ -122,4 +136,9 @@ FORCEINLINE const TSharedPtr<FOnlineSessionSearch>& USNOnlineSystem::GetSearchSe
 FORCEINLINE int USNOnlineSystem::GetMaxPlayerNum() const
 {
 	return MaxPlayerNum;
+}
+
+FORCEINLINE const FString& USNOnlineSystem::GetConnectURL() const 
+{
+	return ConnectURL;
 }
