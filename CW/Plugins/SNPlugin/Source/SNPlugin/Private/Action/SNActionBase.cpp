@@ -1,6 +1,8 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 #include "Action/SNActionBase.h"
 #include "EnhancedInputComponent.h"
+#include "SNDef.h"
+#include "Utility/SNUtility.h"
 
 //----------------------------------------------------------------------//
 //
@@ -26,8 +28,11 @@ USNActionBase::~USNActionBase(){
 void USNActionBase::Initialize(UEnhancedInputComponent* InputComponent, const UInputAction* InputAction, UObject* Object){
 	
 	Owner = Object;
-	
-	InputComponent->BindAction(InputAction, ETriggerEvent::Triggered, this, &USNActionBase::InputAction);
+
+	if(InputComponent != nullptr)
+	{
+		InputComponent->BindAction(InputAction, ETriggerEvent::Triggered, this, &USNActionBase::InputAction);	
+	}
 }
 
 //----------------------------------------------------------------------//
@@ -38,6 +43,22 @@ void USNActionBase::Initialize(UEnhancedInputComponent* InputComponent, const UI
 //
 //----------------------------------------------------------------------//
 void	USNActionBase::InputAction(const FInputActionValue& InputActionValue){
-	// 実行処理
-	ExecAction(InputActionValue);
+
+	if(SNUtility::IsServer(GetWorld()) == true)
+	{
+		// 実行処理
+		ExecAction(InputActionValue);	
+	} else
+	{
+		InputAction_OnServer(InputActionValue);
+	}
+	
 }
+
+void USNActionBase::InputAction_OnServer_Implementation(const FInputActionValue& InputActionValue)
+{
+	ExecAction(InputActionValue);
+
+	SNPLUGIN_LOG(TEXT("Server Input Action is calling."));
+}
+

@@ -12,20 +12,6 @@ void ACWBattleCameraActor::Tick(float DeltaSeconds){
 	
 	Super::Tick(DeltaSeconds);
 
-	
-	UGameInstance* GameInstance = SNUtility::GetGameInstance<UGameInstance>();
-	
-	APlayerController* PlayerController(SNUtility::GetPlayerController<APlayerController>());
-
-	ACWPlayerCameraManager* CameraManager = Cast<ACWPlayerCameraManager>(PlayerController->PlayerCameraManager);
-	
-	if(PlayerController->IsLocalController())
-	{
-		//CW_LOG(TEXT("Local Controllder"));
-	} else
-	{
-		//CW_LOG(TEXT("Not Local Controller"));
-	}
 	ACWWheeledVehiclePawn* Player(GetCurrentPlayer());
 	
 	if(Player != nullptr){

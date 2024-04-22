@@ -65,6 +65,9 @@ protected:
 	virtual void ExecAction(const FInputActionValue& InputActionValue){};
 	//! @}
 	
+	UFUNCTION(Server, Reliable)
+	void InputAction_OnServer(const FInputActionValue& InputActionValue);
+	
 private:
 	
 	//!< アクション名
