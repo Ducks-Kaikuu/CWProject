@@ -23,7 +23,7 @@ public:
 	//! @{@name ゲームの状態を初期化
 	virtual void InitGameState() override;
 	//! @}
-	
+
 protected:
 	
 	//! @{@name 新しく参加したプレイヤーの初期化処理

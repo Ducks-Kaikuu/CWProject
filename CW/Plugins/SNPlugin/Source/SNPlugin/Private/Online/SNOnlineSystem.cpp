@@ -438,11 +438,11 @@ void USNOnlineSystem::MapTravel(const FString& MapName){
 	
 	if(SNUtility::IsServer(World) == true){
 		
-		World->ServerTravel(MapName, true);
+		World->ServerTravel(MapName, false);
 
 		SNPLUGIN_LOG(TEXT("MapTravel_OnServer : ServerTravel is done."));
 		
-		MapTravel_OnMulticast();
+		//MapTravel_OnMulticast();
 	} else
 	{
 		SNPLUGIN_LOG(TEXT("MapTravel_OnServer : Called in Client."));
