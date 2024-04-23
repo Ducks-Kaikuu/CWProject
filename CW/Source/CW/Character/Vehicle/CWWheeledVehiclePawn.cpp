@@ -13,6 +13,7 @@
 #include "Input/SNInputManagerSubsystem.h"
 #include "Net/UnrealNetwork.h"
 #include "Online/SNOnlineSystem.h"
+#include "Utility/SNUtility.h"
 
 ACWWheeledVehiclePawn::ACWWheeledVehiclePawn(const FObjectInitializer& Initializer)
 	:Super(Initializer)
@@ -29,20 +30,14 @@ void ACWWheeledVehiclePawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>
 void	ACWWheeledVehiclePawn::Tick(float DeltaTime){
 	
 	Super::Tick(DeltaTime);
+
+	if(SNUtility::IsServer(GetWorld()) == false)
+	{
+		return;
+	}
 	
 	UChaosVehicleMovementComponent* VehicleComponent = GetVehicleMovement();
-
-	if(InputComponent != nullptr)
-	{
-		UCWGameInstance* GameInstance = GetCWGameInstance();
-		
-		USNInputManagerSubsystem* InputManagerSubsystem=GameInstance->GetSubsystem<USNInputManagerSubsystem>();
-
-		USNPlayablePawnComponent* PlayablePawnComponent = Cast<USNPlayablePawnComponent>(GetComponentByClass(USNPlayablePawnComponent::StaticClass()));
-
-		//CW_LOG(TEXT("TEST"));
-	}
-
+	
 	if(VehicleComponent != nullptr){
 		
 		float Value = Throttle;

@@ -2,6 +2,8 @@
 
 
 #include "CW/Character/Vehicle/Action/CWVehicleAccel.h"
+
+#include "CW/CWDef.h"
 #include "CW/Character/Vehicle/CWWheeledVehiclePawn.h"
 
 void UCWVehicleAccel::ExecAction(const FInputActionValue& InputActionValue){
@@ -15,5 +17,7 @@ void UCWVehicleAccel::ExecAction(const FInputActionValue& InputActionValue){
 		float tmp = InputActionValue.GetMagnitude();
 		
 		Pawn->SetThrottle(tmp);
+
+		CW_LOG(TEXT("Access is %f"), tmp);
 	}
 }
