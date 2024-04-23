@@ -7,6 +7,7 @@
 
 #include "EnhancedInputComponent.h"
 #include "InputMappingContext.h"
+#include "Character/Base/SNPlayablePawnInterface.h"
 
 
 //----------------------------------------------------------------------//
@@ -20,13 +21,13 @@ USNInputConfig::USNInputConfig(const FObjectInitializer& ObjectInitializer){
 	
 }
 
-bool	USNInputConfig::InitializeInput(FName InputName, UObject* OwnerObject){
+bool	USNInputConfig::InitializeInput(FName Name, UObject* OwnerObject){
 
 	SNPLUGIN_ASSERT(OwnerObject != nullptr, TEXT("Should set Input Action Owner."));
 	
 	Owner = OwnerObject;
 
-	Name = InputName;
+	InputName = Name;
 	
 	UGameInstance* GameInstance(SNUtility::GetGameInstance<UGameInstance>());
 	
@@ -82,13 +83,23 @@ void	USNInputConfig::FinishLoadAsset(){
 		UClass* ClassPtr = Cast<UClass>(Object);
 		
 		if(ClassPtr != nullptr){
-			
-			FSNInputAction& Input(InputActionList[Count]);
-			
-			Input.Action = NewObject<USNActionBase>(Owner, ClassPtr);
-			
-			if(Input.Action != nullptr){
-				Input.Action->Initialize(InputComponent, Input.InputAction.Get(), Owner);
+
+			ISNPlayablePawnInterface* PlayablePawn = Cast<ISNPlayablePawnInterface>(Pawn);
+
+			if(PlayablePawn != nullptr)
+			{
+				USNActionBase* Action = NewObject<USNActionBase>(Owner, ClassPtr);
+
+				if(Action != nullptr)
+				{
+					FSNInputAction& Input(InputActionList[Count]);
+
+					Action->SetActionName(*Input.InputAction->GetName());
+					
+					PlayablePawn->AddInputAction(Action->GetActionName(), Action);
+
+					Action->Initialize(InputComponent, Input.InputAction.Get(), Owner);
+				}
 			}
 		}
 		
@@ -107,9 +118,9 @@ void USNInputConfig::SetEnabled(bool bEnabled)
 	if(InputManagerSubsystem != nullptr)
 	{
 		if(bEnabled == true){
-			InputManagerSubsystem->EnableInputMapping(GetKey());
+			InputManagerSubsystem->EnableInputMapping(GetInputName());
 		} else {
-			InputManagerSubsystem->DisableInputMapping(GetKey());
+			InputManagerSubsystem->DisableInputMapping(GetInputName());
 		}
 	}
 }
@@ -124,7 +135,7 @@ void USNInputConfig::Release()
 	
 	if(InputManagerSubsystem != nullptr)
 	{
-		InputManagerSubsystem->RemoveInputContext(GetKey());
+		InputManagerSubsystem->RemoveInputContext(GetInputName());
 	}
 }
 

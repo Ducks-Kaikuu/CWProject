@@ -34,9 +34,6 @@ public:
 	//!< ゲームプレイタグで実行するアクション
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Meta = (Categories = "Action"))
 	TSoftClassPtr<USNActionBase> ActionClass = nullptr;
-	
-	UPROPERTY()
-	TObjectPtr<USNActionBase> Action=nullptr;
 };
 
 //----------------------------------------------------------------------//
@@ -55,11 +52,11 @@ public:
 	USNInputConfig(const FObjectInitializer& ObjectInitializer);
 	//! @}
 	
-	bool	InitializeInput(FName InputName, UObject* OwnerObject);
+	bool	InitializeInput(FName Name, UObject* OwnerObject);
 
 	void SetEnabled(bool bEnabled);
 
-	const FName& GetKey() const ;
+	const FName& GetInputName() const ;
 	
 	const TSoftObjectPtr<UInputMappingContext>& GetInputMappingContext() const ;
 
@@ -70,9 +67,9 @@ private:
 	//! @{@name ロード終了処理
 	void FinishLoadAsset();
 	//! @}
-
+	
 	UPROPERTY()
-	FName Name=NAME_None;
+	FName InputName=NAME_None;
 	
 	UPROPERTY(EditAnywhere, Category="Input")
 	TSoftObjectPtr<UInputMappingContext> InputMappingContext = nullptr;
@@ -87,9 +84,9 @@ private:
 	TSharedPtr<FStreamableHandle> StreamableHandle;
 };
 
-FORCEINLINE const FName& USNInputConfig::GetKey() const
+FORCEINLINE const FName& USNInputConfig::GetInputName() const
 {
-	return Name;
+	return InputName;
 } 
 FORCEINLINE const TSoftObjectPtr<UInputMappingContext>& USNInputConfig::GetInputMappingContext() const
 {

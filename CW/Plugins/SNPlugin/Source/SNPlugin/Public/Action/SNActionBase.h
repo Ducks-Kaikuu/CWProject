@@ -25,6 +25,8 @@ class SNPLUGIN_API USNActionBase : public UBTTaskNode
 	GENERATED_BODY()
 	
 public:
+	// ISNPlayablePawnInterfaceのみExecActionを呼び出せるように。
+	friend class ISNPlayablePawnInterface;
 	
 	//! @{@name デフォルトコンストラクタ
 	USNActionBase();
@@ -40,7 +42,7 @@ public:
 	void	SetOwner(AActor* Object) override ;
 	//! @}
 	
-	void	SetName(const FName& name);
+	void	SetActionName(const FName& Name);
 	
 	//! @{@name 入力からのアクション
 	void	InputAction(const FInputActionValue& InputActionValue);
@@ -53,11 +55,11 @@ public:
 	template<class T>
 	const T* GetOwner() const ;
 	//! @}
-#if 0
+
 	//! @{@name 名前を取得
-	FName GetName() const ;
+	FName GetActionName() const ;
 	//! @}
-#endif
+	
 protected:
 	
 	
@@ -65,13 +67,10 @@ protected:
 	virtual void ExecAction(const FInputActionValue& InputActionValue){};
 	//! @}
 	
-	UFUNCTION(Server, Reliable)
-	void InputAction_OnServer(const FInputActionValue& InputActionValue);
-	
 private:
 	
 	//!< アクション名
-	FName Name;
+	FName ActionName;
 	
 	//!< オーナー
 	UObject*	Owner;
@@ -84,16 +83,22 @@ private:
 //! @param Object オーナーとなるオブジェクト
 //
 //----------------------------------------------------------------------//
-inline void	USNActionBase::SetOwner(AActor* Object){
+FORCEINLINE void	USNActionBase::SetOwner(AActor* Object){
 	
 	Super::SetOwner(Object);
 	
 	Owner = Object;
 }
 
-inline void	USNActionBase::SetName(const FName& name){
-	Name = name;
+FORCEINLINE void	USNActionBase::SetActionName(const FName& Name){
+	ActionName = Name;
 }
+
+FORCEINLINE FName USNActionBase::GetActionName() const
+{
+	return ActionName;
+}
+
 
 //----------------------------------------------------------------------//
 //
@@ -127,6 +132,6 @@ inline const T* USNActionBase::GetOwner() const {
 //
 //----------------------------------------------------------------------//
 inline FName USNActionBase::GetName() const {
-	return Name;
+	return ActionName;
 }
 #endif

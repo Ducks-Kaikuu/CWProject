@@ -2,6 +2,7 @@
 #include "Action/SNActionBase.h"
 #include "EnhancedInputComponent.h"
 #include "SNDef.h"
+#include "Character/Base/SNPlayablePawnInterface.h"
 #include "Utility/SNUtility.h"
 
 //----------------------------------------------------------------------//
@@ -28,9 +29,8 @@ USNActionBase::~USNActionBase(){
 void USNActionBase::Initialize(UEnhancedInputComponent* InputComponent, const UInputAction* InputAction, UObject* Object){
 	
 	Owner = Object;
-
-	if(InputComponent != nullptr)
-	{
+	
+	if(InputComponent != nullptr){
 		InputComponent->BindAction(InputAction, ETriggerEvent::Triggered, this, &USNActionBase::InputAction);	
 	}
 }
@@ -47,18 +47,15 @@ void	USNActionBase::InputAction(const FInputActionValue& InputActionValue){
 	if(SNUtility::IsServer(GetWorld()) == true)
 	{
 		// 実行処理
-		ExecAction(InputActionValue);	
+		ExecAction(InputActionValue);
 	} else
 	{
-		InputAction_OnServer(InputActionValue);
+		ISNPlayablePawnInterface* PlayablePawn(GetOwner<ISNPlayablePawnInterface>());
+
+		if(PlayablePawn != nullptr)
+		{
+			PlayablePawn->ExecuteActionOnServer(GetActionName(), InputActionValue);
+		}
 	}
 	
 }
-
-void USNActionBase::InputAction_OnServer_Implementation(const FInputActionValue& InputActionValue)
-{
-	ExecAction(InputActionValue);
-
-	SNPLUGIN_LOG(TEXT("Server Input Action is calling."));
-}
-
