@@ -35,7 +35,14 @@ void	ACWWheeledVehiclePawn::Tick(float DeltaTime){
 	{
 		return;
 	}
-	
+
+	if(Controller->IsLocalController() == false)
+	{
+		return;
+		//CW_LOG(TEXT("Throttle : %f"), Throttle);
+
+		
+	}
 	UChaosVehicleMovementComponent* VehicleComponent = GetVehicleMovement();
 	
 	if(VehicleComponent != nullptr){

@@ -8,18 +8,25 @@
 #include "Utility/SNUtility.h"
 #include "Character/SNPlayerController.h"
 
-void ASNWheeledVehiclePlayerBase::NotifyRestarted()
-{
+//----------------------------------------------------------------------//
+//
+//! @brief プレイヤーのリスタート処理
+//
+//! @note 接続後、InputComponentなどの初期化も終わったタイミングで呼ばれます。
+//        ホストではないプレイヤーにInputComponentは存在しないので、注意。
+//
+//----------------------------------------------------------------------//
+void ASNWheeledVehiclePlayerBase::NotifyRestarted(){
+	
 	Super::NotifyRestarted();
-
+	
 	ASNPlayerController* PlayerController(Cast<ASNPlayerController>(Controller));
-
-	if(PlayerController != nullptr)
-	{
+	
+	if(PlayerController != nullptr){
 		// 入力の初期化処理
 		PlayerController->InitializeInput();
 		
-		SNPLUGIN_LOG(TEXT("Setup Player Input Component."));
+		SNPLUGIN_LOG(TEXT("NotifyRestarted."));
 	}
 }
 

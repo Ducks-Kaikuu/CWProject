@@ -16,7 +16,7 @@ void UCWVehicleAccel::ExecAction(const FInputActionValue& InputActionValue){
 		
 		float tmp = InputActionValue.GetMagnitude();
 		
-		Pawn->SetThrottle(tmp);
+  		Pawn->SetThrottle(tmp);
 
 		CW_LOG(TEXT("Access is %f"), tmp);
 	}

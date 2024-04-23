@@ -159,12 +159,14 @@ void USNOnlineSystem::FindSession(){
 		SearchSettings = MakeShareable(new FOnlineSessionSearch());
 		
 		SNPLUGIN_ASSERT(SearchSettings != nullptr, TEXT("Failed to allocate Session Search Settings."));
+
+		SearchSettings->SearchResults.Empty();
 		
 		SearchSettings->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);
 		SearchSettings->QuerySettings.Set(SEARCH_LOBBIES, true, EOnlineComparisonOp::Equals);
 		
 		Sessions->AddOnFindSessionsCompleteDelegate_Handle(FOnFindSessionsCompleteDelegate::CreateUObject(this, &USNOnlineSystem::OnFindSessionsComplete));
-		
+
 		TSharedRef<FOnlineSessionSearch> SearchSettingsRef = SearchSettings.ToSharedRef();
 		// プレイヤーコントローラを取得
 		APlayerController* PlayerController(SNUtility::GetPlayerController<APlayerController>());
