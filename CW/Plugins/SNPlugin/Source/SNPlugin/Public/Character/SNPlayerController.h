@@ -35,7 +35,7 @@ private:
 	//!< 入力用コンフィグのリスト
 	UPROPERTY(EditAnyWhere, Category="Input")
 	TMap<FName, TObjectPtr<USNInputConfig>> InputConfigMap;
-
+	
 	UPROPERTY()
 	TSet<FName> CurrentInputTypes;
 

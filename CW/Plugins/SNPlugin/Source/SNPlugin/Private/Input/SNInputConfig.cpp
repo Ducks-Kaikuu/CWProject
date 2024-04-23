@@ -37,32 +37,31 @@ USNInputConfig::USNInputConfig(const FObjectInitializer& ObjectInitializer):
 bool	USNInputConfig::InitializeInput(FName Name, UObject* OwnerObject){
 
 	SNPLUGIN_ASSERT(OwnerObject != nullptr, TEXT("Should set Input Action Owner."));
-	// オーナーが設定されている場合は初期化済みとする
-	if(OwnerActor != nullptr){
-		
-		SNPLUGIN_LOG(TEXT("InputConfig is already initialised.[%s]"), *OwnerActor->GetName());
-		
-		return false;
-	}
 	// オーナーを設定
 	OwnerActor = OwnerObject;
 	// コンフィグ名を設定
 	ConfigName = Name;
-	// ゲームインスタンスを取得
-	UGameInstance* GameInstance(SNUtility::GetGameInstance<UGameInstance>());
-	// ゲームインスタンスが取得できない場合はアサート
-	SNPLUGIN_ASSERT(GameInstance != nullptr, TEXT("GameInstance is nullptr"));
-	// 入力マネージャーサブシステムを取得
-	USNInputManagerSubsystem* InputManagerSubsystem(GameInstance->GetSubsystem<USNInputManagerSubsystem>());
-	// 取得できない場合はアサート
-	SNPLUGIN_ASSERT(InputManagerSubsystem != nullptr, TEXT("InputManagerSubsystem is nullptr."));
-	// インプットコンテキストを同期ロード
-	// (@@Note : ヒッチが発生する場合は非同期にするか検討)
-	UInputMappingContext* InputMappingContextInstance(InputMappingContext.LoadSynchronous());
-	// ロードに失敗した場合はアサート
-	SNPLUGIN_ASSERT(InputMappingContextInstance != nullptr, TEXT("InputMappingContext is nullptr."));
-	// コンテキストを追加
-	InputManagerSubsystem->AddInputContext(ConfigName, InputMappingContextInstance);
+
+	APawn* OwnerPawn(Cast<APawn>(OwnerObject));
+	// ローカルプレイヤー以外はContextMappingへの登録は行わない
+	if((OwnerPawn != nullptr) && (OwnerPawn->Controller != nullptr) && (OwnerPawn->Controller->IsLocalController() == true))
+	{
+		// ゲームインスタンスを取得
+		UGameInstance* GameInstance(SNUtility::GetGameInstance<UGameInstance>());
+		// ゲームインスタンスが取得できない場合はアサート
+		SNPLUGIN_ASSERT(GameInstance != nullptr, TEXT("GameInstance is nullptr"));
+		// 入力マネージャーサブシステムを取得
+		USNInputManagerSubsystem* InputManagerSubsystem(GameInstance->GetSubsystem<USNInputManagerSubsystem>());
+		// 取得できない場合はアサート
+		SNPLUGIN_ASSERT(InputManagerSubsystem != nullptr, TEXT("InputManagerSubsystem is nullptr."));
+		// インプットコンテキストを同期ロード
+		// (@@Note : ヒッチが発生する場合は非同期にするか検討)
+		UInputMappingContext* InputMappingContextInstance(InputMappingContext.LoadSynchronous());
+		// ロードに失敗した場合はアサート
+		SNPLUGIN_ASSERT(InputMappingContextInstance != nullptr, TEXT("InputMappingContext is nullptr."));
+		// コンテキストを追加
+		InputManagerSubsystem->AddInputContext(ConfigName, InputMappingContextInstance);
+	}
 	// アクションは非同期でロード
 	TArray<FSoftObjectPath> assetList;
 	
