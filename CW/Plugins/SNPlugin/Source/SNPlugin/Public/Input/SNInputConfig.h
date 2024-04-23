@@ -88,7 +88,7 @@ private:
 	
 	//!< オーナー
 	UPROPERTY()
-	TObjectPtr<UObject> Owner = nullptr;
+	TObjectPtr<UObject> OwnerActor = nullptr;
 	
 	//!< 非同期ロード用のハンドル
 	TSharedPtr<FStreamableHandle> StreamableHandle = nullptr;

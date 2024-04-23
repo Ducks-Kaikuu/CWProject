@@ -38,14 +38,14 @@ bool	USNInputConfig::InitializeInput(FName Name, UObject* OwnerObject){
 
 	SNPLUGIN_ASSERT(OwnerObject != nullptr, TEXT("Should set Input Action Owner."));
 	// オーナーが設定されている場合は初期化済みとする
-	if(Owner != nullptr){
+	if(OwnerActor != nullptr){
 		
-		SNPLUGIN_LOG(TEXT("InputConfig is already initialised."));
+		SNPLUGIN_LOG(TEXT("InputConfig is already initialised.[%s]"), *OwnerActor->GetName());
 		
 		return false;
 	}
 	// オーナーを設定
-	Owner = OwnerObject;
+	OwnerActor = OwnerObject;
 	// コンフィグ名を設定
 	ConfigName = Name;
 	// ゲームインスタンスを取得
@@ -87,7 +87,7 @@ void	USNInputConfig::FinishLoadAsset(){
 	
 	UEnhancedInputComponent* InputComponent = nullptr;
 	
-	APawn* Pawn = Cast<APawn>(Owner);
+	APawn* Pawn = Cast<APawn>(OwnerActor);
 	
 	if(Pawn != nullptr){
 		// 入力コンポーネントを取得
@@ -115,7 +115,7 @@ void	USNInputConfig::FinishLoadAsset(){
 		
 		if(ClassPtr != nullptr){
 			
-			USNActionBase* Action = NewObject<USNActionBase>(Owner, ClassPtr);
+			USNActionBase* Action = NewObject<USNActionBase>(OwnerActor, ClassPtr);
 			
 			if(Action != nullptr){
 				// ※@@Note : ロードの順番が登録した順番として保証されてない場合は見直しが必要
@@ -129,7 +129,7 @@ void	USNInputConfig::FinishLoadAsset(){
 					PlayablePawn->AddInputAction(Action->GetActionName(), Action);
 				}
 				// 入力コンポーネントにバインド
-				Action->Initialize(InputComponent, Input.InputAction.Get(), Owner);
+				Action->Initialize(InputComponent, Input.InputAction.Get(), OwnerActor);
 			}
 		}
 		
@@ -184,6 +184,6 @@ void USNInputConfig::Release(){
 		InputManagerSubsystem->RemoveInputContext(GetConfigName());
 	}
 	// オーナーを初期化
-	Owner = nullptr;
+	OwnerActor = nullptr;
 }
 
