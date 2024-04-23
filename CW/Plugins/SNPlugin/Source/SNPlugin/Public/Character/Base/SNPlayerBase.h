@@ -16,7 +16,5 @@ class SNPLUGIN_API ASNPlayerBase : public ASNCharacterBase
 	
 protected:
 	
-	//! @{@name プレイヤーインプットコンポーネントの初期化
-	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
-	//! @}
+	virtual void NotifyRestarted() override;
 };
