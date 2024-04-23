@@ -29,6 +29,8 @@ void ASNPlayerController::EndPlay(const EEndPlayReason::Type EndPlayReason){
 			// リソースを解放
 			InputConfig.Value->Release();
 		}
+
+		SNPLUGIN_LOG(TEXT("PlayerController Endplay is done."))
 	}
 }
 
