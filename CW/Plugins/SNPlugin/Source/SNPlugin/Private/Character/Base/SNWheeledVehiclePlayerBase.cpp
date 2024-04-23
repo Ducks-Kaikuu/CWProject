@@ -105,5 +105,5 @@ void ASNWheeledVehiclePlayerBase::ExecuteInputAction_OnServer_Implementation(FNa
 	
 	ISNPlayablePawnInterface::ExecuteAction(Name, InputActionValue);
 	
-	SNPLUGIN_LOG(TEXT("Server Input Action is calling. %f : %f"), InputActionValue[0], InputActionValue[1]);
+	SNPLUGIN_LOG(TEXT("[%s]Server Input Action is calling. %d : %f : %f"), *(Name.ToString()), InputActionMap.Num(), InputActionValue[0], InputActionValue[1]);
 }

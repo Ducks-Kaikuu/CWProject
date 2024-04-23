@@ -72,6 +72,8 @@ bool	USNInputConfig::InitializeInput(FName Name, UObject* OwnerObject){
 	}
 	// 非同期ロードをリクエスト
 	StreamableHandle = SNUtility::RequestAsyncLoad(assetList, this, &USNInputConfig::FinishLoadAsset);
+
+	SNPLUGIN_LOG(TEXT("Config Initialize is done."));
 	
 	return true;
 }
@@ -133,6 +135,8 @@ void	USNInputConfig::FinishLoadAsset(){
 		
 		++Count;
 	}
+	
+	SNPLUGIN_LOG(TEXT("Config Post Load Async is done."));
 }
 
 //----------------------------------------------------------------------//
