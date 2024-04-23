@@ -14,6 +14,28 @@ class UInputAction;
 class AActor;
 struct FInputActionValue;
 
+USTRUCT()
+struct FInputActionValueProxy:public FInputActionValue
+{
+	GENERATED_BODY()
+
+	FInputActionValueProxy():Super(){}
+	
+	FInputActionValueProxy(const FInputActionValue& InputActionValue):
+	Super(InputActionValue.GetValueType(), Axis3D(InputActionValue[0], InputActionValue[1], InputActionValue[2]))
+	{
+		
+	}
+	FVector GetValue()
+	{
+		return Value;
+	}
+
+	EInputActionValueType GetType()
+	{
+		return ValueType;
+	}
+};
 //----------------------------------------------------------------------//
 //
 //! @brief アクション用ベースクラス
@@ -36,13 +58,13 @@ public:
 	virtual ~USNActionBase();
 	//! @}
 	
+	//! @{@name 初期化処理
 	virtual void Initialize(UEnhancedInputComponent* InputComponent, const UInputAction* InputAction, UObject* Object);
+	//! @}
 	
 	//! @{@name オーナーを設定
 	void	SetOwner(AActor* Object) override ;
 	//! @}
-	
-	void	SetActionName(const FName& Name);
 	
 	//! @{@name 入力からのアクション
 	void	InputAction(const FInputActionValue& InputActionValue);
@@ -55,8 +77,12 @@ public:
 	template<class T>
 	const T* GetOwner() const ;
 	//! @}
-
-	//! @{@name 名前を取得
+	
+	//! @{@name アクション名の設定
+	void	SetActionName(const FName& Name);
+	//! @}
+	
+	//! @{@name アクション名を取得
 	FName GetActionName() const ;
 	//! @}
 	
@@ -90,12 +116,25 @@ FORCEINLINE void	USNActionBase::SetOwner(AActor* Object){
 	Owner = Object;
 }
 
+//----------------------------------------------------------------------//
+//
+//! @brief アクション名の設定
+//
+//! @param Name アクション名
+//
+//----------------------------------------------------------------------//
 FORCEINLINE void	USNActionBase::SetActionName(const FName& Name){
 	ActionName = Name;
 }
 
-FORCEINLINE FName USNActionBase::GetActionName() const
-{
+//----------------------------------------------------------------------//
+//
+//! @brief アクション名を取得
+//
+//! @retval アクション名
+//
+//----------------------------------------------------------------------//
+FORCEINLINE FName USNActionBase::GetActionName() const {
 	return ActionName;
 }
 
@@ -108,7 +147,7 @@ FORCEINLINE FName USNActionBase::GetActionName() const
 //
 //----------------------------------------------------------------------//
 template<class T>
-inline T* USNActionBase::GetOwner(){
+FORCEINLINE T* USNActionBase::GetOwner(){
 	return Cast<T>(Owner);
 }
 
@@ -120,18 +159,6 @@ inline T* USNActionBase::GetOwner(){
 //
 //----------------------------------------------------------------------//
 template<class T>
-inline const T* USNActionBase::GetOwner() const {
+FORCEINLINE const T* USNActionBase::GetOwner() const {
 	return Cast<T>(Owner);
 }
-#if 0
-//----------------------------------------------------------------------//
-//
-//! @brief 名前を取得
-//
-//! @retval 名前
-//
-//----------------------------------------------------------------------//
-inline FName USNActionBase::GetName() const {
-	return ActionName;
-}
-#endif

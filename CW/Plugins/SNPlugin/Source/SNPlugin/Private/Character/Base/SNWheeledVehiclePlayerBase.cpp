@@ -1,6 +1,8 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Character/Base/SNWheeledVehiclePlayerBase.h"
+
+#include "ClassViewerFilter.h"
 #include "SNDef.h"
 #include "Action/SNActionBase.h"
 #include "Utility/SNUtility.h"
@@ -88,18 +90,24 @@ USNActionBase* ASNWheeledVehiclePlayerBase::GetAction(const FName& Name){
 //
 //----------------------------------------------------------------------//
 void ASNWheeledVehiclePlayerBase::ExecuteActionOnServer(const FName& Name, const FInputActionValue& InputActionValue){
-	ExecuteInputAction_OnServer(Name, InputActionValue);
+
+	FInputActionValueProxy Proxy(InputActionValue);
+	
+	ExecuteInputAction_OnServer(Name, Proxy.GetValue(), Proxy.GetValueType());
 }
 
 //----------------------------------------------------------------------//
 //
 //! @brief 入力からアクション実行用のレプリケーション
 //
-//! @param Name             アクション名
-//! @param InputActionValue 入力値
+//! @param Name       アクション名
+//! @param InputValue 入力値
+//! @param Type       入力タイプ
 //
 //----------------------------------------------------------------------//
-void ASNWheeledVehiclePlayerBase::ExecuteInputAction_OnServer_Implementation(const FName& Name, const FInputActionValue& InputActionValue){
+void ASNWheeledVehiclePlayerBase::ExecuteInputAction_OnServer_Implementation(FName Name, FVector InputValue, EInputActionValueType Type){
+
+	FInputActionValue InputActionValue(Type, InputValue);
 	
 	ISNPlayablePawnInterface::ExecuteAction(Name, InputActionValue);
 	

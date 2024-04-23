@@ -45,7 +45,7 @@ private:
 	
 	//! @{@name 入力からアクション実行用のレプリケーション
 	UFUNCTION(Server, Reliable)
-	void ExecuteInputAction_OnServer(const FName& Name, const FInputActionValue& InputActionValue);
+	void ExecuteInputAction_OnServer(FName Name, FVector InputValue, EInputActionValueType Type);
 	//! @}
 	
 	//!< 入力アクションリスト
