@@ -52,15 +52,21 @@ public:
 	USNInputConfig(const FObjectInitializer& ObjectInitializer);
 	//! @}
 	
+	//! @{@name 入力周りの初期化処理
 	bool	InitializeInput(FName Name, UObject* OwnerObject);
-
-	void SetEnabled(bool bEnabled);
-
-	const FName& GetInputName() const ;
+	//! @}
 	
-	const TSoftObjectPtr<UInputMappingContext>& GetInputMappingContext() const ;
-
+	//! @{@name 入力を有効化
+	void SetEnabled(bool bEnabled);
+	//! @}
+	
+	//! @{@name コンフィグ名を取得
+	const FName& GetConfigName() const ;
+	//! @}
+	
+	//! @{@name 解放処理
 	void Release();
+	//! @}
 	
 private:
 	
@@ -68,27 +74,33 @@ private:
 	void FinishLoadAsset();
 	//! @}
 	
+	//!< コンフィグの名前
 	UPROPERTY()
-	FName InputName=NAME_None;
+	FName ConfigName=NAME_None;
 	
+	//!< マッピングコンテキスト
 	UPROPERTY(EditAnywhere, Category="Input")
 	TSoftObjectPtr<UInputMappingContext> InputMappingContext = nullptr;
-
+	
 	//!< 入力アクション用リスト
 	UPROPERTY(EditDefaultsOnly, Meta = (TitleProperty = "InputAction"), Category="Input")
 	TArray<FSNInputAction> InputActionList;
 	
+	//!< オーナー
 	UPROPERTY()
-	TObjectPtr<UObject> Owner;
+	TObjectPtr<UObject> Owner = nullptr;
 	
-	TSharedPtr<FStreamableHandle> StreamableHandle;
+	//!< 非同期ロード用のハンドル
+	TSharedPtr<FStreamableHandle> StreamableHandle = nullptr;
 };
 
-FORCEINLINE const FName& USNInputConfig::GetInputName() const
-{
-	return InputName;
-} 
-FORCEINLINE const TSoftObjectPtr<UInputMappingContext>& USNInputConfig::GetInputMappingContext() const
-{
-	return InputMappingContext;
+//----------------------------------------------------------------------//
+//
+//! @brief コンフィグ名を取得
+//
+//! @retval コンフィグ名
+//
+//----------------------------------------------------------------------//
+FORCEINLINE const FName& USNInputConfig::GetConfigName() const {
+	return ConfigName;
 } 

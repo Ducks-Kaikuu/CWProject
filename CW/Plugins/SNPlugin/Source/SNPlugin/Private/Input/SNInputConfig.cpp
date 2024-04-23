@@ -17,44 +17,70 @@
 //! @param ObjectInitializer イニシャライザ
 //
 //----------------------------------------------------------------------//
-USNInputConfig::USNInputConfig(const FObjectInitializer& ObjectInitializer){
-	
+USNInputConfig::USNInputConfig(const FObjectInitializer& ObjectInitializer):
+ Super(ObjectInitializer)
+{
+	InputActionList.Empty();
 }
 
+//----------------------------------------------------------------------//
+//
+//! @brief 入力周りの初期化処理
+//
+//! @param Name        コンフィグ名
+//! @param OwnerObject オーナーとなるオブジェクト
+//
+//! @retval true  正常終了
+//! @retval false 異常終了
+//
+//----------------------------------------------------------------------//
 bool	USNInputConfig::InitializeInput(FName Name, UObject* OwnerObject){
 
 	SNPLUGIN_ASSERT(OwnerObject != nullptr, TEXT("Should set Input Action Owner."));
-	
+	// オーナーが設定されている場合は初期化済みとする
+	if(Owner != nullptr){
+		
+		SNPLUGIN_LOG(TEXT("InputConfig is already initialised."));
+		
+		return false;
+	}
+	// オーナーを設定
 	Owner = OwnerObject;
-
-	InputName = Name;
-	
+	// コンフィグ名を設定
+	ConfigName = Name;
+	// ゲームインスタンスを取得
 	UGameInstance* GameInstance(SNUtility::GetGameInstance<UGameInstance>());
-	
+	// ゲームインスタンスが取得できない場合はアサート
 	SNPLUGIN_ASSERT(GameInstance != nullptr, TEXT("GameInstance is nullptr"));
-	
+	// 入力マネージャーサブシステムを取得
 	USNInputManagerSubsystem* InputManagerSubsystem(GameInstance->GetSubsystem<USNInputManagerSubsystem>());
-	
+	// 取得できない場合はアサート
 	SNPLUGIN_ASSERT(InputManagerSubsystem != nullptr, TEXT("InputManagerSubsystem is nullptr."));
-	
+	// インプットコンテキストを同期ロード
+	// (@@Note : ヒッチが発生する場合は非同期にするか検討)
 	UInputMappingContext* InputMappingContextInstance(InputMappingContext.LoadSynchronous());
-	
+	// ロードに失敗した場合はアサート
 	SNPLUGIN_ASSERT(InputMappingContextInstance != nullptr, TEXT("InputMappingContext is nullptr."));
-	
-	InputManagerSubsystem->AddInputContext(Name, InputMappingContextInstance);
-	
+	// コンテキストを追加
+	InputManagerSubsystem->AddInputContext(ConfigName, InputMappingContextInstance);
+	// アクションは非同期でロード
 	TArray<FSoftObjectPath> assetList;
 	
 	for(auto& action:InputActionList){
 		
 		assetList.Add(action.ActionClass.ToSoftObjectPath());
 	}
-	
+	// 非同期ロードをリクエスト
 	StreamableHandle = SNUtility::RequestAsyncLoad(assetList, this, &USNInputConfig::FinishLoadAsset);
 	
 	return true;
 }
 
+//----------------------------------------------------------------------//
+//
+//! @brief アクションアセットの非同期ロードが終了した際の処理
+//
+//----------------------------------------------------------------------//
 void	USNInputConfig::FinishLoadAsset(){
 	
 	UEnhancedInputComponent* InputComponent = nullptr;
@@ -62,44 +88,46 @@ void	USNInputConfig::FinishLoadAsset(){
 	APawn* Pawn = Cast<APawn>(Owner);
 	
 	if(Pawn != nullptr){
+		// 入力コンポーネントを取得
 		InputComponent = Cast<UEnhancedInputComponent>(Pawn->InputComponent);
 	} else {
-		
+		// ポーンではない場合はプレイヤーコントローラから入力コンポーネントを取得
 		APlayerController* PlayerController(SNUtility::GetPlayerController<APlayerController>());
-		
+		// プレイヤーコントローラがない場合はアサート
 		SNPLUGIN_ASSERT(PlayerController != nullptr, TEXT("PlayerController is nullptr."));
-		
+		// 入力コンポーネントを取得
 		InputComponent = Cast<UEnhancedInputComponent>(PlayerController->InputComponent);
 	}
-		
-	TArray<UObject*> ObjectList;
 	
+	TArray<UObject*> ObjectList;
+	// ロードしたアセットを取得
 	StreamableHandle->GetLoadedAssets(ObjectList);
+	// プレイヤブルポーンインターフェイスを取得
+	ISNPlayablePawnInterface* PlayablePawn = Cast<ISNPlayablePawnInterface>(Pawn);
 	
 	int Count = 0;
 	
 	for(auto& Object: ObjectList){
-		
+		// クラス情報へキャスト
 		UClass* ClassPtr = Cast<UClass>(Object);
 		
 		if(ClassPtr != nullptr){
-
-			ISNPlayablePawnInterface* PlayablePawn = Cast<ISNPlayablePawnInterface>(Pawn);
-
-			if(PlayablePawn != nullptr)
-			{
-				USNActionBase* Action = NewObject<USNActionBase>(Owner, ClassPtr);
-
-				if(Action != nullptr)
-				{
-					FSNInputAction& Input(InputActionList[Count]);
-
-					Action->SetActionName(*Input.InputAction->GetName());
-					
+			
+			USNActionBase* Action = NewObject<USNActionBase>(Owner, ClassPtr);
+			
+			if(Action != nullptr){
+				// ※@@Note : ロードの順番が登録した順番として保証されてない場合は見直しが必要
+				FSNInputAction& Input(InputActionList[Count]);
+				// アクション名を設定
+				Action->SetActionName(*(Input.InputAction->GetName()));
+				
+				if(PlayablePawn != nullptr){
+					// ポーンにアクションを追加
+					// ※オンライン非対応であればここの処理は不要
 					PlayablePawn->AddInputAction(Action->GetActionName(), Action);
-
-					Action->Initialize(InputComponent, Input.InputAction.Get(), Owner);
 				}
+				// 入力コンポーネントにバインド
+				Action->Initialize(InputComponent, Input.InputAction.Get(), Owner);
 			}
 		}
 		
@@ -107,35 +135,51 @@ void	USNInputConfig::FinishLoadAsset(){
 	}
 }
 
-void USNInputConfig::SetEnabled(bool bEnabled)
-{
+//----------------------------------------------------------------------//
+//
+//! @brief 入力コンフィグを有効、無効化に設定
+//
+//! @param bEnabled true : 有効化 / false : 無効化
+//
+//----------------------------------------------------------------------//
+void USNInputConfig::SetEnabled(bool bEnabled){
+	// ゲームインスタンスを取得
 	UGameInstance* GameInstance(SNUtility::GetGameInstance<UGameInstance>());
-	
+	// ゲームインスタンスが取得できない場合はアサート
 	SNPLUGIN_ASSERT(GameInstance != nullptr, TEXT("GameInstance is nullptr"));
-	
+	// 入力マネージャーサブシステムを取得
 	USNInputManagerSubsystem* InputManagerSubsystem(GameInstance->GetSubsystem<USNInputManagerSubsystem>());
 	
-	if(InputManagerSubsystem != nullptr)
-	{
+	if(InputManagerSubsystem != nullptr){
+		
 		if(bEnabled == true){
-			InputManagerSubsystem->EnableInputMapping(GetInputName());
+			// マッピングコンテキストを有効化
+			InputManagerSubsystem->EnableInputMapping(GetConfigName());
 		} else {
-			InputManagerSubsystem->DisableInputMapping(GetInputName());
+			// マッピングコンテキストを無効化
+			InputManagerSubsystem->DisableInputMapping(GetConfigName());
 		}
 	}
 }
 
-void USNInputConfig::Release()
-{
+//----------------------------------------------------------------------//
+//
+//! @brief 解放処理
+//
+//----------------------------------------------------------------------//
+void USNInputConfig::Release(){
+	// ゲームインスタンスを取得
 	UGameInstance* GameInstance(SNUtility::GetGameInstance<UGameInstance>());
-	
+	// ゲームインスタンスが取得できない場合はアサート
 	SNPLUGIN_ASSERT(GameInstance != nullptr, TEXT("GameInstance is nullptr"));
-	
+	// 入力マネージャーサブシステムを取得
 	USNInputManagerSubsystem* InputManagerSubsystem(GameInstance->GetSubsystem<USNInputManagerSubsystem>());
 	
-	if(InputManagerSubsystem != nullptr)
-	{
-		InputManagerSubsystem->RemoveInputContext(GetInputName());
+	if(InputManagerSubsystem != nullptr){
+		// マネージャーから解放
+		InputManagerSubsystem->RemoveInputContext(GetConfigName());
 	}
+	// オーナーを初期化
+	Owner = nullptr;
 }
 

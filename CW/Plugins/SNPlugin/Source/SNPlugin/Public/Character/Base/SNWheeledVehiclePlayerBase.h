@@ -7,34 +7,48 @@
 #include "Character/Base/SNWheeledVehiclePawnBase.h"
 #include "SNWheeledVehiclePlayerBase.generated.h"
 
-/**
- * 
- */
+//----------------------------------------------------------------------//
+//
+//! @brief プレイ可能なビークル用のインターフェイス
+//
+//----------------------------------------------------------------------//
 UCLASS()
 class SNPLUGIN_API ASNWheeledVehiclePlayerBase : public ASNWheeledVehiclePawnBase, public ISNPlayablePawnInterface
 {
 	GENERATED_BODY()
 
 public:
-
+	
+	//! @{@name 終了処理
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+	//! @}
 	
+	//! @{@name 入力された際に呼ばれるアクションを追加
 	virtual void AddInputAction(const FName& Name, USNActionBase* Action) override;
+	//! @}
 	
+	//! @{@name アクションを取得
 	virtual USNActionBase* GetAction(const FName& Name) override;
-
+	//! @}
+	
+	//! @{@name サーバー側でアクションを実行
 	virtual void ExecuteActionOnServer(const FName& Name, const FInputActionValue& InputActionValue) override;
+	//! @}
 	
 protected:
 	
 	//! @{@name プレイヤーインプットコンポーネントの初期化
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 	//! @}
-
+	
 private:
+	
+	//! @{@name 入力からアクション実行用のレプリケーション
 	UFUNCTION(Server, Reliable)
 	void ExecuteInputAction_OnServer(const FName& Name, const FInputActionValue& InputActionValue);
+	//! @}
 	
+	//!< 入力アクションリスト
 	UPROPERTY()
 	TMap<FName, TObjectPtr<USNActionBase>> InputActionMap;
 };

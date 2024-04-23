@@ -27,47 +27,81 @@ void ASNWheeledVehiclePlayerBase::SetupPlayerInputComponent(UInputComponent* Pla
 	}
 }
 
-void ASNWheeledVehiclePlayerBase::EndPlay(const EEndPlayReason::Type EndPlayReason)
-{
+//----------------------------------------------------------------------//
+//
+//! @brief 終了処理
+//
+//! @param EndPlayReason 終了の理由
+//
+//----------------------------------------------------------------------//
+void ASNWheeledVehiclePlayerBase::EndPlay(const EEndPlayReason::Type EndPlayReason){
+	
 	Super::EndPlay(EndPlayReason);
-
-	for(auto& Action:InputActionMap)
-	{
+	
+	for(auto& Action:InputActionMap){
+		// アクションを破棄
 		Action.Value->ConditionalBeginDestroy();
 	}
-
+	// アクションリストをリセット
 	InputActionMap.Reset();
 }
 
 
-void ASNWheeledVehiclePlayerBase::AddInputAction(const FName& Name, USNActionBase* Action)
-{
+//----------------------------------------------------------------------//
+//
+//! @brief 入力された際に呼ばれるアクションを追加
+//
+//! @param Name   アクション名
+//! @param Action アクションへのポインタ
+//
+//----------------------------------------------------------------------//
+void ASNWheeledVehiclePlayerBase::AddInputAction(const FName& Name, USNActionBase* Action){
 	InputActionMap.Add(Name, Action);
 }
 
-USNActionBase* ASNWheeledVehiclePlayerBase::GetAction(const FName& Name)
-{
+//----------------------------------------------------------------------//
+//
+//! @brief アクションを取得
+//
+//! @param Name アクション名
+//
+//! @retval アクションへのポインタ
+//
+//----------------------------------------------------------------------//
+USNActionBase* ASNWheeledVehiclePlayerBase::GetAction(const FName& Name){
+	
 	USNActionBase* Action = nullptr;
 	
-	if(InputActionMap.Contains(Name) == true)
-	{
+	if(InputActionMap.Contains(Name) == true){
 		Action = InputActionMap[Name];
 	}
-
+	
 	return Action;
 }
 
-void ASNWheeledVehiclePlayerBase::ExecuteInputAction_OnServer_Implementation(const FName& Name, const FInputActionValue& InputActionValue)
-{
-	ISNPlayablePawnInterface::ExecuteAction(Name, InputActionValue);
-	
-	SNPLUGIN_LOG(TEXT("Server Input Action is calling."));
-}
-
-void ASNWheeledVehiclePlayerBase::ExecuteActionOnServer(const FName& Name, const FInputActionValue& InputActionValue)
-{
+//----------------------------------------------------------------------//
+//
+//! @brief サーバー側でアクションを実行
+//
+//! @param Name             アクション名
+//! @param InputActionValue 入力値
+//
+//----------------------------------------------------------------------//
+void ASNWheeledVehiclePlayerBase::ExecuteActionOnServer(const FName& Name, const FInputActionValue& InputActionValue){
 	ExecuteInputAction_OnServer(Name, InputActionValue);
 }
 
-
-
+//----------------------------------------------------------------------//
+//
+//! @brief 入力からアクション実行用のレプリケーション
+//
+//! @param Name             アクション名
+//! @param InputActionValue 入力値
+//
+//----------------------------------------------------------------------//
+void ASNWheeledVehiclePlayerBase::ExecuteInputAction_OnServer_Implementation(const FName& Name, const FInputActionValue& InputActionValue){
+	
+	ISNPlayablePawnInterface::ExecuteAction(Name, InputActionValue);
+	
+	SNPLUGIN_LOG(TEXT("Server Input Action is calling. %f : %f"), InputActionValue[0], InputActionValue[1]);
+}
