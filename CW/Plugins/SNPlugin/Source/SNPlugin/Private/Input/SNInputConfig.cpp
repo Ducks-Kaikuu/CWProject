@@ -37,6 +37,20 @@ USNInputConfig::USNInputConfig(const FObjectInitializer& ObjectInitializer):
 bool	USNInputConfig::InitializeInput(FName Name, UObject* OwnerObject){
 
 	SNPLUGIN_ASSERT(OwnerObject != nullptr, TEXT("Should set Input Action Owner."));
+
+	if(OwnerActor != nullptr)
+	{
+		ISNPlayablePawnInterface* PlayablePawn = Cast<ISNPlayablePawnInterface>(OwnerActor);
+
+		if(PlayablePawn != nullptr)
+		{
+			SNPLUGIN_LOG(TEXT("Owner is not nullptr.[%d]"), PlayablePawn->GetActionNum());	
+		} else
+		{
+			SNPLUGIN_LOG(TEXT("PlayablePawn is not Owner."));
+		}
+		
+	}
 	// オーナーを設定
 	OwnerActor = OwnerObject;
 	// コンフィグ名を設定

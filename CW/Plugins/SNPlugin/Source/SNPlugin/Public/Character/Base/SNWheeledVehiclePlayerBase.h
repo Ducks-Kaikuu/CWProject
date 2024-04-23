@@ -30,6 +30,8 @@ public:
 	//! @{@name アクションを取得
 	virtual USNActionBase* GetAction(const FName& Name) override;
 	//! @}
+
+	virtual int GetActionNum() const override;
 	
 	//! @{@name サーバー側でアクションを実行
 	virtual void ExecuteActionOnServer(const FName& Name, const FInputActionValue& InputActionValue) override;

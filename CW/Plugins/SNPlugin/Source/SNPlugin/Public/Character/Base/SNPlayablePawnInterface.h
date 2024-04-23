@@ -43,6 +43,8 @@ public:
 	//! @{@name サーバー側でアクションを実行
 	virtual void ExecuteActionOnServer(const FName& Name, const FInputActionValue& InputActionValue) = 0;
 	//! @}
+
+	virtual int GetActionNum() const = 0;
 	
 protected:
 	

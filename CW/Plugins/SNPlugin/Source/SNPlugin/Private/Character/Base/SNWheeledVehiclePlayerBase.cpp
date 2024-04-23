@@ -75,6 +75,12 @@ USNActionBase* ASNWheeledVehiclePlayerBase::GetAction(const FName& Name){
 	return Action;
 }
 
+int ASNWheeledVehiclePlayerBase::GetActionNum() const
+{
+	return InputActionMap.Num();
+}
+
+
 //----------------------------------------------------------------------//
 //
 //! @brief サーバー側でアクションを実行
