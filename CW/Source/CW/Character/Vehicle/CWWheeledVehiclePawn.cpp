@@ -38,17 +38,7 @@ void ACWWheeledVehiclePawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>
 void	ACWWheeledVehiclePawn::Tick(float DeltaTime){
 
 	Super::Tick(DeltaTime);
-#if 0
-	if(SNUtility::IsServer(GetWorld()) == false)
-	{
-		return;
-	}
-#else
-	if((Controller == nullptr) || (Controller->IsLocalController() == false))
-	{
-		return;
-	}
-#endif
+	
 	UChaosVehicleMovementComponent* VehicleComponent = GetVehicleMovement();
 	
 	if(VehicleComponent != nullptr)
