@@ -19,6 +19,10 @@ ACWWheeledVehiclePawn::ACWWheeledVehiclePawn(const FObjectInitializer& Initializ
 	:Super(Initializer)
 {
 	PawnExtComponent = CreateDefaultSubobject<USNPawnExtensionComponent>(TEXT("ExtensionComponent"));
+
+	SetReplicates(true);
+
+	SetReplicateMovement(true);
 }
 
 void ACWWheeledVehiclePawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -31,7 +35,7 @@ void	ACWWheeledVehiclePawn::Tick(float DeltaTime){
 	
 	Super::Tick(DeltaTime);
 
-	if(Controller->IsLocalController() == false)
+	if((Controller == nullptr) || (Controller->IsLocalController() == false))
 	{
 		return;
 		//CW_LOG(TEXT("Throttle : %f"), Throttle);
@@ -61,7 +65,7 @@ void	ACWWheeledVehiclePawn::Tick(float DeltaTime){
 //		VehicleComponent->SetThrottleInput(Value);
 		VehicleComponent->SetSteeringInput(XAxis);
 		VehicleComponent->SetHandbrakeInput(HandBrake);
-#if 0
+#if 1
 			
 			FString str00(TEXT("Throttle  Input : ") + FString::SanitizeFloat(VehicleComponent->GetThrottleInput()));
 			FString str01(TEXT("Brake     Input : ") + FString::SanitizeFloat(VehicleComponent->GetBrakeInput()));
