@@ -29,17 +29,17 @@ void ACWWheeledVehiclePawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(ACWWheeledVehiclePawn, Throttle);
-	DOREPLIFETIME(ACWWheeledVehiclePawn,YAxis);
-	DOREPLIFETIME(ACWWheeledVehiclePawn,XAxis);
-	DOREPLIFETIME(ACWWheeledVehiclePawn, HandBrake);
+	//DOREPLIFETIME(ACWWheeledVehiclePawn, Throttle);
+	//DOREPLIFETIME(ACWWheeledVehiclePawn,YAxis);
+	//DOREPLIFETIME(ACWWheeledVehiclePawn,XAxis);
+	//DOREPLIFETIME(ACWWheeledVehiclePawn, HandBrake);
 }
 
 
 void	ACWWheeledVehiclePawn::Tick(float DeltaTime){
 	
 	Super::Tick(DeltaTime);
-#if 0
+#if 1
 	if(SNUtility::IsServer(GetWorld()) == false)
 	{
 		return;
@@ -55,8 +55,8 @@ void	ACWWheeledVehiclePawn::Tick(float DeltaTime){
 #endif
 	UChaosVehicleMovementComponent* VehicleComponent = GetVehicleMovement();
 	
-	if(VehicleComponent != nullptr){
-		
+	if(VehicleComponent != nullptr)
+	{
 		float Value = Throttle;
 		
 		if(HandBrake == true){
@@ -73,22 +73,37 @@ void	ACWWheeledVehiclePawn::Tick(float DeltaTime){
 			}
 		}
 		
-//		VehicleComponent->SetThrottleInput(Value);
+		//		VehicleComponent->SetThrottleInput(Value);
 		VehicleComponent->SetSteeringInput(XAxis);
 		VehicleComponent->SetHandbrakeInput(HandBrake);
 #if 1
+		if((Controller == nullptr) || (Controller->IsLocalController() == false)){
 			
 			FString str00(TEXT("Throttle  Input : ") + FString::SanitizeFloat(VehicleComponent->GetThrottleInput()));
 			FString str01(TEXT("Brake     Input : ") + FString::SanitizeFloat(VehicleComponent->GetBrakeInput()));
 			FString str02(TEXT("Steering  Input : ") + FString::SanitizeFloat(VehicleComponent->GetSteeringInput()));
 			FString str03(TEXT("HandBrake Input : "));
-			
+				
 			str03 += (VehicleComponent->GetHandbrakeInput() == true ? TEXT("True") : TEXT("False"));
-			
+				
 			CW_DEBUG_DISPLAY(str00, FLinearColor::Red, 30, 20, 0.0f, 1.0f);
 			CW_DEBUG_DISPLAY(str01, FLinearColor::Red, 30, 40, 0.0f, 1.0f);
 			CW_DEBUG_DISPLAY(str02, FLinearColor::Red, 30, 60, 0.0f, 1.0f);
 			CW_DEBUG_DISPLAY(str03, FLinearColor::Red, 30, 80, 0.0f, 1.0f);
+		} else
+		{
+			FString str00(TEXT("Throttle  Input : ") + FString::SanitizeFloat(VehicleComponent->GetThrottleInput()));
+			FString str01(TEXT("Brake     Input : ") + FString::SanitizeFloat(VehicleComponent->GetBrakeInput()));
+			FString str02(TEXT("Steering  Input : ") + FString::SanitizeFloat(VehicleComponent->GetSteeringInput()));
+			FString str03(TEXT("HandBrake Input : "));
+				
+			str03 += (VehicleComponent->GetHandbrakeInput() == true ? TEXT("True") : TEXT("False"));
+				
+			CW_DEBUG_DISPLAY(str00, FLinearColor::Red, 30, 120, 0.0f, 1.0f);
+			CW_DEBUG_DISPLAY(str01, FLinearColor::Red, 30, 140, 0.0f, 1.0f);
+			CW_DEBUG_DISPLAY(str02, FLinearColor::Red, 30, 160, 0.0f, 1.0f);
+			CW_DEBUG_DISPLAY(str03, FLinearColor::Red, 30, 180, 0.0f, 1.0f);
+		}
 #endif
 	}
 }
