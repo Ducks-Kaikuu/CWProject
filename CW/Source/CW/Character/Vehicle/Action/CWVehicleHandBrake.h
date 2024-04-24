@@ -9,7 +9,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(BlueprintType, Blueprintable)
 class CW_API UCWVehicleHandBrake : public UCWActionBase
 {
 	GENERATED_BODY()

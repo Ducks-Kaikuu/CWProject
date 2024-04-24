@@ -9,7 +9,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(BlueprintType, Blueprintable)
 class CW_API UCWVehicleAccel : public UCWActionBase
 {
 	GENERATED_BODY()

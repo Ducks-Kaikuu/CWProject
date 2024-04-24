@@ -19,9 +19,9 @@ ACWWheeledVehiclePawn::ACWWheeledVehiclePawn(const FObjectInitializer& Initializ
 	:Super(Initializer)
 {
 	
-	SetReplicates(true);
+//	SetReplicates(true);
 
-	SetReplicateMovement(true);
+//	SetReplicateMovement(true);
 }
 
 void ACWWheeledVehiclePawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

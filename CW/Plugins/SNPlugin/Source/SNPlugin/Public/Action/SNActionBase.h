@@ -69,7 +69,7 @@ FORCEINLINE EInputActionValueType FInputActionValueProxy::GetType() const {
 //! @brief アクション用ベースクラス
 //
 //----------------------------------------------------------------------//
-UCLASS()
+UCLASS(BlueprintType, Blueprintable)
 class SNPLUGIN_API USNActionBase : public UBTTaskNode
 {
 	GENERATED_BODY()

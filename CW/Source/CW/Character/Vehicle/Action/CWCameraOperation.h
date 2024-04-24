@@ -14,7 +14,7 @@ class  UCameraComponent;
 /**
  * 
  */
-UCLASS()
+UCLASS(BlueprintType, Blueprintable)
 class CW_API UCWCameraOperation : public UCWActionBase
 {
 	GENERATED_BODY()

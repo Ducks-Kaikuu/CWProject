@@ -9,7 +9,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(BlueprintType, Blueprintable)
 class CW_API UCWVehicleShoot : public UCWActionBase
 {
 	GENERATED_BODY()
