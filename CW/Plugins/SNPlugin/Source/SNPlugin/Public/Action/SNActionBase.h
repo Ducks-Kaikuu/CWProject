@@ -12,30 +12,58 @@
 class UEnhancedInputComponent;
 class UInputAction;
 class AActor;
+
 struct FInputActionValue;
 
+//----------------------------------------------------------------------//
+//
+//! @brief 入力されたパラメータへアクセスするためのプロキシ
+//
+//----------------------------------------------------------------------//
 USTRUCT()
 struct FInputActionValueProxy:public FInputActionValue
 {
 	GENERATED_BODY()
-
-	FInputActionValueProxy():Super(){}
 	
-	FInputActionValueProxy(const FInputActionValue& InputActionValue):
-	Super(InputActionValue.GetValueType(), Axis3D(InputActionValue[0], InputActionValue[1], InputActionValue[2]))
-	{
-		
-	}
-	FVector GetValue()
-	{
-		return Value;
-	}
-
-	EInputActionValueType GetType()
-	{
-		return ValueType;
-	}
+	//! @{@name デフォルトコンストラクタ
+	FInputActionValueProxy();
+	//! @}
+	
+	//! @{@name コピーコンストラクタ
+	FInputActionValueProxy(const FInputActionValue& InputActionValue);
+	//! @}
+	
+	//! @{@name 入力値を取得
+	const FVector& GetValue() const ;
+	//! @}
+	
+	//! @{@name 入力タイプを取得
+	EInputActionValueType GetType() const ;
+	//! @}
 };
+
+//----------------------------------------------------------------------//
+//
+//! @brief 入力値を取得
+//
+//! @retval 入力値
+//
+//----------------------------------------------------------------------//
+FORCEINLINE const FVector& FInputActionValueProxy::GetValue() const {
+	return Value;
+}
+
+//----------------------------------------------------------------------//
+//
+//! @brief 入力タイプを取得
+//
+//! @retval 入力タイプ
+//
+//----------------------------------------------------------------------//
+FORCEINLINE EInputActionValueType FInputActionValueProxy::GetType() const {
+	return ValueType;
+}
+
 //----------------------------------------------------------------------//
 //
 //! @brief アクション用ベースクラス
@@ -91,13 +119,16 @@ protected:
 	//! @{@name 各アクションの実行処理
 	virtual void ExecAction(const FInputActionValue& InputActionValue){};
 	//! @}
-
-	void SetExecEachLocal(bool bFlag);
+	
+	//! @{@name サーバーでアクションを実行するかのフラグを設定
+	void SetExecOnServer(bool bFlag);
+	//! @}
 	
 private:
-
+	
+	//!< サーバーでアクションを実行するかのフラグ
 	UPROPERTY(EditAnywhere, Category="Online")
-	bool bExecAtEachLocal = false;
+	bool bExecOnServer = false;
 	
 	//!< アクション名
 	FName ActionName;
@@ -142,9 +173,17 @@ FORCEINLINE FName USNActionBase::GetActionName() const {
 	return ActionName;
 }
 
-FORCEINLINE void USNActionBase::SetExecEachLocal(bool bFlag)
-{
-	bExecAtEachLocal = bFlag;
+//----------------------------------------------------------------------//
+//
+//! @brief サーバーでアクションを実行するかのフラグを設定
+//
+//! @param bFlag true : サーバーで実行 / false : ローカルで実行
+//
+//! @retval 
+//
+//----------------------------------------------------------------------//
+FORCEINLINE void USNActionBase::SetExecOnServer(bool bFlag){
+	bExecOnServer = bFlag;
 }
 
 //----------------------------------------------------------------------//

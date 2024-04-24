@@ -10,8 +10,32 @@
 //! @brief デフォルトコンストラクタ
 //
 //----------------------------------------------------------------------//
-USNActionBase::USNActionBase()
-:Super()
+FInputActionValueProxy::FInputActionValueProxy():
+ Super()
+{
+	
+}
+
+//----------------------------------------------------------------------//
+//
+//! @brief コピーコンストラクタ
+//
+//! @param InputActionValue コピー元
+//
+//----------------------------------------------------------------------//
+FInputActionValueProxy::FInputActionValueProxy(const FInputActionValue& InputActionValue):
+ Super(InputActionValue.GetValueType(), Axis3D(InputActionValue[0], InputActionValue[1], InputActionValue[2]))
+{
+	
+}
+
+//----------------------------------------------------------------------//
+//
+//! @brief デフォルトコンストラクタ
+//
+//----------------------------------------------------------------------//
+USNActionBase::USNActionBase():
+ Super()
 ,Owner(nullptr)
 {
 	
@@ -26,6 +50,15 @@ USNActionBase::~USNActionBase(){
 	Owner = nullptr;
 }
 
+//----------------------------------------------------------------------//
+//
+//! @brief 初期化処理
+//
+//! @param InputComponent インプットコンポーネント
+//! @param InputAction    インプットアクション
+//! @param Object         オーナーとなるオブジェクト
+//
+//----------------------------------------------------------------------//
 void USNActionBase::Initialize(UEnhancedInputComponent* InputComponent, const UInputAction* InputAction, UObject* Object){
 	
 	Owner = Object;
@@ -43,23 +76,24 @@ void USNActionBase::Initialize(UEnhancedInputComponent* InputComponent, const UI
 //
 //----------------------------------------------------------------------//
 void	USNActionBase::InputAction(const FInputActionValue& InputActionValue){
-
-	if(SNUtility::IsServer(GetWorld()) == true)
-	{
+	
+	if(SNUtility::IsServer(GetWorld()) == true){
 		// 実行処理
 		ExecAction(InputActionValue);
-	} else
-	{
-		if(bExecAtEachLocal == false)
-		{
+	} else {
+		
+		if(bExecOnServer == true){
+			
 			ISNPlayablePawnInterface* PlayablePawn(GetOwner<ISNPlayablePawnInterface>());
-
-			if(PlayablePawn != nullptr)
-			{
+			
+			if(PlayablePawn != nullptr){
 				PlayablePawn->ExecuteActionOnServer(GetActionName(), InputActionValue);
+			} else {
+				// 実行処理
+				ExecAction(InputActionValue);
 			}
-		} else
-		{
+			
+		} else {
 			// 実行処理
 			ExecAction(InputActionValue);
 		}

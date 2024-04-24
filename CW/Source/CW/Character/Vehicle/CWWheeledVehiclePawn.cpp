@@ -18,8 +18,7 @@
 ACWWheeledVehiclePawn::ACWWheeledVehiclePawn(const FObjectInitializer& Initializer)
 	:Super(Initializer)
 {
-	PawnExtComponent = CreateDefaultSubobject<USNPawnExtensionComponent>(TEXT("ExtensionComponent"));
-
+	
 	SetReplicates(true);
 
 	SetReplicateMovement(true);
@@ -30,8 +29,8 @@ void ACWWheeledVehiclePawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(ACWWheeledVehiclePawn, Throttle);
-	DOREPLIFETIME(ACWWheeledVehiclePawn,YAxis);
-	DOREPLIFETIME(ACWWheeledVehiclePawn,XAxis);
+	DOREPLIFETIME(ACWWheeledVehiclePawn, YAxis);
+	DOREPLIFETIME(ACWWheeledVehiclePawn, XAxis);
 	DOREPLIFETIME(ACWWheeledVehiclePawn, HandBrake);
 }
 
@@ -73,7 +72,7 @@ void	ACWWheeledVehiclePawn::Tick(float DeltaTime){
 		//		VehicleComponent->SetThrottleInput(Value);
 		VehicleComponent->SetSteeringInput(XAxis);
 		VehicleComponent->SetHandbrakeInput(HandBrake);
-#if 1
+#if 0
 		if((Controller == nullptr) || (Controller->IsLocalController() == false)){
 			
 			FString str00(TEXT("Throttle  Input : ") + FString::SanitizeFloat(VehicleComponent->GetThrottleInput()));
@@ -145,8 +144,6 @@ void ACWWheeledVehiclePawn::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
 
-	PawnExtComponent->HandleControllerChanged();
-
 	CW_LOG(TEXT("PossessedBy"));
 }
 
@@ -154,22 +151,12 @@ void ACWWheeledVehiclePawn::UnPossessed()
 {
 	Super::UnPossessed();
 
-	PawnExtComponent->HandleControllerChanged();
-
 	CW_LOG(TEXT("UnPossessed"));
-}
-void ACWWheeledVehiclePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-	PawnExtComponent->SetupPlayerInputComponent();
 }
 
 void ACWWheeledVehiclePawn::OnRep_Controller()
 {
 	Super::OnRep_Controller();
-
-	PawnExtComponent->HandleControllerChanged();
 
 	CW_LOG(TEXT("OnRep_Controller"));
 }
@@ -177,8 +164,6 @@ void ACWWheeledVehiclePawn::OnRep_Controller()
 void ACWWheeledVehiclePawn::OnRep_PlayerState()
 {
 	Super::OnRep_PlayerState();
-
-	PawnExtComponent->HandlePlayerStateReplicated();
 
 	CW_LOG(TEXT("OnRep_PlayerState"));
 }

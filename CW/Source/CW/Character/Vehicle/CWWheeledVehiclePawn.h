@@ -44,8 +44,6 @@ protected:
 
 	virtual void UnPossessed() override;
 
-	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
-
 	virtual void OnRep_Controller() override;
 
 	virtual void OnRep_PlayerState() override;
@@ -90,7 +88,4 @@ private:
 	//!< 武器の非同期ロード用のハンドル
 	TSharedPtr<FStreamableHandle> LStreamHandle = nullptr;
 	TSharedPtr<FStreamableHandle> RStreamHandle = nullptr;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Lyra|Character", Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<USNPawnExtensionComponent> PawnExtComponent;
 };

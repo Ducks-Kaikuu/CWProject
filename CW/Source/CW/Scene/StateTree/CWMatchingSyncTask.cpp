@@ -7,6 +7,7 @@
 #include "OnlineSubsystem.h"
 #include "OnlineSubsystemUtils.h"
 #include "SNDef.h"
+#include "Character/SNPlayerController.h"
 #include "CW/CWDef.h"
 #include "CW/Character/Player/CWPlayerState.h"
 #include "CW/System/CWGameState.h"
@@ -61,6 +62,12 @@ EStateTreeRunStatus UCWMatchingSyncTask::Tick(FStateTreeExecutionContext& Contex
 EStateTreeRunStatus UCWMatchingSyncTask::EnterState(FStateTreeExecutionContext& Context, const FStateTreeTransitionResult& Transition)
 {
 	EStateTreeRunStatus Result = Super::EnterState(Context, Transition);
+
+	ASNPlayerController* PlayerController(SNUtility::GetPlayerController<ASNPlayerController>());
+
+	CW_ASSERT(PlayerController != nullptr, TEXT("PlayerController is nullptr."));
+	
+	PlayerController->EnabledInputType(FName(TEXT("Battle")), true);
 	
 	return Result;
 }
@@ -69,14 +76,6 @@ void UCWMatchingSyncTask::ExitState(FStateTreeExecutionContext& Context, const F
 {
 	Super::ExitState(Context, Transition);
 
-	APlayerController* PlayerController(SNUtility::GetPlayerController<APlayerController>());
-
-	CW_ASSERT(PlayerController != nullptr, TEXT("PlayerController is nullptr."));
-	
-	if((BattleMap.IsNull() == false) && (SNUtility::IsServer(GetWorld()) == true))
-	{
-		UGameplayStatics::OpenLevel(GetWorld(), *BattleMap.GetAssetName(), true, "listen");
-	}
 }
 
 void UCWMatchingSyncTask::HudPostLoad()
