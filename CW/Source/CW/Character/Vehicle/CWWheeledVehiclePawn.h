@@ -64,16 +64,16 @@ private:
 	ACWWeaponActorBase* PostLoadWeapon(TSharedPtr<FStreamableHandle> StreamHandle, FName SocketName);
 	//! @}
 
-	//UPROPERTY(Replicated)
+	UPROPERTY(Replicated)
 	float Throttle=0.0f;
 
-	//UPROPERTY(Replicated)
+	UPROPERTY(Replicated)
 	float YAxis=0.0f;
 
-	//UPROPERTY(Replicated)
+	UPROPERTY(Replicated)
 	float XAxis=0.0f;
 
-	//UPROPERTY(Replicated)
+	UPROPERTY(Replicated)
 	bool HandBrake=false;
 	
 	//!< 左側の武器をアタッチするソケット名

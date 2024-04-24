@@ -28,13 +28,18 @@ ACWWheeledVehiclePawn::ACWWheeledVehiclePawn(const FObjectInitializer& Initializ
 void ACWWheeledVehiclePawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ACWWheeledVehiclePawn, Throttle);
+	DOREPLIFETIME(ACWWheeledVehiclePawn,YAxis);
+	DOREPLIFETIME(ACWWheeledVehiclePawn,XAxis);
+	DOREPLIFETIME(ACWWheeledVehiclePawn, HandBrake);
 }
 
 
 void	ACWWheeledVehiclePawn::Tick(float DeltaTime){
 	
 	Super::Tick(DeltaTime);
-#if 1
+#if 0
 	if(SNUtility::IsServer(GetWorld()) == false)
 	{
 		return;
