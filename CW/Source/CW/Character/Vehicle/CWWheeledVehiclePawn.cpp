@@ -31,11 +31,6 @@ void	ACWWheeledVehiclePawn::Tick(float DeltaTime){
 	
 	Super::Tick(DeltaTime);
 
-	if(SNUtility::IsServer(GetWorld()) == false)
-	{
-		return;
-	}
-
 	if(Controller->IsLocalController() == false)
 	{
 		return;
