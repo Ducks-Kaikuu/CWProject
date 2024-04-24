@@ -29,17 +29,17 @@ void ACWWheeledVehiclePawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	//DOREPLIFETIME(ACWWheeledVehiclePawn, Throttle);
-	//DOREPLIFETIME(ACWWheeledVehiclePawn,YAxis);
-	//DOREPLIFETIME(ACWWheeledVehiclePawn,XAxis);
-	//DOREPLIFETIME(ACWWheeledVehiclePawn, HandBrake);
+	DOREPLIFETIME(ACWWheeledVehiclePawn, Throttle);
+	DOREPLIFETIME(ACWWheeledVehiclePawn,YAxis);
+	DOREPLIFETIME(ACWWheeledVehiclePawn,XAxis);
+	DOREPLIFETIME(ACWWheeledVehiclePawn, HandBrake);
 }
 
 
 void	ACWWheeledVehiclePawn::Tick(float DeltaTime){
-	
+
 	Super::Tick(DeltaTime);
-#if 1
+#if 0
 	if(SNUtility::IsServer(GetWorld()) == false)
 	{
 		return;
@@ -48,9 +48,6 @@ void	ACWWheeledVehiclePawn::Tick(float DeltaTime){
 	if((Controller == nullptr) || (Controller->IsLocalController() == false))
 	{
 		return;
-		//CW_LOG(TEXT("Throttle : %f"), Throttle);
-
-		
 	}
 #endif
 	UChaosVehicleMovementComponent* VehicleComponent = GetVehicleMovement();

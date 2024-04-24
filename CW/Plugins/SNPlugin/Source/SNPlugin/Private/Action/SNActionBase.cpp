@@ -50,11 +50,18 @@ void	USNActionBase::InputAction(const FInputActionValue& InputActionValue){
 		ExecAction(InputActionValue);
 	} else
 	{
-		ISNPlayablePawnInterface* PlayablePawn(GetOwner<ISNPlayablePawnInterface>());
-
-		if(PlayablePawn != nullptr)
+		if(bExecAtEachLocal == false)
 		{
-			PlayablePawn->ExecuteActionOnServer(GetActionName(), InputActionValue);
+			ISNPlayablePawnInterface* PlayablePawn(GetOwner<ISNPlayablePawnInterface>());
+
+			if(PlayablePawn != nullptr)
+			{
+				PlayablePawn->ExecuteActionOnServer(GetActionName(), InputActionValue);
+			}
+		} else
+		{
+			// 実行処理
+			ExecAction(InputActionValue);
 		}
 	}
 	

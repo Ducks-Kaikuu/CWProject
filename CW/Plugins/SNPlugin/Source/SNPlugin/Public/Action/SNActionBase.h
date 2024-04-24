@@ -88,12 +88,16 @@ public:
 	
 protected:
 	
-	
 	//! @{@name 各アクションの実行処理
 	virtual void ExecAction(const FInputActionValue& InputActionValue){};
 	//! @}
+
+	void SetExecEachLocal(bool bFlag);
 	
 private:
+
+	UPROPERTY(EditAnywhere, Category="Online")
+	bool bExecAtEachLocal = false;
 	
 	//!< アクション名
 	FName ActionName;
@@ -138,6 +142,10 @@ FORCEINLINE FName USNActionBase::GetActionName() const {
 	return ActionName;
 }
 
+FORCEINLINE void USNActionBase::SetExecEachLocal(bool bFlag)
+{
+	bExecAtEachLocal = bFlag;
+}
 
 //----------------------------------------------------------------------//
 //

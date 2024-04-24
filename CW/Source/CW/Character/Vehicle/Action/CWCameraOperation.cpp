@@ -13,7 +13,7 @@ UCWCameraOperation::UCWCameraOperation()
 :Super()
 ,CameraRotation(FRotator::ZeroRotator)
 {
-	
+	SetExecEachLocal(true);
 }
 
 //----------------------------------------------------------------------//
