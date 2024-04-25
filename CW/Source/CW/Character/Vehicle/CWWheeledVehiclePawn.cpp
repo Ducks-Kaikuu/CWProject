@@ -19,9 +19,6 @@ ACWWheeledVehiclePawn::ACWWheeledVehiclePawn(const FObjectInitializer& Initializ
 	:Super(Initializer)
 {
 	
-	SetReplicates(true);
-
-	SetReplicateMovement(true);
 }
 
 void ACWWheeledVehiclePawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -37,12 +34,12 @@ void ACWWheeledVehiclePawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>
 
 void	ACWWheeledVehiclePawn::Tick(float DeltaTime){
 
-	if ((Controller == nullptr) || ((Controller != nullptr) && (Controller->IsLocalController() == false)))
+	Super::Tick(DeltaTime);
+	
+	if ((Controller == nullptr) || (Controller->IsLocalController() == false))
 	{
 		return;
 	}
-
-	Super::Tick(DeltaTime);
 	
 	UChaosVehicleMovementComponent* VehicleComponent = GetVehicleMovement();
 	
@@ -69,7 +66,7 @@ void	ACWWheeledVehiclePawn::Tick(float DeltaTime){
 		VehicleComponent->SetSteeringInput(XAxis);
 		VehicleComponent->SetHandbrakeInput(HandBrake);
 
-		ReplicateTransform();
+	//	ReplicateTransform();
 #if 1
 		if((Controller == nullptr) || (Controller->IsLocalController() == false)){
 			
@@ -133,6 +130,16 @@ void ACWWheeledVehiclePawn::BeginPlay(){
 	} else
 	{
 		CW_LOG(TEXT("None Input Component"))
+	}
+
+	if((Controller != nullptr) && (Controller->IsLocalController() == false))
+	{
+		UChaosVehicleMovementComponent* VehicleComponent = GetVehicleMovement();
+
+		if(VehicleComponent != nullptr)
+		{
+			VehicleComponent->SetComponentTickEnabled(false);
+		}
 	}
 
 	CW_LOG(TEXT("BeginPlay"));
@@ -268,6 +275,8 @@ void ACWWheeledVehiclePawn::ReplicateTransform()
 
 void ACWWheeledVehiclePawn::Replicate_OnServer_Implementation(const FVector_NetQuantize10& Location, const FVector_NetQuantize10& Rotation, uint8 bSweep)
 {
-	SetActorLocationAndRotation(Location, FRotator(Rotation.X, Rotation.Y, Rotation.Z), (bool)bSweep);
+	SetActorLocationAndRotation(Location, FRotator(Rotation.X, Rotation.Y, Rotation.Z), (bool)bSweep, nullptr, ETeleportType::ResetPhysics);
+	
+	CW_LOG(TEXT("Replicate OnServer."));
 }
 
