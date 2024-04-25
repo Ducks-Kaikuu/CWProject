@@ -19,9 +19,9 @@ ACWWheeledVehiclePawn::ACWWheeledVehiclePawn(const FObjectInitializer& Initializ
 	:Super(Initializer)
 {
 	
-//	SetReplicates(true);
+	SetReplicates(true);
 
-//	SetReplicateMovement(true);
+	SetReplicateMovement(true);
 }
 
 void ACWWheeledVehiclePawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -37,12 +37,18 @@ void ACWWheeledVehiclePawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>
 
 void	ACWWheeledVehiclePawn::Tick(float DeltaTime){
 
+	if ((Controller == nullptr) || ((Controller != nullptr) && (Controller->IsLocalController() == false)))
+	{
+		return;
+	}
+
 	Super::Tick(DeltaTime);
 	
 	UChaosVehicleMovementComponent* VehicleComponent = GetVehicleMovement();
 	
 	if(VehicleComponent != nullptr)
 	{
+		
 		float Value = Throttle;
 		
 		if(HandBrake == true){
@@ -62,7 +68,9 @@ void	ACWWheeledVehiclePawn::Tick(float DeltaTime){
 		//		VehicleComponent->SetThrottleInput(Value);
 		VehicleComponent->SetSteeringInput(XAxis);
 		VehicleComponent->SetHandbrakeInput(HandBrake);
-#if 0
+
+		ReplicateTransform();
+#if 1
 		if((Controller == nullptr) || (Controller->IsLocalController() == false)){
 			
 			FString str00(TEXT("Throttle  Input : ") + FString::SanitizeFloat(VehicleComponent->GetThrottleInput()));
@@ -246,3 +254,20 @@ ACWWeaponActorBase* ACWWheeledVehiclePawn::GetWeapon(const FName& Name)
 
 	return WeaponMap[Name];
 }
+
+void ACWWheeledVehiclePawn::ReplicateTransform()
+{
+	const FTransform& Transform(GetActorTransform());
+	
+	const FRotator Rotator(Transform.GetRotation().Rotator());
+
+	FVector_NetQuantize10 Rotate(Rotator.Pitch, Rotator.Yaw, Rotator.Roll);
+	
+	Replicate_OnServer(Transform.GetLocation(), Rotate, true);
+}
+
+void ACWWheeledVehiclePawn::Replicate_OnServer_Implementation(const FVector_NetQuantize10& Location, const FVector_NetQuantize10& Rotation, uint8 bSweep)
+{
+	SetActorLocationAndRotation(Location, FRotator(Rotation.X, Rotation.Y, Rotation.Z), (bool)bSweep);
+}
+

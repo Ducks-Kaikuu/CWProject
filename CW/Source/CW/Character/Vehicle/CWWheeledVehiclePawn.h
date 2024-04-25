@@ -49,6 +49,11 @@ protected:
 	virtual void OnRep_PlayerState() override;
 	
 private:
+
+	void ReplicateTransform();
+
+	UFUNCTION(Server, Reliable)
+	void Replicate_OnServer(const FVector_NetQuantize10& Location, const FVector_NetQuantize10& Rotation, uint8 bSweep);
 	
 	//! @{@name 左用武器がロードされた場合の処理
 	void FinishLoadWeaponL();
