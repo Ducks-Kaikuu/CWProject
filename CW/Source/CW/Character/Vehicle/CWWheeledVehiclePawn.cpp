@@ -65,6 +65,25 @@ void ACWWheeledVehiclePawn::NotifyRestarted()
 				}
 			}
 		}
+	} else
+	{
+		if(GetLocalRole() == ROLE_Authority)
+		{
+			if(GetLocalRole() == ROLE_Authority)
+			{
+				UChaosVehicleMovementComponent* VehicleComponent = GetVehicleMovement();
+
+				if(VehicleComponent != nullptr)
+				{
+					VehicleComponent->SetRequiresControllerForInputs(true);
+
+					CW_LOG(TEXT("[Controller None] : SetRequiresControllerForInputs is true."))
+				} else
+				{
+					CW_LOG(TEXT("[Controller None] : Vehicle Component is nullptr."))
+				}
+			}
+		}
 	}
 }
 
