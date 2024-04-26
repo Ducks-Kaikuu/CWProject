@@ -8,13 +8,52 @@
 #include "CW/Character/Vehicle/CWWheeledVehiclePawn.h"
 #include "Utility/SNUtility.h"
 
+void ACWBattleCameraActor::BeginPlay()
+{
+	Super::BeginPlay();
+
+	ACWWheeledVehiclePawn* Player(GetCurrentPlayer());
+
+	AttachToActor(Player, FAttachmentTransformRules::KeepRelativeTransform);
+
+	FTransform OffsetTransform(FTransform::Identity);
+
+	FVector Offset(TargetOffset);
+
+	Offset.Z += FocuedCameraHeight;
+	
+	OffsetTransform.SetTranslation(Offset);
+}
+
 void ACWBattleCameraActor::Tick(float DeltaSeconds){
 	
 	Super::Tick(DeltaSeconds);
 
+	if(bCameraTick == false)
+	{
+		return;
+	}
 	ACWWheeledVehiclePawn* Player(GetCurrentPlayer());
 	
 	if(Player != nullptr){
+#if 0
+		static bool isInitialize = false;
+
+		static FTransform Test;
+
+		if(isInitialize == false)
+		{
+			Test = (BoneName != NAME_None ? Player->GetMesh()->GetBoneTransform(BoneName) : Player->GetActorTransform());
+
+			isInitialize = true;
+		}
+
+		FTransform Transform(Test);
+#else
+		// アタッチするトランスフォームの情報を取得
+		FTransform Transform(BoneName != NAME_None ? Player->GetMesh()->GetBoneTransform(BoneName) : Player->GetActorTransform());
+#endif
+		
 		
 		if(bCarFocusedCamera == true){
 			// アクターと向きが違うので180度回転
@@ -23,8 +62,6 @@ void ACWBattleCameraActor::Tick(float DeltaSeconds){
 			FVector Offset(ReverseRotation.RotateVector(TargetOffset));
 			// カメラのローテーションを反映
 			FVector CameraPosition(CameraRotate.RotateVector(Offset));
-			// アタッチするトランスフォームの情報を取得
-			FTransform Transform(BoneName != NAME_None ? Player->GetMesh()->GetBoneTransform(BoneName) : Player->GetActorTransform());
 			// フォーカス時の高さを加算
 			Transform.AddToTranslation(FVector(0.0f, 0.0f, FocuedCameraHeight));
 			// 親トランスフォームを反映
@@ -51,8 +88,6 @@ void ACWBattleCameraActor::Tick(float DeltaSeconds){
 			const FRotator ReverseRotation(0, 180, 0);
 			
 			FVector Offset(ReverseRotation.RotateVector(TargetOffset));
-			
-			FTransform Transform(BoneName != NAME_None ? Player->GetMesh()->GetBoneTransform(BoneName) : Player->GetActorTransform());
 			
 			FTransform CameraTransform(CameraRotate, Offset);
 			

@@ -36,6 +36,8 @@ public:
 	
 protected:
 
+	virtual void BeginPlay() override;
+	
 	void Tick(float DeltaSeconds) override;
 	
 private:
@@ -62,10 +64,19 @@ private:
 	
 	UPROPERTY(EditAnywhere, Category="CW|Camera|Parameter")
 	float FocuedCameraHeight = 200.0f;
+
+	UPROPERTY(EditAnywhere, Category="CW|Camera|Parameter")
+	bool bCameraTick = true;
 	
 	//!< カメラの回転情報
 	UPROPERTY()
 	FRotator CameraRotate = FRotator::ZeroRotator;
+
+	UPROPERTY()
+	FTransform OldPlayerTransform;
+	
+	UPROPERTY()
+	FTransform CurrentPlayerTransform;
 };
 
 //----------------------------------------------------------------------//

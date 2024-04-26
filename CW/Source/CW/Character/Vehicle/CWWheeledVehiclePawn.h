@@ -23,6 +23,8 @@ public:
 	ACWWheeledVehiclePawn(const FObjectInitializer& Initializer);
 	
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	virtual void NotifyRestarted() override;
 	
 	void	Tick(float DeltaTime) override ;
 	

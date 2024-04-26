@@ -7,12 +7,7 @@
 #include "CW/Weapon/CWWeaponActorBase.h"
 
 #include "ChaosVehicleMovementComponent.h"
-#include "Character/SNPawnExtensionComponent.h"
-#include "Character/SNPlayablePawnComponent.h"
-#include "CW/Character/Player/CWPlayerController.h"
-#include "Input/SNInputManagerSubsystem.h"
 #include "Net/UnrealNetwork.h"
-#include "Online/SNOnlineSystem.h"
 #include "Utility/SNUtility.h"
 
 ACWWheeledVehiclePawn::ACWWheeledVehiclePawn(const FObjectInitializer& Initializer)
@@ -29,6 +24,48 @@ void ACWWheeledVehiclePawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>
 	DOREPLIFETIME(ACWWheeledVehiclePawn, YAxis);
 	DOREPLIFETIME(ACWWheeledVehiclePawn, XAxis);
 	DOREPLIFETIME(ACWWheeledVehiclePawn, HandBrake);
+}
+
+void ACWWheeledVehiclePawn::NotifyRestarted()
+{
+	Super::NotifyRestarted();
+
+	if(Controller != nullptr)
+	{
+		if(Controller->IsLocalController() == false)
+		{
+			if(GetLocalRole() == ROLE_Authority)
+			{
+				UChaosVehicleMovementComponent* VehicleComponent = GetVehicleMovement();
+
+				if(VehicleComponent != nullptr)
+				{
+					VehicleComponent->SetRequiresControllerForInputs(false);
+					
+					CW_LOG(TEXT("SetRequiresControllerForInputs is false."))
+				} else
+				{
+					CW_LOG(TEXT("Vehicle Component is nullptr."))
+				}
+			}
+		} else
+		{
+			if(GetLocalRole() == ROLE_Authority)
+			{
+				UChaosVehicleMovementComponent* VehicleComponent = GetVehicleMovement();
+
+				if(VehicleComponent != nullptr)
+				{
+					VehicleComponent->SetRequiresControllerForInputs(true);
+
+					CW_LOG(TEXT("SetRequiresControllerForInputs is true."))
+				} else
+				{
+					CW_LOG(TEXT("Vehicle Component is nullptr."))
+				}
+			}
+		}
+	}
 }
 
 
@@ -130,16 +167,6 @@ void ACWWheeledVehiclePawn::BeginPlay(){
 	} else
 	{
 		CW_LOG(TEXT("None Input Component"))
-	}
-
-	if((Controller != nullptr) && (Controller->IsLocalController() == false))
-	{
-		UChaosVehicleMovementComponent* VehicleComponent = GetVehicleMovement();
-
-		if(VehicleComponent != nullptr)
-		{
-			VehicleComponent->SetComponentTickEnabled(false);
-		}
 	}
 
 	CW_LOG(TEXT("BeginPlay"));
