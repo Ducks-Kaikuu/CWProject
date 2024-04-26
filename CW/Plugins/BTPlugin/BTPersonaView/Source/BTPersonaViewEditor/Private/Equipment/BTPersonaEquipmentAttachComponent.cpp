@@ -361,7 +361,7 @@ void UBTPersonaEquipmentAttachComponent::OnRegister()
 
 	{
 		// 自動アタッチを無効化する
-		TGuardValue<bool>(bDisableAutoAttachTemporary, true);
+		TGuardValue<bool> GuardSetting(bDisableAutoAttachTemporary, true);
 
 		InitEquipmentChangeStateMachine();
 
@@ -614,8 +614,10 @@ bool UBTPersonaEquipmentAttachComponent::OnUpdateEquipmentProviderAssetLoading(f
 			return false;
 		}
 
+		TArray<UObject*> LoadAssetsTmp;
 		// アセットを入れて置く
-		EquipmentProviderAssetLoadHandle->GetLoadedAssets(LoadedEquipmentProviderAssets);
+		EquipmentProviderAssetLoadHandle->GetLoadedAssets(LoadAssetsTmp);
+		LoadedEquipmentProviderAssets = LoadAssetsTmp;
 		EquipmentChangeStateMachine.ChangeStateRequest(EChangeState::EquipmentProviderAssetLoadCompleted);
 	}
 
