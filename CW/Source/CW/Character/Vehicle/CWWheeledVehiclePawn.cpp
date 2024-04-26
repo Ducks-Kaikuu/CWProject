@@ -20,10 +20,10 @@ void ACWWheeledVehiclePawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(ACWWheeledVehiclePawn, Throttle);
-	DOREPLIFETIME(ACWWheeledVehiclePawn, YAxis);
-	DOREPLIFETIME(ACWWheeledVehiclePawn, XAxis);
-	DOREPLIFETIME(ACWWheeledVehiclePawn, HandBrake);
+//	DOREPLIFETIME(ACWWheeledVehiclePawn, Throttle);
+//	DOREPLIFETIME(ACWWheeledVehiclePawn, YAxis);
+//	DOREPLIFETIME(ACWWheeledVehiclePawn, XAxis);
+//	DOREPLIFETIME(ACWWheeledVehiclePawn, HandBrake);
 }
 
 void ACWWheeledVehiclePawn::NotifyRestarted()
@@ -63,6 +63,18 @@ void ACWWheeledVehiclePawn::NotifyRestarted()
 				{
 					CW_LOG(TEXT("Vehicle Component is nullptr."))
 				}
+			} else
+			{
+				SetActorTickEnabled(false);
+
+				UChaosVehicleMovementComponent* VehicleComponent = GetVehicleMovement();
+
+				if(VehicleComponent != nullptr)
+				{
+					VehicleComponent->SetComponentTickEnabled(false);
+				}
+
+				CW_LOG(TEXT("Stopped Vehicle Tick."))
 			}
 		}
 	} else
@@ -83,6 +95,18 @@ void ACWWheeledVehiclePawn::NotifyRestarted()
 					CW_LOG(TEXT("[Controller None] : Vehicle Component is nullptr."))
 				}
 			}
+		} else
+		{
+			SetActorTickEnabled(false);
+
+			UChaosVehicleMovementComponent* VehicleComponent = GetVehicleMovement();
+
+			if(VehicleComponent != nullptr)
+			{
+				VehicleComponent->SetComponentTickEnabled(false);
+			}
+
+			CW_LOG(TEXT("Stopped Vehicle Tick."))
 		}
 	}
 }
@@ -91,11 +115,6 @@ void ACWWheeledVehiclePawn::NotifyRestarted()
 void	ACWWheeledVehiclePawn::Tick(float DeltaTime){
 
 	Super::Tick(DeltaTime);
-	
-	if ((Controller == nullptr) || (Controller->IsLocalController() == false))
-	{
-		return;
-	}
 	
 	UChaosVehicleMovementComponent* VehicleComponent = GetVehicleMovement();
 	
