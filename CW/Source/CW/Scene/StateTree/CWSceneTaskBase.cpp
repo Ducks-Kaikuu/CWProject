@@ -27,7 +27,7 @@ void UCWSceneTaskBase::ExitState(FStateTreeExecutionContext& Context, const FSta
 	
 	if(HudInstance != nullptr){
 		
-		ACWSceneBase* Scene = GetCWGameInstance()->GetCurrentScene();
+		ACWSceneBase* Scene = Cast<ACWSceneBase>(GetOwnerActor(Context));
 		
 		if(Scene != nullptr){
 			
