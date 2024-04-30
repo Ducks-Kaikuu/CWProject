@@ -20,10 +20,10 @@ void ACWWheeledVehiclePawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-//	DOREPLIFETIME(ACWWheeledVehiclePawn, Throttle);
-//	DOREPLIFETIME(ACWWheeledVehiclePawn, YAxis);
-//	DOREPLIFETIME(ACWWheeledVehiclePawn, XAxis);
-//	DOREPLIFETIME(ACWWheeledVehiclePawn, HandBrake);
+	DOREPLIFETIME(ACWWheeledVehiclePawn, Throttle);
+	DOREPLIFETIME(ACWWheeledVehiclePawn, YAxis);
+	DOREPLIFETIME(ACWWheeledVehiclePawn, XAxis);
+	DOREPLIFETIME(ACWWheeledVehiclePawn, HandBrake);
 }
 
 void ACWWheeledVehiclePawn::NotifyRestarted()
