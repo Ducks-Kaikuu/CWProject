@@ -32,82 +32,22 @@ void ACWWheeledVehiclePawn::NotifyRestarted()
 
 	if(Controller != nullptr)
 	{
-		if(Controller->IsLocalController() == false)
+		if(Controller->IsLocalController() == true)
 		{
-			if(GetLocalRole() == ROLE_Authority)
+			if(GetLocalRole() != ROLE_Authority)
 			{
-				UChaosVehicleMovementComponent* VehicleComponent = GetVehicleMovement();
+				USkeletalMeshComponent* SkeletalMeshComponent(GetMesh());
 
-				if(VehicleComponent != nullptr)
+				if(SkeletalMeshComponent != nullptr)
 				{
-					VehicleComponent->SetRequiresControllerForInputs(false);
-					
-					CW_LOG(TEXT("SetRequiresControllerForInputs is false."))
-				} else
-				{
-					CW_LOG(TEXT("Vehicle Component is nullptr."))
+					SkeletalMeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+					CW_LOG(TEXT("Collision is Disable."))
 				}
-			}
-		} else
-		{
-			if(GetLocalRole() == ROLE_Authority)
-			{
-				UChaosVehicleMovementComponent* VehicleComponent = GetVehicleMovement();
-
-				if(VehicleComponent != nullptr)
-				{
-					VehicleComponent->SetRequiresControllerForInputs(true);
-
-					CW_LOG(TEXT("SetRequiresControllerForInputs is true."))
-				} else
-				{
-					CW_LOG(TEXT("Vehicle Component is nullptr."))
-				}
-			} else
-			{
-				SetActorTickEnabled(false);
-
-				UChaosVehicleMovementComponent* VehicleComponent = GetVehicleMovement();
-
-				if(VehicleComponent != nullptr)
-				{
-					VehicleComponent->SetComponentTickEnabled(false);
-				}
-
-				CW_LOG(TEXT("Stopped Vehicle Tick."))
 			}
 		}
-	} else
-	{
-		if(GetLocalRole() == ROLE_Authority)
-		{
-			if(GetLocalRole() == ROLE_Authority)
-			{
-				UChaosVehicleMovementComponent* VehicleComponent = GetVehicleMovement();
-
-				if(VehicleComponent != nullptr)
-				{
-					VehicleComponent->SetRequiresControllerForInputs(true);
-
-					CW_LOG(TEXT("[Controller None] : SetRequiresControllerForInputs is true."))
-				} else
-				{
-					CW_LOG(TEXT("[Controller None] : Vehicle Component is nullptr."))
-				}
-			}
-		} else
-		{
-			SetActorTickEnabled(false);
-
-			UChaosVehicleMovementComponent* VehicleComponent = GetVehicleMovement();
-
-			if(VehicleComponent != nullptr)
-			{
-				VehicleComponent->SetComponentTickEnabled(false);
-			}
-
-			CW_LOG(TEXT("Stopped Vehicle Tick."))
-		}
+	} else {
+		CW_LOG(TEXT("Controller is nullptr."));	
 	}
 }
 
